@@ -479,6 +479,7 @@
   @media print {
     body { background: #FFF; padding: 0; }
     #app-header, #progress-bar, #step-indicator, .btn-row, .mode-btn { display: none !important; }
+    .sev-modal-overlay { display: none !important; }
     .card { box-shadow: none; margin: 0; border: none; }
     .guidance-card-body { display: block !important; }
     .result-panel-body { display: block !important; }
@@ -1459,7 +1460,7 @@ function showRapidResult() {
   const postCls = s.posting === 'Inspected' ? 'posting-inspected' : s.posting === 'Restricted Use' ? 'posting-restricted' : 'posting-unsafe';
   const postIcon = s.posting === 'Inspected' ? '✅' : s.posting === 'Restricted Use' ? '⚠️' : '🚫';
 
-  const damageRows = RAPID_DAMAGE_CATS.filter(c => s.rapidDamage[c.key]).map(c => {
+  const damageRows = RAPID_DAMAGE_CATS.filter(c => s.rapidDamage[c.key] && s.rapidDamage[c.key] !== 'none').map(c => {
     const sev = s.rapidDamage[c.key];
     const col = sev === 'severe' ? '#B71C1C' : sev === 'moderate' ? '#E65100' : '#2E7D32';
     return `<tr><td>${c.label}</td><td style="color:${col};font-weight:600;text-transform:capitalize;">${sev}</td></tr>`;
@@ -1530,6 +1531,7 @@ function showFullForm() {
     return `<div class="full-damage-row">
       <span>${label}</span>
       <div class="severity-btns">
+        <button class="sev-btn ${cur==='none'?'sel-none':''}" onclick="setFullExtSev('${key}','none',this)">None</button>
         <button class="sev-btn ${cur==='minor'?'sel-minor':''}" onclick="setFullExtSev('${key}','minor',this)">Minor</button>
         <button class="sev-btn ${cur==='moderate'?'sel-moderate':''}" onclick="setFullExtSev('${key}','moderate',this)">Moderate</button>
         <button class="sev-btn ${cur==='severe'?'sel-severe':''}" onclick="setFullExtSev('${key}','severe',this)">Severe</button>
@@ -1543,6 +1545,7 @@ function showFullForm() {
     return `<div class="full-damage-row">
       <span>${label}</span>
       <div class="severity-btns">
+        <button class="sev-btn ${cur==='none'?'sel-none':''}" onclick="setFullIntSev('${key}','none',this)">None</button>
         <button class="sev-btn ${cur==='minor'?'sel-minor':''}" onclick="setFullIntSev('${key}','minor',this)">Minor</button>
         <button class="sev-btn ${cur==='moderate'?'sel-moderate':''}" onclick="setFullIntSev('${key}','moderate',this)">Moderate</button>
         <button class="sev-btn ${cur==='severe'?'sel-severe':''}" onclick="setFullIntSev('${key}','severe',this)">Severe</button>
@@ -1642,10 +1645,10 @@ function showFullForm() {
       </div>
     </div>
 
-    <div class="form-section-title">Exterior Damage</div>
+    <div class="form-section-title">Exterior Damage <button class="info-link" onclick="showSevModal()" style="margin-left:8px;">What do these levels mean?</button></div>
     ${extRows}
 
-    <div class="form-section-title">Interior Damage</div>
+    <div class="form-section-title">Interior Damage <button class="info-link" onclick="showSevModal()" style="margin-left:8px;">What do these levels mean?</button></div>
     ${intRows}
 
     <div class="form-section-title">Contents &amp; Collections</div>
@@ -1698,6 +1701,7 @@ function refreshSevBtns(btn, cur) {
   const row = btn.closest('.full-damage-row');
   row.querySelectorAll('.sev-btn').forEach(b => {
     b.className = 'sev-btn';
+    if (cur === 'none' && b.textContent === 'None') b.classList.add('sel-none');
     if (cur === 'minor' && b.textContent === 'Minor') b.classList.add('sel-minor');
     if (cur === 'moderate' && b.textContent === 'Moderate') b.classList.add('sel-moderate');
     if (cur === 'severe' && b.textContent === 'Severe') b.classList.add('sel-severe');
@@ -1730,13 +1734,13 @@ function showFullResult() {
   const postCls = posting === 'Inspected' ? 'posting-inspected' : posting === 'Restricted Use' ? 'posting-restricted' : posting === 'Unsafe' ? 'posting-unsafe' : 'posting-restricted';
   const postIcon = posting === 'Inspected' ? '✅' : posting === 'Restricted Use' ? '⚠️' : posting === 'Unsafe' ? '🚫' : '🔍';
 
-  const extDmg = Object.entries(s.exteriorDamage).filter(([,v])=>v).map(([k,v]) => {
+  const extDmg = Object.entries(s.exteriorDamage).filter(([,v])=>v && v !== 'none').map(([k,v]) => {
     const label = FULL_DAMAGE_EXTERIOR.find(l => l.toLowerCase().replace(/[^a-z]/g,'_') === k) || k;
     const col = v === 'severe' ? '#B71C1C' : v === 'moderate' ? '#E65100' : '#2E7D32';
     return `<tr><td>${label}</td><td style="color:${col};font-weight:600;text-transform:capitalize;">${v}</td></tr>`;
   }).join('');
 
-  const intDmg = Object.entries(s.interiorDamage).filter(([,v])=>v).map(([k,v]) => {
+  const intDmg = Object.entries(s.interiorDamage).filter(([,v])=>v && v !== 'none').map(([k,v]) => {
     const label = FULL_DAMAGE_INTERIOR.find(l => l.toLowerCase().replace(/[^a-z]/g,'_') === k) || k;
     const col = v === 'severe' ? '#B71C1C' : v === 'moderate' ? '#E65100' : '#2E7D32';
     return `<tr><td>${label}</td><td style="color:${col};font-weight:600;text-transform:capitalize;">${v}</td></tr>`;
