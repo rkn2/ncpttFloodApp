@@ -1,0 +1,1823 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Historic Flood Recovery Tool</title>
+<style>
+  :root {
+    --hw-primary: #7B5E3A;
+    --hw-light: #F5EFE6;
+    --hw-accent: #C4884A;
+    --hw-border: #D4B896;
+    --as-primary: #1B3A5C;
+    --as-light: #EEF3F8;
+    --as-accent: #2E6DA4;
+    --as-border: #AABFD4;
+    --danger: #B22222;
+    --warning-bg: #FFF8E1;
+    --warning-border: #F0C040;
+    --ok-bg: #E8F5E9;
+    --ok-border: #66BB6A;
+    --font: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: var(--font);
+    background: #F0EDE8;
+    min-height: 100vh;
+    padding: 0 0 60px 0;
+  }
+
+  /* ── Header ── */
+  #app-header {
+    background: #2C2416;
+    color: #F5EFE6;
+    padding: 16px 24px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  #app-header h1 { font-size: 1.1rem; font-weight: 600; letter-spacing: 0.01em; }
+  #app-header .sub { font-size: 0.78rem; opacity: 0.7; margin-top: 2px; }
+  .mode-badge {
+    margin-left: auto;
+    font-size: 0.72rem;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  .mode-badge.homeowner { background: var(--hw-accent); color: #fff; }
+  .mode-badge.assessor { background: var(--as-accent); color: #fff; }
+
+  /* ── Progress bar ── */
+  #progress-bar {
+    height: 4px;
+    background: #DDD;
+    position: relative;
+  }
+  #progress-fill {
+    height: 100%;
+    background: var(--hw-accent);
+    transition: width 0.3s ease;
+  }
+  #progress-fill.assessor-mode { background: var(--as-accent); }
+
+  /* ── Step indicator ── */
+  #step-indicator {
+    display: flex;
+    gap: 0;
+    padding: 12px 24px 0;
+    font-size: 0.75rem;
+    color: #888;
+    align-items: center;
+  }
+  .step-dot {
+    width: 22px; height: 22px;
+    border-radius: 50%;
+    border: 2px solid #CCC;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.7rem; font-weight: 700;
+    color: #AAA;
+    background: #FFF;
+    flex-shrink: 0;
+  }
+  .step-dot.active { border-color: var(--hw-accent); color: var(--hw-accent); }
+  .step-dot.done { border-color: var(--hw-accent); background: var(--hw-accent); color: #FFF; }
+  .step-dot.assessor.active { border-color: var(--as-accent); color: var(--as-accent); }
+  .step-dot.assessor.done { border-color: var(--as-accent); background: var(--as-accent); color: #FFF; }
+  .step-line { flex: 1; height: 2px; background: #DDD; margin: 0 4px; }
+  .step-line.done { background: var(--hw-accent); }
+  .step-line.assessor.done { background: var(--as-accent); }
+  .step-label { font-size: 0.7rem; color: #888; margin-top: 4px; text-align: center; }
+
+  /* ── Main card ── */
+  .card {
+    background: #FFF;
+    border-radius: 10px;
+    margin: 16px 16px 0;
+    padding: 24px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+  }
+
+  .card h2 {
+    font-size: 1.15rem;
+    font-weight: 700;
+    margin-bottom: 6px;
+    color: #1A1A1A;
+  }
+  .card .section-desc {
+    font-size: 0.85rem;
+    color: #666;
+    margin-bottom: 20px;
+    line-height: 1.5;
+  }
+
+  /* ── Mode selector ── */
+  #mode-select-screen {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-top: 8px;
+  }
+  .mode-btn {
+    border: 2px solid #DDD;
+    border-radius: 10px;
+    padding: 20px;
+    cursor: pointer;
+    text-align: left;
+    background: #FAFAFA;
+    transition: all 0.15s;
+  }
+  .mode-btn:hover { border-color: var(--hw-accent); background: var(--hw-light); }
+  .mode-btn.assessor-btn:hover { border-color: var(--as-accent); background: var(--as-light); }
+  .mode-btn .mode-title { font-size: 1rem; font-weight: 700; margin-bottom: 4px; }
+  .mode-btn .mode-desc { font-size: 0.82rem; color: #666; line-height: 1.45; }
+  .mode-btn .mode-icon { font-size: 1.8rem; margin-bottom: 8px; }
+
+  /* ── Form fields ── */
+  .field-group { margin-bottom: 20px; }
+  .field-label {
+    display: block;
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 6px;
+  }
+  .field-label span { font-weight: 400; color: #888; }
+
+  select, input[type="text"], input[type="date"], textarea {
+    width: 100%;
+    padding: 9px 12px;
+    border: 1.5px solid #CCC;
+    border-radius: 6px;
+    font-size: 0.88rem;
+    font-family: var(--font);
+    color: #1A1A1A;
+    background: #FFF;
+  }
+  select:focus, input:focus, textarea:focus {
+    outline: none;
+    border-color: var(--hw-accent);
+  }
+  textarea { min-height: 80px; resize: vertical; }
+
+  .radio-group, .check-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .radio-group.inline, .check-group.inline {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .radio-item, .check-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    font-size: 0.85rem;
+    cursor: pointer;
+    line-height: 1.4;
+  }
+  .radio-item input, .check-item input { margin-top: 2px; flex-shrink: 0; }
+
+  /* ── Damage matrix ── */
+  .damage-section {
+    border: 1.5px solid #E8E8E8;
+    border-radius: 8px;
+    margin-bottom: 14px;
+    overflow: hidden;
+  }
+  .damage-section-header {
+    background: #F5F5F5;
+    padding: 10px 14px;
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: #444;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .damage-row {
+    display: flex;
+    align-items: center;
+    padding: 8px 14px;
+    border-top: 1px solid #F0F0F0;
+    gap: 10px;
+  }
+  .damage-row-label { flex: 1; font-size: 0.82rem; color: #333; }
+  .severity-btns { display: flex; gap: 4px; }
+  .sev-btn {
+    border: 1.5px solid #CCC;
+    border-radius: 4px;
+    padding: 3px 8px;
+    font-size: 0.72rem;
+    font-weight: 600;
+    cursor: pointer;
+    background: #FFF;
+    color: #666;
+    transition: all 0.1s;
+  }
+  .sev-btn.sel-none { border-color: #9E9E9E; background: #F5F5F5; color: #424242; }
+  .sev-btn.sel-minor { border-color: #4CAF50; background: #E8F5E9; color: #2E7D32; }
+  .sev-btn.sel-moderate { border-color: #FF9800; background: #FFF3E0; color: #E65100; }
+  .sev-btn.sel-severe { border-color: #F44336; background: #FFEBEE; color: #B71C1C; }
+
+  /* ── Severity info modal ── */
+  .sev-modal-overlay {
+    display: none;
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,0.45);
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
+  }
+  .sev-modal-overlay.open { display: flex; }
+  .sev-modal {
+    background: #FFF;
+    border-radius: 10px;
+    padding: 22px 24px;
+    max-width: 360px;
+    width: 90%;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.18);
+  }
+  .sev-modal h3 { font-size: 0.95rem; margin-bottom: 14px; color: #2C2416; }
+  .sev-modal-row { display: flex; gap: 10px; margin-bottom: 10px; align-items: flex-start; }
+  .sev-modal-badge {
+    flex-shrink: 0;
+    font-size: 0.7rem; font-weight: 700;
+    padding: 2px 8px; border-radius: 4px;
+    margin-top: 2px;
+  }
+  .sev-modal-badge.none { background:#F5F5F5; color:#424242; border:1.5px solid #9E9E9E; }
+  .sev-modal-badge.minor { background:#E8F5E9; color:#2E7D32; border:1.5px solid #4CAF50; }
+  .sev-modal-badge.moderate { background:#FFF3E0; color:#E65100; border:1.5px solid #FF9800; }
+  .sev-modal-badge.severe { background:#FFEBEE; color:#B71C1C; border:1.5px solid #F44336; }
+  .sev-modal-desc { font-size: 0.8rem; color: #444; line-height: 1.4; }
+  .sev-modal-close {
+    display: block; width: 100%; margin-top: 18px;
+    padding: 8px; border-radius: 6px;
+    border: none; background: #2C2416; color: #FFF;
+    font-size: 0.82rem; font-weight: 600; cursor: pointer;
+  }
+  .info-link {
+    font-size: 0.72rem; color: #7B5E3A; cursor: pointer;
+    text-decoration: underline; background: none; border: none;
+    padding: 0; font-family: inherit;
+  }
+
+  /* ── Buttons ── */
+  .btn-row {
+    display: flex;
+    gap: 10px;
+    margin-top: 24px;
+  }
+  .btn {
+    padding: 11px 22px;
+    border-radius: 7px;
+    font-size: 0.88rem;
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+    transition: all 0.15s;
+  }
+  .btn-primary {
+    background: var(--hw-accent);
+    color: #FFF;
+    flex: 1;
+  }
+  .btn-primary:hover { background: var(--hw-primary); }
+  .btn-primary.as { background: var(--as-accent); }
+  .btn-primary.as:hover { background: var(--as-primary); }
+  .btn-secondary {
+    background: #EEE;
+    color: #555;
+  }
+  .btn-secondary:hover { background: #DDD; }
+  .btn-print {
+    background: #fff;
+    border: 1.5px solid var(--as-accent);
+    color: var(--as-accent);
+  }
+
+  /* ── Results ── */
+  .result-panel {
+    border-radius: 8px;
+    margin-bottom: 16px;
+    overflow: hidden;
+  }
+  .result-panel-header {
+    padding: 12px 16px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    user-select: none;
+  }
+  .result-panel-header .toggle { margin-left: auto; font-size: 0.8rem; color: #888; }
+  .result-panel-body { padding: 0 16px 16px; }
+
+  .assistance-card {
+    border: 1.5px solid #E0E0E0;
+    border-radius: 8px;
+    padding: 14px;
+    margin-bottom: 12px;
+  }
+  .assistance-card h4 { font-size: 0.88rem; font-weight: 700; margin-bottom: 4px; }
+  .assistance-card .tag {
+    display: inline-block;
+    font-size: 0.68rem;
+    font-weight: 700;
+    padding: 2px 7px;
+    border-radius: 3px;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+  .tag-grant { background: #E8F5E9; color: #2E7D32; }
+  .tag-loan { background: #E3F2FD; color: #1565C0; }
+  .tag-fema { background: #FCE4EC; color: #AD1457; }
+  .tag-local { background: #F3E5F5; color: #6A1B9A; }
+  .assistance-card p { font-size: 0.82rem; color: #444; line-height: 1.5; margin-bottom: 8px; }
+  .assistance-card a {
+    font-size: 0.8rem;
+    color: var(--as-accent);
+    font-weight: 600;
+    text-decoration: none;
+  }
+  .assistance-card a:hover { text-decoration: underline; }
+
+  .guidance-card {
+    margin-bottom: 14px;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1.5px solid #E8E8E8;
+  }
+  .guidance-card-header {
+    background: var(--hw-light);
+    border-bottom: 1.5px solid var(--hw-border);
+    padding: 10px 14px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--hw-primary);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .guidance-card-header .toggle { margin-left: auto; font-size: 0.8rem; color: #888; }
+  .guidance-card-body { padding: 14px; display: none; }
+  .guidance-card-body.open { display: block; }
+
+  .guidance-do, .guidance-dont, .guidance-pro {
+    border-radius: 6px;
+    padding: 10px 12px;
+    margin-bottom: 10px;
+    font-size: 0.82rem;
+    line-height: 1.55;
+  }
+  .guidance-do { background: var(--ok-bg); border-left: 3px solid var(--ok-border); }
+  .guidance-dont { background: #FFEBEE; border-left: 3px solid var(--danger); }
+  .guidance-pro { background: var(--warning-bg); border-left: 3px solid var(--warning-border); }
+  .guidance-do strong, .guidance-dont strong, .guidance-pro strong {
+    display: block; margin-bottom: 4px; font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.04em;
+  }
+  .guidance-do strong { color: #2E7D32; }
+  .guidance-dont strong { color: var(--danger); }
+  .guidance-pro strong { color: #B8860B; }
+  .guidance-do ul, .guidance-dont ul, .guidance-pro ul {
+    padding-left: 16px; margin: 0;
+  }
+  .guidance-do li, .guidance-dont li, .guidance-pro li { margin-bottom: 3px; }
+
+  .soi-note {
+    font-size: 0.76rem;
+    color: #777;
+    border-top: 1px solid #EEE;
+    padding-top: 8px;
+    margin-top: 8px;
+    font-style: italic;
+  }
+
+  /* ── Assessor result card ── */
+  .posting-badge {
+    display: inline-block;
+    padding: 6px 16px;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    font-weight: 700;
+    margin-bottom: 12px;
+  }
+  .posting-inspected { background: #E8F5E9; color: #1B5E20; border: 2px solid #4CAF50; }
+  .posting-restricted { background: #FFF8E1; color: #7B4F00; border: 2px solid #FFC107; }
+  .posting-unsafe { background: #FFEBEE; color: #7B0000; border: 2px solid #F44336; }
+
+  .summary-table { width: 100%; border-collapse: collapse; font-size: 0.82rem; margin-bottom: 12px; }
+  .summary-table td { padding: 6px 8px; border-bottom: 1px solid #F0F0F0; vertical-align: top; }
+  .summary-table td:first-child { font-weight: 600; color: #555; width: 40%; }
+
+  /* ── Utility ── */
+  .hidden { display: none !important; }
+  .divider { height: 1px; background: #EEE; margin: 20px 0; }
+  .info-box {
+    background: var(--as-light);
+    border: 1.5px solid var(--as-border);
+    border-radius: 6px;
+    padding: 12px 14px;
+    font-size: 0.82rem;
+    color: #333;
+    line-height: 1.5;
+    margin-bottom: 16px;
+  }
+  .warn-box {
+    background: var(--warning-bg);
+    border: 1.5px solid var(--warning-border);
+    border-radius: 6px;
+    padding: 12px 14px;
+    font-size: 0.82rem;
+    color: #555;
+    line-height: 1.5;
+    margin-bottom: 16px;
+  }
+
+  /* ── Full assessment sections ── */
+  .form-section-title {
+    font-size: 0.78rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--as-primary);
+    border-bottom: 2px solid var(--as-border);
+    padding-bottom: 6px;
+    margin: 20px 0 14px;
+  }
+  .form-section-title:first-child { margin-top: 0; }
+
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  @media (max-width: 480px) { .two-col { grid-template-columns: 1fr; } }
+
+  .full-damage-row {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: center;
+    padding: 7px 0;
+    border-bottom: 1px solid #F5F5F5;
+    gap: 10px;
+    font-size: 0.83rem;
+  }
+  .full-damage-row:last-child { border-bottom: none; }
+
+  /* ── Print styles ── */
+  @media print {
+    body { background: #FFF; padding: 0; }
+    #app-header, #progress-bar, #step-indicator, .btn-row, .mode-btn { display: none !important; }
+    .card { box-shadow: none; margin: 0; border: none; }
+    .guidance-card-body { display: block !important; }
+    .result-panel-body { display: block !important; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Severity info modal (shared) -->
+<div class="sev-modal-overlay" id="sev-modal-overlay" onclick="if(event.target===this)closeSevModal()">
+  <div class="sev-modal">
+    <h3>What do the damage levels mean?</h3>
+    <div class="sev-modal-row">
+      <span class="sev-modal-badge none">None</span>
+      <span class="sev-modal-desc">No visible damage to this part of the building. It looks and works normally.</span>
+    </div>
+    <div class="sev-modal-row">
+      <span class="sev-modal-badge minor">Minor</span>
+      <span class="sev-modal-desc">Cosmetic damage only — staining, peeling paint, surface dirt. The structure and function are still intact.</span>
+    </div>
+    <div class="sev-modal-row">
+      <span class="sev-modal-badge moderate">Moderate</span>
+      <span class="sev-modal-desc">Damage affects how the building looks or works, but it's not about to collapse. Professional inspection is recommended.</span>
+    </div>
+    <div class="sev-modal-row">
+      <span class="sev-modal-badge severe">Severe</span>
+      <span class="sev-modal-desc">Major loss of material, structural compromise, or immediate safety concern. Do not use this part of the building until a professional has assessed it.</span>
+    </div>
+    <button class="sev-modal-close" onclick="closeSevModal()">Got it</button>
+  </div>
+</div>
+
+<div id="app-header">
+  <div>
+    <h1>Historic Flood Recovery Tool</h1>
+    <div class="sub">National Park Service &bull; Preservation Assistance</div>
+  </div>
+  <span id="mode-badge-header" class="mode-badge hidden"></span>
+</div>
+<div id="progress-bar"><div id="progress-fill" style="width:0%"></div></div>
+<div id="step-indicator"></div>
+
+<div id="screens"></div>
+
+<script>
+// ═══════════════════════════════════════════════
+// DATA
+// ═══════════════════════════════════════════════
+
+const STATE_PROGRAMS = {
+  VT: [
+    { name: "Vermont Division for Historic Preservation", tag: "grant", desc: "Vermont SHPO can connect you with state preservation programs and FEMA-related historic building assistance. Eligible listed and contributing structures may qualify for additional review support.", url: "https://accd.vermont.gov/historic-preservation", apply: "Contact Vermont SHPO" },
+    { name: "Vermont Emergency Relief and Assistance Fund (ERAF)", tag: "grant", desc: "State fund that can supplement FEMA assistance for eligible Vermonters. Contact Vermont Emergency Management for current disaster declaration status.", url: "https://vem.vermont.gov", apply: "Vermont Emergency Management" },
+  ],
+  NC: [
+    { name: "NC State Historic Preservation Office", tag: "grant", desc: "SHPO can identify preservation grant programs and connect historic property owners with technical assistance for appropriate repair approaches.", url: "https://www.dncr.nc.gov/about/offices/state-historic-preservation-office", apply: "Contact NC SHPO" },
+    { name: "NC Emergency Management", tag: "local", desc: "State-level disaster assistance coordination, including Individual Assistance programs in federally declared disaster areas.", url: "https://www.ncdps.gov/emergency-management", apply: "NC Emergency Management" },
+  ],
+  PR: [
+    { name: "Puerto Rico State Historic Preservation Office (SHPO)", tag: "grant", desc: "PR SHPO has an active NPS capacity-building grant and can provide assessment support, technical guidance, and connection to preservation programs for historic properties.", url: "https://www.icp.pr.gov", apply: "Contact PR SHPO / ICP" },
+    { name: "PR Emergency Management Bureau (NMEAD)", tag: "local", desc: "Coordinates federal disaster assistance programs in Puerto Rico, including FEMA IA registration and state-level supplemental programs.", url: "https://www.estado.pr.gov/en/puerto-rico-emergency-management", apply: "NMEAD / FEMA Puerto Rico" },
+  ],
+  _default: []
+};
+
+const NATIONAL_PROGRAMS = [
+  {
+    name: "FEMA Individual Assistance (IA)",
+    tag: "fema",
+    desc: "Federal disaster assistance for homeowners and renters in federally declared disaster areas. Covers temporary housing, home repair, and other disaster-related expenses. This is NOT a grant for historic preservation — repairs may need to meet basic habitability standards.",
+    note: "Historic property owners: notify FEMA that your building is historically significant. FEMA must consider historic character in repair requirements.",
+    url: "https://www.disasterassistance.gov",
+    apply: "Register at DisasterAssistance.gov or call 1-800-621-3362"
+  },
+  {
+    name: "SBA Disaster Loans — Home & Personal Property",
+    tag: "loan",
+    desc: "Low-interest federal loans (up to $500,000 for real property) for homeowners to repair or replace disaster-damaged property. Must be in a declared disaster area. This is a loan, NOT a grant — repayment required.",
+    note: "SBA loan approval is often required before FEMA can provide certain types of additional assistance.",
+    url: "https://disasterloanassistance.sba.gov",
+    apply: "Apply at SBA Disaster Loan Assistance portal"
+  },
+  {
+    name: "NPS / SHPO Historic Preservation Programs",
+    tag: "grant",
+    desc: "National Park Service preservation grants (via state SHPOs) and Section 106 review processes protect historic properties in federal disaster response. Formally listed properties have additional protections and may qualify for specific technical assistance.",
+    note: "Contact your State Historic Preservation Office early — they can advocate for preservation-sensitive repair approaches with FEMA.",
+    url: "https://www.nps.gov/subjects/historicpreservation/grants.htm",
+    apply: "Contact your state SHPO (see state-specific programs above)"
+  }
+];
+
+const REPAIR_GUIDANCE = {
+  structural: {
+    icon: "🏗️",
+    label: "Structural / Foundation",
+    do: [
+      "Wait for groundwater levels to equalize before pumping a flooded basement — pumping too early can cause foundation collapse from hydrostatic pressure",
+      "Monitor cracks with tell-tale gauges — movement over time indicates ongoing instability",
+      "Repoint masonry joints with lime-based mortar (ASTM Type N for limestone/soft stone; Type O for brick)",
+      "Replace eroded soil beneath footings and restore drainage slope away from the building",
+      "Contact a qualified structural engineer or architect if you see cracking, settling, or wall heaving"
+    ],
+    dont: [
+      "Do NOT use Portland cement mortar on historic masonry — it is too hard and will crack the surrounding historic fabric",
+      "Do NOT pump a flooded basement if the groundwater outside is still high — you will create an unbalanced pressure that can collapse foundation walls",
+      "Do NOT ignore cracks — even small ones can indicate ongoing movement that will worsen"
+    ],
+    pro: "Consult a licensed structural engineer before making any structural repairs. If walls are cracked or settling, get a professional assessment before re-occupying.",
+    soi: "Secretary of Interior Standards: Repair historic masonry using compatible, reversible materials. Lime-based mortars are softer than the masonry units and protect historic brick or stone from cracking."
+  },
+  roof: {
+    icon: "🏠",
+    label: "Roof",
+    do: [
+      "Install temporary tarps or cover boards immediately to prevent additional water intrusion",
+      "Document all damage with photos before any removal or repair",
+      "Replace only what is genuinely damaged — retain historic roofing materials where possible",
+      "Allow roof substrate to dry before permanent repairs"
+    ],
+    dont: [
+      "Do NOT replace historic slate, clay tile, or other character-defining roofing materials with modern substitutes without SHPO consultation",
+      "Do NOT close up a wet roof assembly — trapped moisture will cause rot and mold"
+    ],
+    pro: "If your roof has historic materials (slate, clay tile, wood shingle), contact your SHPO before replacing — compatible materials and techniques are required for historic properties.",
+    soi: "Secretary of Interior Standards: Preserve historic roofing materials and repair in kind. Replacement with modern materials requires justification that the historic material is beyond repair."
+  },
+  siding: {
+    icon: "🪵",
+    label: "Exterior Walls / Siding",
+    do: [
+      "Allow wood siding to dry naturally — force-drying can warp or crack historic wood",
+      "Remove paint that has peeled due to moisture migration (this is a symptom of moisture in the wall, not just surface failure)",
+      "Repaint only after all materials have fully dried and moisture content of wood is below 20%",
+      "Inspect for rot at sill plates and base trim — these areas hold moisture longest"
+    ],
+    dont: [
+      "Do NOT apply sealers or vapor barriers to historic wood or masonry siding — they trap moisture and cause accelerated deterioration",
+      "Do NOT paint wet surfaces — moisture will be trapped and paint will peel again",
+      "Do NOT replace historic wood siding with vinyl or fiber cement without SHPO consultation"
+    ],
+    soi: "Secretary of Interior Standards: Retain and repair historic siding materials rather than replacing them. Water-repellent preservative (not sealer) may be appropriate for exposed wood."
+  },
+  windows: {
+    icon: "🪟",
+    label: "Windows and Doors",
+    do: [
+      "Open windows and doors to maximize airflow and speed drying of the building interior",
+      "Inspect wood frames for swelling, rot, and paint failure",
+      "Dry wood frames slowly — rapid drying can cause cracking",
+      "Repair rather than replace historic windows — they can often be restored even after flooding"
+    ],
+    dont: [
+      "Do NOT replace historic wood windows with vinyl or aluminum replacements without SHPO consultation — historic windows are often character-defining features",
+      "Do NOT force swollen sashes open — allow them to dry and shrink before operating"
+    ],
+    soi: "Secretary of Interior Standards: Repair historic windows in kind. Replacement is only appropriate when the historic window is beyond economic repair."
+  },
+  chimney: {
+    icon: "🧱",
+    label: "Chimney",
+    do: [
+      "Inspect chimney mortar joints after flooding — saturated mortar is vulnerable to freeze-thaw damage",
+      "Repoint with lime-based mortar matching the historic composition",
+      "Cap the chimney temporarily if the top is open to prevent additional water infiltration"
+    ],
+    dont: [
+      "Do NOT use Portland cement mortar — it is too rigid for historic masonry and will cause spalling",
+      "Do NOT use the fireplace or furnace until the chimney has been inspected by a qualified professional"
+    ],
+    pro: "Have a certified chimney inspector assess the flue and structural integrity before using any heating appliance."
+  },
+  electrical: {
+    icon: "⚡",
+    label: "Electrical / Mechanical / HVAC",
+    do: [
+      "Keep all utilities OFF until inspected by a licensed professional",
+      "Do not enter a building with standing water and active electricity",
+      "Have a licensed electrician inspect and certify the system before restoring power",
+      "Replace any submerged electrical panels, wiring, and outlets",
+      "Have HVAC systems inspected — flooded systems can spread mold throughout the building when restarted"
+    ],
+    dont: [
+      "Do NOT restore power to a building until a licensed electrician has inspected and cleared it",
+      "Do NOT restart HVAC systems without inspection — ductwork and air handlers may harbor mold or debris"
+    ],
+    pro: "Electrical and mechanical systems that were submerged must be fully inspected and recertified by licensed professionals before use. This is a life-safety issue."
+  },
+  insulation: {
+    icon: "🌡️",
+    label: "Insulation",
+    do: [
+      "Remove ALL wet insulation from walls, floors, and ceilings — wet insulation holds moisture and promotes rot and mold",
+      "Leave wall cavities open until all framing has dried completely",
+      "Re-insulate only after a moisture meter confirms wood framing is below 20% moisture content",
+      "Consider closed-cell spray foam only after consulting a preservation professional — vapor management matters in historic walls"
+    ],
+    dont: [
+      "Do NOT leave wet insulation in place — even fiberglass batt that appears dry can hold moisture in its facing",
+      "Do NOT close up wall cavities before they are fully dry",
+      "Do NOT install vapor barriers that trap moisture in historic walls"
+    ],
+    soi: "Secretary of Interior Standards: Insulation upgrades in historic buildings must be carefully managed to avoid trapping moisture that can damage historic fabric."
+  },
+  interior: {
+    icon: "🏛️",
+    label: "Interior Finishes (Plaster, Flooring, Wallpaper)",
+    do: [
+      "Tap-test plaster walls — a hollow sound indicates the plaster has delaminated from the substrate (water got behind it)",
+      "Retain and repair historic plaster wherever possible — it can often be reanchored or patched",
+      "Allow all materials to dry completely before any repairs or refinishing",
+      "Preserve historic flooring — wood floors can often be dried, sanded, and refinished after flooding",
+      "Document historic finishes (wallpaper, paint colors, plaster profiles) before removal"
+    ],
+    dont: [
+      "Do NOT remove historic plaster without careful assessment — it is a character-defining feature and often repairable",
+      "Do NOT repaint or refinish any surface until moisture content of wood is below 20% — paint traps moisture and will peel",
+      "Do NOT apply oil-based paint, vinyl wallpaper, or vapor-barrier finishes on interior walls until fully dry",
+      "Do NOT discard historic wallpaper without documenting it — even damaged paper is a historic record"
+    ],
+    soi: "Secretary of Interior Standards: Preserve historic interior features including plaster, flooring, and decorative finishes. Replacement should only occur when repair is genuinely not feasible."
+  },
+  mold: {
+    icon: "🦠",
+    label: "Mold / Contamination",
+    do: [
+      "Wear respirators, gloves, and eye protection when working in flood-damaged areas",
+      "Seal off mold-affected areas from the rest of the building before disturbing",
+      "Remove all porous materials that cannot be adequately cleaned: carpet, upholstery, flooded insulation, wet gypsum board",
+      "Clean hard surfaces with a non-phosphate detergent and scrub brush, then disinfect with 1/2 to 1 cup household bleach per gallon of water",
+      "Ventilate the work area to the outdoors — use fans in windows to exhaust spores outside",
+      "Monitor for new mold growth for several weeks after drying",
+      "Do not restore finishes until all materials have dried completely"
+    ],
+    dont: [
+      "Do NOT use high-pressure spray to clean mold — it drives contaminated water deeper into materials",
+      "Do NOT mix bleach with ammonia-based cleaners — produces toxic fumes",
+      "Do NOT run HVAC systems while mold is present — it will spread spores throughout the building",
+      "Do NOT close up the building before it is fully dry"
+    ],
+    pro: "For severe mold colonization (larger than 10 sq ft) or if the building has asbestos or lead paint, hire a licensed remediation contractor. Both are common in historic buildings."
+  }
+};
+
+const DAMAGE_CATEGORIES = [
+  { key: "structural", label: "Structural / Foundation" },
+  { key: "roof", label: "Roof" },
+  { key: "siding", label: "Exterior Walls / Siding" },
+  { key: "windows", label: "Windows and Doors" },
+  { key: "chimney", label: "Chimney" },
+  { key: "electrical", label: "Electrical / Mechanical / HVAC" },
+  { key: "insulation", label: "Insulation" },
+  { key: "interior", label: "Interior Finishes" },
+  { key: "mold", label: "Mold / Contamination" }
+];
+
+const FULL_DAMAGE_EXTERIOR = [
+  "Foundation", "Basement walls", "Exterior walls", "Roof structure", "Roofing material",
+  "Chimneys", "Porches / balconies", "Windows", "Doors", "Exterior trim",
+  "Siding / cladding", "Paint / coatings", "Drainage / gutters", "Steps / walkways",
+  "Fencing", "Site features (walls, fountains, pools)"
+];
+
+const FULL_DAMAGE_INTERIOR = [
+  "Ceiling structure / finish", "Floor structure", "Floor covering",
+  "Interior walls / plaster", "Stairways", "Upper floor structure"
+];
+
+const ARCH_STYLES = [
+  "Federal / Early Republic (pre-1830)", "Greek Revival (1825–1860)", "Italianate (1840–1885)",
+  "Gothic Revival (1840–1880)", "Second Empire (1855–1885)", "Queen Anne (1880–1910)",
+  "Romanesque Revival (1880–1900)", "Colonial Revival (1880–1955)", "Craftsman / Bungalow (1905–1930)",
+  "Tudor Revival (1890–1940)", "Spanish Colonial Revival (1915–1940)", "Art Deco (1925–1940)",
+  "Mid-Century Modern (1940–1970)", "Vernacular / Folk (no specific style)", "Other / Unknown"
+];
+
+// ═══════════════════════════════════════════════
+// APP STATE
+// ═══════════════════════════════════════════════
+
+let state = {
+  mode: null, // 'homeowner' | 'assessor'
+  step: 0,    // current step index
+  // Homeowner
+  hw: {
+    state: "", buildingType: "", materials: [], age: "", designations: [],
+    affectedAreas: [], damage: {} // { structural: 'minor'|'moderate'|'severe', ... }
+  },
+  // Assessor
+  as: {
+    submode: null, // 'rapid' | 'full'
+    // rapid fields
+    inspector: "", date: "", area: "", buildingName: "", address: "",
+    stories: "", footprint: "", units: "", age: "", foundation: "", roof: "", wallFinish: "",
+    historicStatus: [],
+    waterNature: [], waterDepth: [], sediment: "", erosion: "",
+    rapidDamage: {}, // { structural: 'minor'|'moderate'|'severe', ... }
+    overallDamage: "", posting: "", recommendFull: false, triggerReasons: [], notes: "",
+    // full fields
+    gps: ["","","","",""],
+    hazards: [],
+    sigOlder: "", sigCraftsman: "", sigStyle: "", sigSetting: "", sigRare: "", sigPersons: "",
+    archStyle: "",
+    siteTopo: "", siteRetaining: "", siteVeg: "", siteSmall: "", siteArchaeo: "", siteCollections: "", siteCollCond: "",
+    exteriorDamage: {}, interiorDamage: {},
+    contentsType: [], contentsCond: "",
+    finalPosting: "", furtherEval: false, recommendations: ""
+  }
+};
+
+// ═══════════════════════════════════════════════
+// RENDER HELPERS
+// ═══════════════════════════════════════════════
+
+function screens() { return document.getElementById('screens'); }
+
+function updateProgress(pct, isAssessor) {
+  document.getElementById('progress-fill').style.width = pct + '%';
+  document.getElementById('progress-fill').className = isAssessor ? 'assessor-mode' : '';
+}
+
+function renderStepIndicator(steps, currentStep, isAssessor) {
+  const el = document.getElementById('step-indicator');
+  if (!steps || steps.length === 0) { el.innerHTML = ''; return; }
+  const cls = isAssessor ? 'assessor' : '';
+  let html = '';
+  steps.forEach((s, i) => {
+    let dotCls = cls;
+    if (i < currentStep) dotCls += ' done';
+    else if (i === currentStep) dotCls += ' active';
+    html += `<div class="step-dot ${dotCls}">${i < currentStep ? '✓' : i+1}</div>`;
+    if (i < steps.length - 1) {
+      html += `<div class="step-line ${i < currentStep ? cls + ' done' : ''}"></div>`;
+    }
+  });
+  el.innerHTML = html;
+}
+
+function card(content) {
+  return `<div class="card">${content}</div>`;
+}
+
+function badgeHtml(mode) {
+  const el = document.getElementById('mode-badge-header');
+  if (!mode) { el.classList.add('hidden'); return; }
+  el.classList.remove('hidden');
+  el.className = 'mode-badge ' + mode;
+  el.textContent = mode === 'homeowner' ? 'Homeowner' : 'Assessor';
+}
+
+function toggle(id) {
+  const el = document.getElementById(id);
+  const btn = document.querySelector(`[data-toggle="${id}"]`);
+  if (!el) return;
+  const open = el.style.display !== 'none' && el.style.display !== '';
+  el.style.display = open ? 'none' : 'block';
+  if (btn) btn.textContent = open ? '▼ Show' : '▲ Hide';
+}
+
+// ═══════════════════════════════════════════════
+// SCREENS
+// ═══════════════════════════════════════════════
+
+function showModeSelect() {
+  state.mode = null; state.step = 0;
+  badgeHtml(null);
+  updateProgress(0, false);
+  renderStepIndicator([], 0, false);
+  screens().innerHTML = card(`
+    <h2>Welcome</h2>
+    <p class="section-desc">This tool helps owners of historic buildings respond to flood damage — both by identifying assistance programs and providing preservation-sensitive repair guidance. Select who is using the tool today.</p>
+    <div id="mode-select-screen">
+      <div class="mode-btn" onclick="startHomeowner()">
+        <div class="mode-icon">🏡</div>
+        <div class="mode-title">Homeowner / Property Owner</div>
+        <div class="mode-desc">I own or occupy a historic building that was damaged by flooding and I need guidance on what assistance I may qualify for and how to repair my building appropriately.</div>
+      </div>
+      <div class="mode-btn assessor-btn" onclick="startAssessor()">
+        <div class="mode-icon">📋</div>
+        <div class="mode-title">Field Assessor</div>
+        <div class="mode-desc">I am a trained assessor (SHPO staff, NPS, emergency responder, volunteer) conducting building-by-building damage documentation in the field.</div>
+      </div>
+    </div>
+  `);
+}
+
+// ── HOMEOWNER ────────────────────────────────
+
+function startHomeowner() {
+  state.mode = 'homeowner'; state.step = 0;
+  badgeHtml('homeowner');
+  showHwStep0();
+}
+
+const HW_STEPS = ['Building Info', 'Flood Damage', 'Results'];
+
+function showHwStep0() {
+  state.step = 0;
+  updateProgress(20, false);
+  renderStepIndicator(HW_STEPS, 0, false);
+  screens().innerHTML = card(`
+    <h2>Building Information</h2>
+    <p class="section-desc">Tell us about your building. This tool is designed for historic structures — all building types are welcome.</p>
+    <div class="field-group">
+      <label class="field-label">State or Territory</label>
+      <select id="hw-state">
+        <option value="">— Select —</option>
+        ${usStates().map(s => `<option value="${s.v}" ${state.hw.state===s.v?'selected':''}>${s.l}</option>`).join('')}
+      </select>
+    </div>
+    <div class="field-group">
+      <label class="field-label">Building Type</label>
+      <div class="radio-group">
+        ${['Single-family residential','Multi-family residential','Commercial / mixed-use','Civic / institutional'].map(v =>
+          `<label class="radio-item"><input type="radio" name="hw-btype" value="${v}" ${state.hw.buildingType===v?'checked':''}> ${v}</label>`
+        ).join('')}
+      </div>
+    </div>
+    <div class="field-group">
+      <label class="field-label">Primary Construction Material <span>(check all that apply)</span></label>
+      <div class="check-group">
+        ${['Wood frame','Masonry (brick / stone)','Concrete','Mixed'].map(v =>
+          `<label class="check-item"><input type="checkbox" name="hw-mat" value="${v}" ${state.hw.materials.includes(v)?'checked':''}> ${v}</label>`
+        ).join('')}
+      </div>
+    </div>
+    <div class="field-group">
+      <label class="field-label">Approximate Building Age</label>
+      <div class="radio-group">
+        ${['Pre-1870','1870–1940','1940–1970','Post-1970'].map(v =>
+          `<label class="radio-item"><input type="radio" name="hw-age" value="${v}" ${state.hw.age===v?'checked':''}> ${v}</label>`
+        ).join('')}
+      </div>
+    </div>
+    <div class="field-group">
+      <label class="field-label">Historic Designation <span>(check all that apply)</span></label>
+      <div class="check-group">
+        ${['Listed on the National Register of Historic Places','Local historic landmark','Contributing structure in a historic district','Not formally designated, but historically significant'].map(v =>
+          `<label class="check-item"><input type="checkbox" name="hw-desig" value="${v}" ${state.hw.designations.includes(v)?'checked':''}> ${v}</label>`
+        ).join('')}
+      </div>
+    </div>
+    <div class="btn-row">
+      <button class="btn btn-secondary" onclick="showModeSelect()">← Back</button>
+      <button class="btn btn-primary" onclick="saveHwStep0()">Next: Flood Damage →</button>
+    </div>
+  `);
+}
+
+function saveHwStep0() {
+  state.hw.state = document.getElementById('hw-state').value;
+  state.hw.buildingType = document.querySelector('input[name="hw-btype"]:checked')?.value || '';
+  state.hw.materials = [...document.querySelectorAll('input[name="hw-mat"]:checked')].map(i=>i.value);
+  state.hw.age = document.querySelector('input[name="hw-age"]:checked')?.value || '';
+  state.hw.designations = [...document.querySelectorAll('input[name="hw-desig"]:checked')].map(i=>i.value);
+  if (!state.hw.state) { alert('Please select your state or territory.'); return; }
+  showHwStep1();
+}
+
+function showHwStep1() {
+  state.step = 1;
+  updateProgress(55, false);
+  renderStepIndicator(HW_STEPS, 1, false);
+
+  const areas = ['Basement / crawl space','First floor','Upper floors','Exterior / site'];
+  const catHtml = DAMAGE_CATEGORIES.map(cat => {
+    const cur = state.hw.damage[cat.key] || '';
+    return `<div class="damage-row">
+      <span class="damage-row-label">${cat.label}</span>
+      <div class="severity-btns">
+        <button class="sev-btn ${cur==='none'?'sel-none':''}" onclick="setSev('${cat.key}','none',this)">None</button>
+        <button class="sev-btn ${cur==='minor'?'sel-minor':''}" onclick="setSev('${cat.key}','minor',this)">Minor</button>
+        <button class="sev-btn ${cur==='moderate'?'sel-moderate':''}" onclick="setSev('${cat.key}','moderate',this)">Moderate</button>
+        <button class="sev-btn ${cur==='severe'?'sel-severe':''}" onclick="setSev('${cat.key}','severe',this)">Severe</button>
+      </div>
+    </div>`;
+  }).join('');
+
+  screens().innerHTML = card(`
+    <h2>Flood Damage</h2>
+    <p class="section-desc">For each damage category below, select the severity level. <button class="info-link" onclick="showSevModal()">What do these levels mean?</button></p>
+    <div class="damage-section">
+      <div class="damage-section-header">📍 Affected Areas <span style="font-weight:400;color:#888;font-size:0.78rem;margin-left:6px">check all that apply</span></div>
+      <div style="padding:10px 14px;">
+        <div class="check-group">
+          ${areas.map(a => `<label class="check-item"><input type="checkbox" name="hw-area" value="${a}" ${state.hw.affectedAreas.includes(a)?'checked':''}> ${a}</label>`).join('')}
+        </div>
+      </div>
+    </div>
+    <div class="damage-section">
+      <div class="damage-section-header">🔍 Damage by Category</div>
+      ${catHtml}
+    </div>
+    <div class="btn-row">
+      <button class="btn btn-secondary" onclick="showHwStep0()">← Back</button>
+      <button class="btn btn-primary" onclick="saveHwStep1()">See Results →</button>
+    </div>
+  `);
+}
+
+function showSevModal() {
+  document.getElementById('sev-modal-overlay').classList.add('open');
+}
+function closeSevModal() {
+  document.getElementById('sev-modal-overlay').classList.remove('open');
+}
+
+function setSev(key, level, btn) {
+  state.hw.damage[key] = (state.hw.damage[key] === level) ? '' : level;
+  // re-render severity buttons for this row
+  const row = btn.closest('.damage-row');
+  row.querySelectorAll('.sev-btn').forEach(b => {
+    b.className = 'sev-btn';
+    if (state.hw.damage[key] === 'none' && b.textContent === 'None') b.classList.add('sel-none');
+    if (state.hw.damage[key] === 'minor' && b.textContent === 'Minor') b.classList.add('sel-minor');
+    if (state.hw.damage[key] === 'moderate' && b.textContent === 'Moderate') b.classList.add('sel-moderate');
+    if (state.hw.damage[key] === 'severe' && b.textContent === 'Severe') b.classList.add('sel-severe');
+  });
+}
+
+function saveHwStep1() {
+  state.hw.affectedAreas = [...document.querySelectorAll('input[name="hw-area"]:checked')].map(i=>i.value);
+  showHwResults();
+}
+
+function showHwResults() {
+  state.step = 2;
+  updateProgress(100, false);
+  renderStepIndicator(HW_STEPS, 2, false);
+
+  // Assistance programs
+  const stateProgs = STATE_PROGRAMS[state.hw.state] || STATE_PROGRAMS['_default'];
+  const allProgs = [...NATIONAL_PROGRAMS, ...stateProgs];
+  const assistHtml = allProgs.map((p,i) => {
+    const tagCls = p.tag === 'grant' ? 'tag-grant' : p.tag === 'loan' ? 'tag-loan' : p.tag === 'fema' ? 'tag-fema' : 'tag-local';
+    const tagLabel = p.tag === 'grant' ? 'Grant / Program' : p.tag === 'loan' ? 'Loan' : p.tag === 'fema' ? 'Federal Assistance' : 'State / Local';
+    return `<div class="assistance-card">
+      <span class="tag ${tagCls}">${tagLabel}</span>
+      <h4>${p.name}</h4>
+      <p>${p.desc}</p>
+      ${p.note ? `<p style="color:#666;font-style:italic;font-size:0.79rem;">${p.note}</p>` : ''}
+      <a href="${p.url}" target="_blank">Apply / Learn More →</a>
+    </div>`;
+  }).join('');
+
+  // Repair guidance — only for categories with a rating
+  const damaged = DAMAGE_CATEGORIES.filter(c => state.hw.damage[c.key] && state.hw.damage[c.key] !== 'none');
+  const guidanceHtml = damaged.length === 0
+    ? `<p style="font-size:0.85rem;color:#888;">No damage categories were selected. Go back and rate the areas that were affected.</p>`
+    : damaged.map(cat => {
+        const g = REPAIR_GUIDANCE[cat.key];
+        if (!g) return '';
+        const sev = state.hw.damage[cat.key];
+        const sevColor = sev === 'severe' ? '#B71C1C' : sev === 'moderate' ? '#E65100' : '#2E7D32';
+        return `<div class="guidance-card">
+          <div class="guidance-card-header" onclick="toggleGuidance('g-${cat.key}')">
+            ${g.icon} ${g.label}
+            <span style="margin-left:8px;font-size:0.72rem;font-weight:600;color:${sevColor};text-transform:uppercase;">${sev}</span>
+            <span class="toggle" id="g-${cat.key}-toggle">▼ Show</span>
+          </div>
+          <div class="guidance-card-body" id="g-${cat.key}">
+            <div class="guidance-do">
+              <strong>✔ Do This</strong>
+              <ul>${g.do.map(d=>`<li>${d}</li>`).join('')}</ul>
+            </div>
+            <div class="guidance-dont">
+              <strong>✖ Do NOT Do This</strong>
+              <ul>${g.dont.map(d=>`<li>${d}</li>`).join('')}</ul>
+            </div>
+            ${g.pro ? `<div class="guidance-pro"><strong>⚠ Call a Professional</strong><p>${g.pro}</p></div>` : ''}
+            ${g.soi ? `<div class="soi-note">📜 ${g.soi}</div>` : ''}
+          </div>
+        </div>`;
+      }).join('');
+
+  const isListed = state.hw.designations.includes('Listed on the National Register of Historic Places');
+  const listedNote = isListed
+    ? `<div class="info-box">Your building is listed on the National Register of Historic Places. This provides additional protections under Section 106 of the National Historic Preservation Act when federal funds are involved (including FEMA assistance). Notify FEMA and your SHPO early in the process.</div>`
+    : `<div class="warn-box">Tip: If your building is not yet formally designated, consider contacting your State Historic Preservation Office (SHPO). Designation can provide additional protections and access to preservation-specific programs.</div>`;
+
+  screens().innerHTML = `
+    ${card(`
+      <h2>Your Recovery Guidance</h2>
+      <p class="section-desc">Based on your building's location and the damage you described. Expand each section for details.</p>
+      ${listedNote}
+
+      <div class="result-panel" style="border:1.5px solid var(--hw-border);">
+        <div class="result-panel-header" style="background:var(--hw-light);" onclick="togglePanel('panel-assist','toggle-assist')">
+          💰 Assistance Programs
+          <span class="toggle" id="toggle-assist">▼ Show</span>
+        </div>
+        <div class="result-panel-body" id="panel-assist" style="display:none;">
+          ${assistHtml}
+        </div>
+      </div>
+
+      <div class="result-panel" style="border:1.5px solid var(--hw-border);margin-top:12px;">
+        <div class="result-panel-header" style="background:var(--hw-light);" onclick="togglePanel('panel-repair','toggle-repair')">
+          🔧 Repair Guidance
+          <span class="toggle" id="toggle-repair">▼ Show</span>
+        </div>
+        <div class="result-panel-body" id="panel-repair" style="display:none;">
+          ${guidanceHtml}
+        </div>
+      </div>
+
+      <div class="btn-row">
+        <button class="btn btn-secondary" onclick="showHwStep1()">← Back</button>
+        <button class="btn btn-print" onclick="window.print()">🖨 Print / Save</button>
+        <button class="btn btn-primary" onclick="showModeSelect()">Start Over</button>
+      </div>
+    `)}
+  `;
+
+  // Auto-open both panels
+  togglePanel('panel-assist','toggle-assist');
+  togglePanel('panel-repair','toggle-repair');
+  // Auto-open first guidance card
+  if (damaged.length > 0) toggleGuidance('g-' + damaged[0].key);
+}
+
+function togglePanel(bodyId, toggleId) {
+  const body = document.getElementById(bodyId);
+  const btn = document.getElementById(toggleId);
+  if (!body) return;
+  const open = body.style.display !== 'none';
+  body.style.display = open ? 'none' : 'block';
+  if (btn) btn.textContent = open ? '▼ Show' : '▲ Hide';
+}
+
+function toggleGuidance(id) {
+  const body = document.getElementById(id);
+  const btn = document.getElementById(id + '-toggle');
+  if (!body) return;
+  body.classList.toggle('open');
+  if (btn) btn.textContent = body.classList.contains('open') ? '▲ Hide' : '▼ Show';
+}
+
+// ── ASSESSOR ─────────────────────────────────
+
+function startAssessor() {
+  state.mode = 'assessor'; state.step = 0;
+  badgeHtml('assessor');
+  showAssessorSubmode();
+}
+
+function showAssessorSubmode() {
+  updateProgress(10, true);
+  renderStepIndicator([], 0, true);
+  screens().innerHTML = card(`
+    <h2>Assessor Mode</h2>
+    <p class="section-desc">Choose an assessment type. You can start with Rapid Triage and escalate to a Full Assessment for buildings that need it.</p>
+    <div id="mode-select-screen">
+      <div class="mode-btn assessor-btn" onclick="startRapid()">
+        <div class="mode-icon">⚡</div>
+        <div class="mode-title">Rapid Triage</div>
+        <div class="mode-desc">Quick in-field screening. One page. Records building condition, flood data, and damage severity. Generates a posting recommendation and flags buildings for full assessment.</div>
+      </div>
+      <div class="mode-btn assessor-btn" onclick="startFull()">
+        <div class="mode-icon">📄</div>
+        <div class="mode-title">Full Assessment</div>
+        <div class="mode-desc">Comprehensive documentation for SHPO review. Covers significance, site, exterior, interior, and contents. Use for buildings flagged in rapid triage or requiring detailed documentation.</div>
+      </div>
+    </div>
+    <div class="btn-row">
+      <button class="btn btn-secondary" onclick="showModeSelect()">← Back</button>
+    </div>
+  `);
+}
+
+// ── RAPID TRIAGE ──────────────────────────
+
+const RAPID_STEPS = ['Building Info', 'Flood Data', 'Damage', 'Posting'];
+const RAPID_DAMAGE_CATS = [
+  { key: 'structural', label: 'Structural' },
+  { key: 'roof', label: 'Roof' },
+  { key: 'foundation', label: 'Foundation' },
+  { key: 'siding', label: 'Siding / Cladding' },
+  { key: 'windows', label: 'Windows / Doors' },
+  { key: 'chimney', label: 'Chimney' },
+  { key: 'electrical', label: 'Electrical / Mechanical' },
+  { key: 'landscape', label: 'Landscape / Site' },
+  { key: 'interior', label: 'Interior Finishes' },
+  { key: 'mold', label: 'Mold / Contamination' }
+];
+
+function startRapid() {
+  state.as.submode = 'rapid';
+  showRapidStep0();
+}
+
+function showRapidStep0() {
+  state.step = 0;
+  updateProgress(15, true);
+  renderStepIndicator(RAPID_STEPS, 0, true);
+  const s = state.as;
+  screens().innerHTML = card(`
+    <h2>Rapid Triage — Building Information</h2>
+    <div class="two-col">
+      <div class="field-group">
+        <label class="field-label">Inspector Name</label>
+        <input type="text" id="as-inspector" value="${s.inspector}" placeholder="Full name">
+      </div>
+      <div class="field-group">
+        <label class="field-label">Date of Inspection</label>
+        <input type="date" id="as-date" value="${s.date}">
+      </div>
+    </div>
+    <div class="field-group">
+      <label class="field-label">Area / Neighborhood</label>
+      <input type="text" id="as-area" value="${s.area}" placeholder="e.g. Downtown Montpelier, Ward 3">
+    </div>
+    <div class="field-group">
+      <label class="field-label">Building Name <span>(if known)</span></label>
+      <input type="text" id="as-bname" value="${s.buildingName}" placeholder="e.g. Hartwell House">
+    </div>
+    <div class="field-group">
+      <label class="field-label">Address</label>
+      <input type="text" id="as-addr" value="${s.address}" placeholder="Street address, city, state, ZIP">
+    </div>
+    <div class="two-col">
+      <div class="field-group">
+        <label class="field-label">Number of Stories</label>
+        <select id="as-stories">
+          <option value="">—</option>
+          ${['1','1.5','2','2.5','3','3+'].map(v=>`<option ${s.stories===v?'selected':''} value="${v}">${v}</option>`).join('')}
+        </select>
+      </div>
+      <div class="field-group">
+        <label class="field-label">Est. Footprint (sq ft)</label>
+        <select id="as-footprint">
+          <option value="">—</option>
+          ${['<500','500–1,000','1,000–2,500','2,500–5,000','>5,000'].map(v=>`<option ${s.footprint===v?'selected':''} value="${v}">${v}</option>`).join('')}
+        </select>
+      </div>
+    </div>
+    <div class="two-col">
+      <div class="field-group">
+        <label class="field-label">Number of Units</label>
+        <input type="text" id="as-units" value="${s.units}" placeholder="e.g. 1, 4, 12">
+      </div>
+      <div class="field-group">
+        <label class="field-label">Approx. Age</label>
+        <select id="as-age">
+          <option value="">—</option>
+          ${['Pre-1870','1870–1940','1940–1970','Post-1970','Unknown'].map(v=>`<option ${s.age===v?'selected':''} value="${v}">${v}</option>`).join('')}
+        </select>
+      </div>
+    </div>
+    <div class="two-col">
+      <div class="field-group">
+        <label class="field-label">Foundation Type</label>
+        <select id="as-foundation">
+          <option value="">—</option>
+          ${['Stone / rubble','Brick','Poured concrete','Concrete block','Crawl space','Slab','Unknown'].map(v=>`<option ${s.foundation===v?'selected':''} value="${v}">${v}</option>`).join('')}
+        </select>
+      </div>
+      <div class="field-group">
+        <label class="field-label">Roof Type</label>
+        <select id="as-roof">
+          <option value="">—</option>
+          ${['Gable','Hip','Gambrel','Flat','Shed','Mansard','Unknown'].map(v=>`<option ${s.roof===v?'selected':''} value="${v}">${v}</option>`).join('')}
+        </select>
+      </div>
+    </div>
+    <div class="field-group">
+      <label class="field-label">Wall Finish / Siding</label>
+      <select id="as-wallfinish">
+        <option value="">—</option>
+        ${['Wood clapboard','Wood shingle','Brick','Stone','Stucco','Metal','Concrete block','Unknown'].map(v=>`<option ${s.wallFinish===v?'selected':''} value="${v}">${v}</option>`).join('')}
+      </select>
+    </div>
+    <div class="field-group">
+      <label class="field-label">Historic Status <span>(check all that apply)</span></label>
+      <div class="check-group">
+        ${['National Register listed','Local landmark','Contributing structure in historic district','Not formally designated'].map(v=>
+          `<label class="check-item"><input type="checkbox" name="as-hist" value="${v}" ${s.historicStatus.includes(v)?'checked':''}> ${v}</label>`
+        ).join('')}
+      </div>
+    </div>
+    <div class="btn-row">
+      <button class="btn btn-secondary" onclick="showAssessorSubmode()">← Back</button>
+      <button class="btn btn-primary as" onclick="saveRapidStep0()">Next: Flood Data →</button>
+    </div>
+  `);
+}
+
+function saveRapidStep0() {
+  const s = state.as;
+  s.inspector = document.getElementById('as-inspector').value;
+  s.date = document.getElementById('as-date').value;
+  s.area = document.getElementById('as-area').value;
+  s.buildingName = document.getElementById('as-bname').value;
+  s.address = document.getElementById('as-addr').value;
+  s.stories = document.getElementById('as-stories').value;
+  s.footprint = document.getElementById('as-footprint').value;
+  s.units = document.getElementById('as-units').value;
+  s.age = document.getElementById('as-age').value;
+  s.foundation = document.getElementById('as-foundation').value;
+  s.roof = document.getElementById('as-roof').value;
+  s.wallFinish = document.getElementById('as-wallfinish').value;
+  s.historicStatus = [...document.querySelectorAll('input[name="as-hist"]:checked')].map(i=>i.value);
+  if (!s.address) { alert('Please enter a building address.'); return; }
+  showRapidStep1();
+}
+
+function showRapidStep1() {
+  state.step = 1;
+  updateProgress(40, true);
+  renderStepIndicator(RAPID_STEPS, 1, true);
+  const s = state.as;
+  screens().innerHTML = card(`
+    <h2>Rapid Triage — Flood Data</h2>
+    <div class="field-group">
+      <label class="field-label">Nature of Water <span>(check all that apply)</span></label>
+      <div class="check-group inline">
+        ${['Standing','Flowing / moving','Seepage / groundwater','Combined sewage'].map(v=>
+          `<label class="check-item"><input type="checkbox" name="as-water" value="${v}" ${s.waterNature.includes(v)?'checked':''}> ${v}</label>`
+        ).join('')}
+      </div>
+    </div>
+    <div class="field-group">
+      <label class="field-label">Maximum Water Depth / Location <span>(check all that apply)</span></label>
+      <div class="check-group">
+        ${['Basement / crawl space only','First floor (< 1 ft)','First floor (1–4 ft)','First floor (> 4 ft)','Second floor or above'].map(v=>
+          `<label class="check-item"><input type="checkbox" name="as-depth" value="${v}" ${s.waterDepth.includes(v)?'checked':''}> ${v}</label>`
+        ).join('')}
+      </div>
+    </div>
+    <div class="two-col">
+      <div class="field-group">
+        <label class="field-label">Sediment Deposit Present?</label>
+        <div class="radio-group inline">
+          ${['Yes','No','Unknown'].map(v=>`<label class="radio-item"><input type="radio" name="as-sed" value="${v}" ${s.sediment===v?'checked':''}> ${v}</label>`).join('')}
+        </div>
+      </div>
+      <div class="field-group">
+        <label class="field-label">Erosion Present?</label>
+        <div class="radio-group inline">
+          ${['Yes','No','Unknown'].map(v=>`<label class="radio-item"><input type="radio" name="as-ero" value="${v}" ${s.erosion===v?'checked':''}> ${v}</label>`).join('')}
+        </div>
+      </div>
+    </div>
+    <div class="btn-row">
+      <button class="btn btn-secondary" onclick="showRapidStep0()">← Back</button>
+      <button class="btn btn-primary as" onclick="saveRapidStep1()">Next: Damage Ratings →</button>
+    </div>
+  `);
+}
+
+function saveRapidStep1() {
+  const s = state.as;
+  s.waterNature = [...document.querySelectorAll('input[name="as-water"]:checked')].map(i=>i.value);
+  s.waterDepth = [...document.querySelectorAll('input[name="as-depth"]:checked')].map(i=>i.value);
+  s.sediment = document.querySelector('input[name="as-sed"]:checked')?.value || '';
+  s.erosion = document.querySelector('input[name="as-ero"]:checked')?.value || '';
+  showRapidStep2();
+}
+
+function showRapidStep2() {
+  state.step = 2;
+  updateProgress(65, true);
+  renderStepIndicator(RAPID_STEPS, 2, true);
+  const s = state.as;
+
+  const rows = RAPID_DAMAGE_CATS.map(cat => {
+    const cur = s.rapidDamage[cat.key] || '';
+    return `<div class="damage-row">
+      <span class="damage-row-label">${cat.label}</span>
+      <div class="severity-btns">
+        <button class="sev-btn ${cur==='none'?'sel-minor':''}" onclick="setRapidSev('${cat.key}','none',this)">None</button>
+        <button class="sev-btn ${cur==='minor'?'sel-minor':''}" onclick="setRapidSev('${cat.key}','minor',this)">Minor</button>
+        <button class="sev-btn ${cur==='moderate'?'sel-moderate':''}" onclick="setRapidSev('${cat.key}','moderate',this)">Moderate</button>
+        <button class="sev-btn ${cur==='severe'?'sel-severe':''}" onclick="setRapidSev('${cat.key}','severe',this)">Severe</button>
+      </div>
+    </div>`;
+  }).join('');
+
+  screens().innerHTML = card(`
+    <h2>Rapid Triage — Damage Ratings</h2>
+    <p class="section-desc">Rate each component based on direct observation.</p>
+    <div class="damage-section">
+      ${rows}
+    </div>
+    <div class="field-group" style="margin-top:16px;">
+      <label class="field-label">Overall Damage Estimate</label>
+      <div class="radio-group">
+        ${['0–10% (minimal)','10–30% (minor)','30–60% (moderate)','60–90% (major)','90–100% (destruction / total loss)'].map(v=>
+          `<label class="radio-item"><input type="radio" name="as-overall" value="${v}" ${s.overallDamage===v?'checked':''}> ${v}</label>`
+        ).join('')}
+      </div>
+    </div>
+    <div class="btn-row">
+      <button class="btn btn-secondary" onclick="showRapidStep1()">← Back</button>
+      <button class="btn btn-primary as" onclick="saveRapidStep2()">Next: Posting →</button>
+    </div>
+  `);
+}
+
+function setRapidSev(key, level, btn) {
+  state.as.rapidDamage[key] = (state.as.rapidDamage[key] === level) ? '' : level;
+  const row = btn.closest('.damage-row');
+  row.querySelectorAll('.sev-btn').forEach(b => {
+    b.className = 'sev-btn';
+    if (state.as.rapidDamage[key] === 'none' && b.textContent === 'None') b.classList.add('sel-minor');
+    if (state.as.rapidDamage[key] === 'minor' && b.textContent === 'Minor') b.classList.add('sel-minor');
+    if (state.as.rapidDamage[key] === 'moderate' && b.textContent === 'Moderate') b.classList.add('sel-moderate');
+    if (state.as.rapidDamage[key] === 'severe' && b.textContent === 'Severe') b.classList.add('sel-severe');
+  });
+}
+
+function saveRapidStep2() {
+  state.as.overallDamage = document.querySelector('input[name="as-overall"]:checked')?.value || '';
+  showRapidStep3();
+}
+
+function showRapidStep3() {
+  state.step = 3;
+  updateProgress(85, true);
+  renderStepIndicator(RAPID_STEPS, 3, true);
+  const s = state.as;
+
+  // Auto-suggest posting based on damage
+  const severes = Object.values(s.rapidDamage).filter(v=>v==='severe').length;
+  const mods = Object.values(s.rapidDamage).filter(v=>v==='moderate').length;
+  let suggestedPosting = s.posting;
+  if (!suggestedPosting) {
+    if (severes >= 2 || s.overallDamage.startsWith('60') || s.overallDamage.startsWith('90')) suggestedPosting = 'Unsafe';
+    else if (severes === 1 || mods >= 3) suggestedPosting = 'Restricted Use';
+    else suggestedPosting = 'Inspected';
+  }
+
+  screens().innerHTML = card(`
+    <h2>Rapid Triage — Posting &amp; Recommendations</h2>
+    <div class="field-group">
+      <label class="field-label">Posting Classification</label>
+      ${suggestedPosting && !s.posting ? `<div class="info-box" style="margin-bottom:10px;">Suggested based on damage ratings: <strong>${suggestedPosting}</strong></div>` : ''}
+      <div class="radio-group">
+        <label class="radio-item"><input type="radio" name="as-post" value="Inspected" ${(s.posting||suggestedPosting)==='Inspected'?'checked':''}> Inspected — no immediate hazard</label>
+        <label class="radio-item"><input type="radio" name="as-post" value="Restricted Use" ${(s.posting||suggestedPosting)==='Restricted Use'?'checked':''}> Restricted Use — entry with caution; some areas unsafe</label>
+        <label class="radio-item"><input type="radio" name="as-post" value="Unsafe" ${(s.posting||suggestedPosting)==='Unsafe'?'checked':''}> Unsafe — do not enter; immediate hazard</label>
+      </div>
+    </div>
+    <div class="field-group">
+      <label class="field-label">Recommend Full Assessment?</label>
+      <div class="check-group">
+        ${['Structural concerns requiring engineering review','Archaeological material observed','Collections or archival materials present','Historic significance warrants detailed documentation','Other'].map(v=>
+          `<label class="check-item"><input type="checkbox" name="as-trigger" value="${v}" ${s.triggerReasons.includes(v)?'checked':''}> ${v}</label>`
+        ).join('')}
+      </div>
+    </div>
+    <div class="field-group">
+      <label class="field-label">Notes</label>
+      <textarea id="as-notes" placeholder="Observations, access conditions, immediate hazards, special concerns...">${s.notes}</textarea>
+    </div>
+    <div class="btn-row">
+      <button class="btn btn-secondary" onclick="showRapidStep2()">← Back</button>
+      <button class="btn btn-primary as" onclick="saveRapidStep3()">Generate Report →</button>
+    </div>
+  `);
+}
+
+function saveRapidStep3() {
+  const s = state.as;
+  s.posting = document.querySelector('input[name="as-post"]:checked')?.value || 'Inspected';
+  s.triggerReasons = [...document.querySelectorAll('input[name="as-trigger"]:checked')].map(i=>i.value);
+  s.recommendFull = s.triggerReasons.length > 0;
+  s.notes = document.getElementById('as-notes').value;
+  showRapidResult();
+}
+
+function showRapidResult() {
+  state.step = 4;
+  updateProgress(100, true);
+  renderStepIndicator(RAPID_STEPS, 4, true);
+  const s = state.as;
+
+  const postCls = s.posting === 'Inspected' ? 'posting-inspected' : s.posting === 'Restricted Use' ? 'posting-restricted' : 'posting-unsafe';
+  const postIcon = s.posting === 'Inspected' ? '✅' : s.posting === 'Restricted Use' ? '⚠️' : '🚫';
+
+  const damageRows = RAPID_DAMAGE_CATS.filter(c => s.rapidDamage[c.key]).map(c => {
+    const sev = s.rapidDamage[c.key];
+    const col = sev === 'severe' ? '#B71C1C' : sev === 'moderate' ? '#E65100' : '#2E7D32';
+    return `<tr><td>${c.label}</td><td style="color:${col};font-weight:600;text-transform:capitalize;">${sev}</td></tr>`;
+  }).join('');
+
+  screens().innerHTML = card(`
+    <h2>Rapid Triage Report</h2>
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;flex-wrap:wrap;">
+      <span class="posting-badge ${postCls}">${postIcon} ${s.posting}</span>
+      ${s.recommendFull ? `<span style="background:#E3F2FD;color:#1565C0;border:1.5px solid #90CAF9;border-radius:6px;padding:5px 12px;font-size:0.82rem;font-weight:600;">📄 Full Assessment Recommended</span>` : ''}
+    </div>
+
+    <table class="summary-table">
+      <tr><td>Inspector</td><td>${s.inspector || '—'}</td></tr>
+      <tr><td>Date</td><td>${s.date || '—'}</td></tr>
+      <tr><td>Area</td><td>${s.area || '—'}</td></tr>
+      <tr><td>Building</td><td>${s.buildingName ? s.buildingName + ' — ' : ''}${s.address}</td></tr>
+      <tr><td>Stories / Units</td><td>${s.stories || '—'} stories / ${s.units || '—'} units</td></tr>
+      <tr><td>Age / Type</td><td>${s.age || '—'}</td></tr>
+      <tr><td>Foundation</td><td>${s.foundation || '—'}</td></tr>
+      <tr><td>Wall Finish</td><td>${s.wallFinish || '—'}</td></tr>
+      <tr><td>Historic Status</td><td>${s.historicStatus.join(', ') || 'Not recorded'}</td></tr>
+      <tr><td>Water Type</td><td>${s.waterNature.join(', ') || '—'}</td></tr>
+      <tr><td>Water Depth</td><td>${s.waterDepth.join('; ') || '—'}</td></tr>
+      <tr><td>Sediment / Erosion</td><td>${s.sediment || '—'} / ${s.erosion || '—'}</td></tr>
+      <tr><td>Overall Damage</td><td>${s.overallDamage || '—'}</td></tr>
+    </table>
+
+    ${damageRows ? `<div class="damage-section"><div class="damage-section-header">Damage by Category</div><table class="summary-table">${damageRows}</table></div>` : ''}
+
+    ${s.triggerReasons.length > 0 ? `
+      <div class="warn-box" style="margin-top:14px;">
+        <strong>Full Assessment Triggers:</strong><br>
+        <ul style="margin:6px 0 0 16px;font-size:0.82rem;">${s.triggerReasons.map(r=>`<li>${r}</li>`).join('')}</ul>
+      </div>` : ''}
+
+    ${s.notes ? `<div class="field-group" style="margin-top:14px;"><strong style="font-size:0.82rem;">Notes:</strong><p style="font-size:0.82rem;color:#444;margin-top:4px;line-height:1.5;">${s.notes}</p></div>` : ''}
+
+    <div class="btn-row">
+      <button class="btn btn-secondary" onclick="showRapidStep3()">← Back</button>
+      <button class="btn btn-print" onclick="window.print()">🖨 Print / Save</button>
+      ${s.recommendFull ? `<button class="btn btn-primary as" onclick="escalateToFull()">→ Full Assessment</button>` : ''}
+      <button class="btn btn-secondary" onclick="showModeSelect()">Start Over</button>
+    </div>
+  `);
+}
+
+function escalateToFull() {
+  // Pre-populate full assessment from rapid data
+  startFull();
+}
+
+// ── FULL ASSESSMENT ───────────────────────
+
+function startFull() {
+  state.as.submode = 'full';
+  showFullForm();
+}
+
+function showFullForm() {
+  updateProgress(30, true);
+  renderStepIndicator(['Full Assessment', 'Review & Submit'], 0, true);
+  const s = state.as;
+
+  const extRows = FULL_DAMAGE_EXTERIOR.map(label => {
+    const key = label.toLowerCase().replace(/[^a-z]/g,'_');
+    const cur = s.exteriorDamage[key] || '';
+    return `<div class="full-damage-row">
+      <span>${label}</span>
+      <div class="severity-btns">
+        <button class="sev-btn ${cur==='minor'?'sel-minor':''}" onclick="setFullExtSev('${key}','minor',this)">Minor</button>
+        <button class="sev-btn ${cur==='moderate'?'sel-moderate':''}" onclick="setFullExtSev('${key}','moderate',this)">Moderate</button>
+        <button class="sev-btn ${cur==='severe'?'sel-severe':''}" onclick="setFullExtSev('${key}','severe',this)">Severe</button>
+      </div>
+    </div>`;
+  }).join('');
+
+  const intRows = FULL_DAMAGE_INTERIOR.map(label => {
+    const key = label.toLowerCase().replace(/[^a-z]/g,'_');
+    const cur = s.interiorDamage[key] || '';
+    return `<div class="full-damage-row">
+      <span>${label}</span>
+      <div class="severity-btns">
+        <button class="sev-btn ${cur==='minor'?'sel-minor':''}" onclick="setFullIntSev('${key}','minor',this)">Minor</button>
+        <button class="sev-btn ${cur==='moderate'?'sel-moderate':''}" onclick="setFullIntSev('${key}','moderate',this)">Moderate</button>
+        <button class="sev-btn ${cur==='severe'?'sel-severe':''}" onclick="setFullIntSev('${key}','severe',this)">Severe</button>
+      </div>
+    </div>`;
+  }).join('');
+
+  screens().innerHTML = card(`
+    <h2>Full Building &amp; Site Assessment</h2>
+    <p class="section-desc">Comprehensive documentation for SHPO review. Complete all sections applicable to this building.</p>
+
+    <div class="form-section-title">Inspector &amp; Building</div>
+    <div class="two-col">
+      <div class="field-group">
+        <label class="field-label">Inspector Name</label>
+        <input type="text" id="f-inspector" value="${s.inspector}" placeholder="Full name">
+      </div>
+      <div class="field-group">
+        <label class="field-label">Date</label>
+        <input type="date" id="f-date" value="${s.date}">
+      </div>
+    </div>
+    <div class="field-group">
+      <label class="field-label">Building Name</label>
+      <input type="text" id="f-bname" value="${s.buildingName}" placeholder="e.g. Hartwell House">
+    </div>
+    <div class="field-group">
+      <label class="field-label">Address</label>
+      <input type="text" id="f-addr" value="${s.address}" placeholder="Full address">
+    </div>
+
+    <div class="form-section-title">GPS Coordinates <span style="font-weight:400;font-size:0.75rem;">(up to 5 locations, NAD83)</span></div>
+    ${[0,1,2,3,4].map(i => `
+      <div class="field-group" style="margin-bottom:8px;">
+        <label class="field-label">Point ${i+1}</label>
+        <input type="text" id="f-gps-${i}" value="${s.gps[i]||''}" placeholder="e.g. 44.2601° N, 72.5754° W">
+      </div>
+    `).join('')}
+
+    <div class="form-section-title">Potential Hazards</div>
+    <div class="check-group">
+      ${['Electrical hazard','Chemical / fuel spill','Active mold colonization','Asbestos (suspected or confirmed)','Lead paint (suspected or confirmed)','Other'].map(v =>
+        `<label class="check-item"><input type="checkbox" name="f-haz" value="${v}" ${s.hazards.includes(v)?'checked':''}> ${v}</label>`
+      ).join('')}
+    </div>
+
+    <div class="form-section-title">Historic Significance</div>
+    ${[
+      ['f-sig-older','Does the property appear to be older than 50 years?','as-sig-older'],
+      ['f-sig-craft','Does it retain intact craftmanship or workmanship?','as-sig-craft'],
+      ['f-sig-style','Does it represent a distinctive architectural type or style?','as-sig-style'],
+      ['f-sig-setting','Does the setting contribute to historic character?','as-sig-setting'],
+      ['f-sig-rare','Is it a rare or endangered building type?','as-sig-rare'],
+      ['f-sig-persons','Is it associated with significant persons or events?','as-sig-persons'],
+    ].map(([id, label]) => `
+      <div class="field-group">
+        <label class="field-label">${label}</label>
+        <div class="radio-group inline">
+          ${['Yes','No','Unknown'].map(v=>`<label class="radio-item"><input type="radio" name="${id}" value="${v}"> ${v}</label>`).join('')}
+        </div>
+      </div>
+    `).join('')}
+    <div class="field-group">
+      <label class="field-label">Architectural Style</label>
+      <select id="f-arch">
+        <option value="">— Select —</option>
+        ${ARCH_STYLES.map(v=>`<option value="${v}" ${s.archStyle===v?'selected':''}>${v}</option>`).join('')}
+      </select>
+    </div>
+
+    <div class="form-section-title">Site Evaluation</div>
+    ${[
+      ['f-topo','Topographic condition (slope, drainage)'],
+      ['f-retaining','Retaining walls — condition'],
+      ['f-veg','Vegetation — condition'],
+      ['f-small','Small structures (outbuildings, sheds) — condition'],
+    ].map(([id, label]) => `
+      <div class="field-group">
+        <label class="field-label">${label}</label>
+        <div class="radio-group inline">
+          ${['Good','Fair','Poor','N/A'].map(v=>`<label class="radio-item"><input type="radio" name="${id}" value="${v}"> ${v}</label>`).join('')}
+        </div>
+      </div>
+    `).join('')}
+    <div class="two-col">
+      <div class="field-group">
+        <label class="field-label">Archaeological Material Present?</label>
+        <div class="radio-group inline">
+          ${['Yes','No','Unknown'].map(v=>`<label class="radio-item"><input type="radio" name="f-archaeo" value="${v}"> ${v}</label>`).join('')}
+        </div>
+      </div>
+      <div class="field-group">
+        <label class="field-label">Collections Present?</label>
+        <div class="radio-group inline">
+          ${['Yes','No'].map(v=>`<label class="radio-item"><input type="radio" name="f-coll" value="${v}"> ${v}</label>`).join('')}
+        </div>
+      </div>
+    </div>
+
+    <div class="form-section-title">Exterior Damage</div>
+    ${extRows}
+
+    <div class="form-section-title">Interior Damage</div>
+    ${intRows}
+
+    <div class="form-section-title">Contents &amp; Collections</div>
+    <div class="field-group">
+      <label class="field-label">Collection Type <span>(if present)</span></label>
+      <div class="check-group inline">
+        ${['Archive / documents','Art / objects','Library / books','Historical artifacts','Other'].map(v=>
+          `<label class="check-item"><input type="checkbox" name="f-ctype" value="${v}" ${s.contentsType.includes(v)?'checked':''}> ${v}</label>`
+        ).join('')}
+      </div>
+    </div>
+    <div class="field-group">
+      <label class="field-label">Collections Condition</label>
+      <div class="radio-group inline">
+        ${['Good','Minor damage','Moderate damage','Severe damage','N/A'].map(v=>`<label class="radio-item"><input type="radio" name="f-ccond" value="${v}" ${s.contentsCond===v?'checked':''}> ${v}</label>`).join('')}
+      </div>
+    </div>
+
+    <div class="form-section-title">Final Posting &amp; Recommendations</div>
+    <div class="field-group">
+      <label class="field-label">Final Posting Classification</label>
+      <div class="radio-group">
+        <label class="radio-item"><input type="radio" name="f-post" value="Inspected" ${s.finalPosting==='Inspected'?'checked':''}> Inspected — no immediate hazard</label>
+        <label class="radio-item"><input type="radio" name="f-post" value="Restricted Use" ${s.finalPosting==='Restricted Use'?'checked':''}> Restricted Use — limited entry</label>
+        <label class="radio-item"><input type="radio" name="f-post" value="Unsafe" ${s.finalPosting==='Unsafe'?'checked':''}> Unsafe — do not enter</label>
+        <label class="radio-item"><input type="radio" name="f-post" value="Further Evaluation" ${s.finalPosting==='Further Evaluation'?'checked':''}> Further Evaluation Needed</label>
+      </div>
+    </div>
+    <div class="field-group">
+      <label class="field-label">Recommendations / Notes</label>
+      <textarea id="f-recs" placeholder="Describe recommended actions, specialist referrals, follow-up needs...">${s.recommendations}</textarea>
+    </div>
+
+    <div class="btn-row">
+      <button class="btn btn-secondary" onclick="showAssessorSubmode()">← Back</button>
+      <button class="btn btn-primary as" onclick="saveFullForm()">Generate Report →</button>
+    </div>
+  `);
+}
+
+function setFullExtSev(key, level, btn) {
+  state.as.exteriorDamage[key] = (state.as.exteriorDamage[key] === level) ? '' : level;
+  refreshSevBtns(btn, state.as.exteriorDamage[key]);
+}
+function setFullIntSev(key, level, btn) {
+  state.as.interiorDamage[key] = (state.as.interiorDamage[key] === level) ? '' : level;
+  refreshSevBtns(btn, state.as.interiorDamage[key]);
+}
+function refreshSevBtns(btn, cur) {
+  const row = btn.closest('.full-damage-row');
+  row.querySelectorAll('.sev-btn').forEach(b => {
+    b.className = 'sev-btn';
+    if (cur === 'minor' && b.textContent === 'Minor') b.classList.add('sel-minor');
+    if (cur === 'moderate' && b.textContent === 'Moderate') b.classList.add('sel-moderate');
+    if (cur === 'severe' && b.textContent === 'Severe') b.classList.add('sel-severe');
+  });
+}
+
+function saveFullForm() {
+  const s = state.as;
+  s.inspector = document.getElementById('f-inspector').value || s.inspector;
+  s.date = document.getElementById('f-date').value || s.date;
+  s.buildingName = document.getElementById('f-bname').value || s.buildingName;
+  s.address = document.getElementById('f-addr').value || s.address;
+  s.gps = [0,1,2,3,4].map(i => document.getElementById(`f-gps-${i}`)?.value || '');
+  s.hazards = [...document.querySelectorAll('input[name="f-haz"]:checked')].map(i=>i.value);
+  s.archStyle = document.getElementById('f-arch').value;
+  s.contentsType = [...document.querySelectorAll('input[name="f-ctype"]:checked')].map(i=>i.value);
+  s.contentsCond = document.querySelector('input[name="f-ccond"]:checked')?.value || '';
+  s.finalPosting = document.querySelector('input[name="f-post"]:checked')?.value || '';
+  s.recommendations = document.getElementById('f-recs').value;
+  if (!s.address) { alert('Please enter a building address.'); return; }
+  showFullResult();
+}
+
+function showFullResult() {
+  updateProgress(100, true);
+  renderStepIndicator(['Full Assessment', 'Review & Submit'], 1, true);
+  const s = state.as;
+
+  const posting = s.finalPosting || 'Not recorded';
+  const postCls = posting === 'Inspected' ? 'posting-inspected' : posting === 'Restricted Use' ? 'posting-restricted' : posting === 'Unsafe' ? 'posting-unsafe' : 'posting-restricted';
+  const postIcon = posting === 'Inspected' ? '✅' : posting === 'Restricted Use' ? '⚠️' : posting === 'Unsafe' ? '🚫' : '🔍';
+
+  const extDmg = Object.entries(s.exteriorDamage).filter(([,v])=>v).map(([k,v]) => {
+    const label = FULL_DAMAGE_EXTERIOR.find(l => l.toLowerCase().replace(/[^a-z]/g,'_') === k) || k;
+    const col = v === 'severe' ? '#B71C1C' : v === 'moderate' ? '#E65100' : '#2E7D32';
+    return `<tr><td>${label}</td><td style="color:${col};font-weight:600;text-transform:capitalize;">${v}</td></tr>`;
+  }).join('');
+
+  const intDmg = Object.entries(s.interiorDamage).filter(([,v])=>v).map(([k,v]) => {
+    const label = FULL_DAMAGE_INTERIOR.find(l => l.toLowerCase().replace(/[^a-z]/g,'_') === k) || k;
+    const col = v === 'severe' ? '#B71C1C' : v === 'moderate' ? '#E65100' : '#2E7D32';
+    return `<tr><td>${label}</td><td style="color:${col};font-weight:600;text-transform:capitalize;">${v}</td></tr>`;
+  }).join('');
+
+  const gpsValid = s.gps.filter(g=>g.trim());
+
+  screens().innerHTML = card(`
+    <h2>Full Assessment Report</h2>
+    <p style="font-size:0.78rem;color:#888;margin-bottom:16px;">For SHPO submission. Print or save for your records.</p>
+
+    <span class="posting-badge ${postCls}">${postIcon} Final Posting: ${posting}</span>
+
+    <div class="form-section-title" style="margin-top:16px;">Building Information</div>
+    <table class="summary-table">
+      <tr><td>Inspector</td><td>${s.inspector || '—'}</td></tr>
+      <tr><td>Date</td><td>${s.date || '—'}</td></tr>
+      <tr><td>Building</td><td>${s.buildingName ? s.buildingName + '<br>' : ''}${s.address}</td></tr>
+      <tr><td>Stories / Units</td><td>${s.stories || '—'} / ${s.units || '—'}</td></tr>
+      <tr><td>Age / Style</td><td>${s.age || '—'}${s.archStyle ? ' — ' + s.archStyle : ''}</td></tr>
+      <tr><td>Foundation / Wall</td><td>${s.foundation || '—'} / ${s.wallFinish || '—'}</td></tr>
+      <tr><td>Historic Status</td><td>${s.historicStatus.join(', ') || '—'}</td></tr>
+      ${gpsValid.length ? `<tr><td>GPS Points</td><td>${gpsValid.join('<br>')}</td></tr>` : ''}
+    </table>
+
+    ${s.hazards.length ? `
+      <div class="form-section-title">Hazards Identified</div>
+      <ul style="padding-left:18px;font-size:0.83rem;">${s.hazards.map(h=>`<li>${h}</li>`).join('')}</ul>` : ''}
+
+    <div class="form-section-title">Flood Data</div>
+    <table class="summary-table">
+      <tr><td>Water Type</td><td>${s.waterNature.join(', ') || '—'}</td></tr>
+      <tr><td>Water Depth</td><td>${s.waterDepth.join('; ') || '—'}</td></tr>
+      <tr><td>Sediment / Erosion</td><td>${s.sediment || '—'} / ${s.erosion || '—'}</td></tr>
+    </table>
+
+    ${extDmg ? `<div class="form-section-title">Exterior Damage</div><table class="summary-table">${extDmg}</table>` : ''}
+    ${intDmg ? `<div class="form-section-title">Interior Damage</div><table class="summary-table">${intDmg}</table>` : ''}
+
+    ${s.contentsType.length ? `
+      <div class="form-section-title">Collections</div>
+      <table class="summary-table">
+        <tr><td>Types</td><td>${s.contentsType.join(', ')}</td></tr>
+        <tr><td>Condition</td><td>${s.contentsCond || '—'}</td></tr>
+      </table>` : ''}
+
+    ${s.recommendations ? `
+      <div class="form-section-title">Recommendations</div>
+      <p style="font-size:0.83rem;color:#333;line-height:1.6;">${s.recommendations}</p>` : ''}
+
+    <div class="btn-row">
+      <button class="btn btn-secondary" onclick="showFullForm()">← Back</button>
+      <button class="btn btn-print" onclick="window.print()">🖨 Print / Save</button>
+      <button class="btn btn-secondary" onclick="showModeSelect()">Start Over</button>
+    </div>
+  `);
+}
+
+// ── UTILITIES ─────────────────────────────
+
+function usStates() {
+  return [
+    {v:'AL',l:'Alabama'},{v:'AK',l:'Alaska'},{v:'AZ',l:'Arizona'},{v:'AR',l:'Arkansas'},
+    {v:'CA',l:'California'},{v:'CO',l:'Colorado'},{v:'CT',l:'Connecticut'},{v:'DE',l:'Delaware'},
+    {v:'FL',l:'Florida'},{v:'GA',l:'Georgia'},{v:'HI',l:'Hawaii'},{v:'ID',l:'Idaho'},
+    {v:'IL',l:'Illinois'},{v:'IN',l:'Indiana'},{v:'IA',l:'Iowa'},{v:'KS',l:'Kansas'},
+    {v:'KY',l:'Kentucky'},{v:'LA',l:'Louisiana'},{v:'ME',l:'Maine'},{v:'MD',l:'Maryland'},
+    {v:'MA',l:'Massachusetts'},{v:'MI',l:'Michigan'},{v:'MN',l:'Minnesota'},{v:'MS',l:'Mississippi'},
+    {v:'MO',l:'Missouri'},{v:'MT',l:'Montana'},{v:'NE',l:'Nebraska'},{v:'NV',l:'Nevada'},
+    {v:'NH',l:'New Hampshire'},{v:'NJ',l:'New Jersey'},{v:'NM',l:'New Mexico'},{v:'NY',l:'New York'},
+    {v:'NC',l:'North Carolina'},{v:'ND',l:'North Dakota'},{v:'OH',l:'Ohio'},{v:'OK',l:'Oklahoma'},
+    {v:'OR',l:'Oregon'},{v:'PA',l:'Pennsylvania'},{v:'RI',l:'Rhode Island'},{v:'SC',l:'South Carolina'},
+    {v:'SD',l:'South Dakota'},{v:'TN',l:'Tennessee'},{v:'TX',l:'Texas'},{v:'UT',l:'Utah'},
+    {v:'VT',l:'Vermont'},{v:'VA',l:'Virginia'},{v:'WA',l:'Washington'},{v:'WV',l:'West Virginia'},
+    {v:'WI',l:'Wisconsin'},{v:'WY',l:'Wyoming'},{v:'DC',l:'Washington D.C.'},{v:'PR',l:'Puerto Rico'},
+    {v:'VI',l:'U.S. Virgin Islands'},{v:'GU',l:'Guam'}
+  ];
+}
+
+// ── INIT ──────────────────────────────────
+showModeSelect();
+</script>
+</body>
+</html>
