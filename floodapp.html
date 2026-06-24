@@ -475,11 +475,122 @@
   }
   .full-damage-row:last-child { border-bottom: none; }
 
+  /* ── Chat widget ── */
+  #chat-btn {
+    position: fixed;
+    bottom: 24px; right: 24px;
+    background: #1B3A5C;
+    color: #FFF;
+    border: none; border-radius: 28px;
+    padding: 12px 20px;
+    font-size: 0.85rem; font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.22);
+    display: flex; align-items: center; gap: 8px;
+    z-index: 900;
+    transition: background 0.15s;
+  }
+  #chat-btn:hover { background: #2E6DA4; }
+  #chat-panel {
+    position: fixed;
+    bottom: 80px; right: 24px;
+    width: 360px; max-width: calc(100vw - 32px);
+    height: 480px; max-height: calc(100vh - 120px);
+    background: #FFF;
+    border-radius: 14px;
+    box-shadow: 0 8px 40px rgba(0,0,0,0.18);
+    display: flex; flex-direction: column;
+    z-index: 900;
+    transform: scale(0.92) translateY(16px);
+    opacity: 0;
+    pointer-events: none;
+    transition: transform 0.18s ease, opacity 0.18s ease;
+  }
+  #chat-panel.open {
+    transform: scale(1) translateY(0);
+    opacity: 1;
+    pointer-events: all;
+  }
+  #chat-header {
+    background: #1B3A5C;
+    color: #FFF;
+    padding: 12px 16px;
+    border-radius: 14px 14px 0 0;
+    font-size: 0.88rem; font-weight: 600;
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  #chat-header .chat-sub { font-size: 0.7rem; font-weight: 400; opacity: 0.75; margin-top: 1px; }
+  #chat-close { background: none; border: none; color: #FFF; font-size: 1.1rem; cursor: pointer; line-height: 1; }
+  #chat-log {
+    flex: 1;
+    overflow-y: auto;
+    padding: 12px;
+    display: flex; flex-direction: column; gap: 8px;
+    background: #F7F8FA;
+  }
+  .chat-msg {
+    max-width: 88%;
+    padding: 8px 12px;
+    border-radius: 10px;
+    font-size: 0.8rem;
+    line-height: 1.45;
+    white-space: pre-wrap;
+  }
+  .chat-user {
+    align-self: flex-end;
+    background: #1B3A5C;
+    color: #FFF;
+    border-bottom-right-radius: 3px;
+  }
+  .chat-assistant {
+    align-self: flex-start;
+    background: #FFF;
+    color: #222;
+    border: 1px solid #E0E4EA;
+    border-bottom-left-radius: 3px;
+  }
+  .chat-assistant.typing-msg { color: #999; font-style: italic; }
+  .chat-kb-note {
+    font-size: 0.72rem; color: #888; text-align: center;
+    padding: 4px 8px; background: #F0F0F0; border-radius: 6px;
+    align-self: center;
+  }
+  #chat-input-row {
+    display: flex; gap: 8px;
+    padding: 10px 12px;
+    border-top: 1px solid #E8E8E8;
+    background: #FFF;
+    border-radius: 0 0 14px 14px;
+  }
+  #chat-input {
+    flex: 1;
+    border: 1.5px solid #D0D5DD;
+    border-radius: 8px;
+    padding: 7px 10px;
+    font-size: 0.8rem;
+    font-family: inherit;
+    resize: none; height: 36px;
+    outline: none;
+  }
+  #chat-input:focus { border-color: #2E6DA4; }
+  #chat-send {
+    background: #1B3A5C; color: #FFF;
+    border: none; border-radius: 8px;
+    padding: 0 14px; font-size: 0.8rem; font-weight: 600;
+    cursor: pointer;
+  }
+  #chat-send:disabled { opacity: 0.5; cursor: default; }
+  @media (max-width: 480px) {
+    #chat-panel { right: 8px; bottom: 72px; width: calc(100vw - 16px); }
+    #chat-btn { right: 16px; bottom: 16px; }
+  }
+
   /* ── Print styles ── */
   @media print {
     body { background: #FFF; padding: 0; }
     #app-header, #progress-bar, #step-indicator, .btn-row, .mode-btn { display: none !important; }
     .sev-modal-overlay { display: none !important; }
+    #chat-btn, #chat-panel { display: none !important; }
     .card { box-shadow: none; margin: 0; border: none; }
     .guidance-card-body { display: block !important; }
     .result-panel-body { display: block !important; }
@@ -509,6 +620,24 @@
       <span class="sev-modal-desc">Major loss of material, structural compromise, or immediate safety concern. Do not use this part of the building until a professional has assessed it.</span>
     </div>
     <button class="sev-modal-close" onclick="closeSevModal()">Got it</button>
+  </div>
+</div>
+
+<!-- Chat widget -->
+<button id="chat-btn" onclick="toggleChat()">💬 Ask about grants</button>
+<div id="chat-panel">
+  <div id="chat-header">
+    <div>
+      <div>Grant &amp; Assistance Assistant</div>
+      <div class="chat-sub">Answers based on loaded program documents</div>
+    </div>
+    <button id="chat-close" onclick="toggleChat()">✕</button>
+  </div>
+  <div id="chat-log"></div>
+  <div id="chat-input-row">
+    <textarea id="chat-input" placeholder="Ask about a grant, eligibility, how to apply…" rows="1"
+      onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendChat();}"></textarea>
+    <button id="chat-send" onclick="sendChat()">Send</button>
   </div>
 </div>
 
@@ -1820,7 +1949,143 @@ function usStates() {
   ];
 }
 
+// ── CHAT / RAG ────────────────────────────
+
+// Replace with your Groq API key — get one free at console.groq.com
+const GROQ_API_KEY = 'gsk_PASTE_YOUR_KEY_HERE';
+const GROQ_MODEL   = 'llama-3.1-8b-instant';
+
+let knowledgeBase = null;
+const chatHistory = [];  // {role, content}
+
+async function loadKB() {
+  try {
+    const resp = await fetch('knowledge-base.json');
+    if (resp.ok) {
+      knowledgeBase = await resp.json();
+      appendChatNote(`📄 ${knowledgeBase.doc_count} document(s) loaded (${knowledgeBase.chunk_count} sections)`);
+    }
+  } catch (_) {
+    appendChatNote('No grant documents loaded yet. Run build-kb.py to add them.');
+  }
+}
+
+function tokenize(text) {
+  return text.toLowerCase().replace(/[^a-z0-9\s]/g, ' ').split(/\s+/).filter(t => t.length > 2);
+}
+
+function searchKB(query, topK = 5) {
+  if (!knowledgeBase || !knowledgeBase.chunks.length) return [];
+  const qTokens = new Set(tokenize(query));
+  const scored = knowledgeBase.chunks.map(chunk => {
+    const cTokens = tokenize(chunk.text);
+    const tf = {};
+    cTokens.forEach(t => { tf[t] = (tf[t] || 0) + 1; });
+    let score = 0;
+    qTokens.forEach(t => { if (tf[t]) score += tf[t] / cTokens.length; });
+    return { chunk, score };
+  });
+  return scored.filter(s => s.score > 0)
+    .sort((a, b) => b.score - a.score)
+    .slice(0, topK)
+    .map(s => s.chunk);
+}
+
+function buildSystemPrompt(query) {
+  // Always include built-in program data
+  const builtIn = [...NATIONAL_PROGRAMS, ...Object.values(STATE_PROGRAMS).flat()]
+    .map(p => `Program: ${p.name}\nDescription: ${p.desc}${p.note ? '\nNote: '+p.note : ''}`)
+    .join('\n\n');
+
+  // Add KB chunks if available
+  const chunks = searchKB(query);
+  const kbContext = chunks.length
+    ? '\n\n---\nAdditional grant documents:\n\n' + chunks.map(c => `[${c.source}]\n${c.text}`).join('\n\n---\n\n')
+    : '';
+
+  return `You are a helpful assistant for the Historic Flood Recovery Tool, which helps homeowners and preservation professionals navigate flood assistance programs and historic building repair guidance.
+
+Answer questions based on the following assistance programs and grant documents. Be concise and practical. If you don't know the answer from the provided information, say so clearly — do not make up program details.
+
+Built-in assistance programs:
+
+${builtIn}${kbContext}`;
+}
+
+function toggleChat() {
+  const panel = document.getElementById('chat-panel');
+  panel.classList.toggle('open');
+}
+
+function appendChatNote(text) {
+  const log = document.getElementById('chat-log');
+  const div = document.createElement('div');
+  div.className = 'chat-kb-note';
+  div.textContent = text;
+  log.appendChild(div);
+}
+
+function appendMsg(role, text, extraClass) {
+  const log = document.getElementById('chat-log');
+  const div = document.createElement('div');
+  div.className = `chat-msg chat-${role}${extraClass ? ' ' + extraClass : ''}`;
+  div.textContent = text;
+  log.appendChild(div);
+  log.scrollTop = log.scrollHeight;
+  return div;
+}
+
+async function sendChat() {
+  const input = document.getElementById('chat-input');
+  const send  = document.getElementById('chat-send');
+  const query = input.value.trim();
+  if (!query) return;
+
+  input.value = '';
+  send.disabled = true;
+
+  appendMsg('user', query);
+  const typing = appendMsg('assistant', 'Thinking…', 'typing-msg');
+
+  chatHistory.push({ role: 'user', content: query });
+
+  const messages = [
+    { role: 'system', content: buildSystemPrompt(query) },
+    ...chatHistory.slice(-8)  // keep last 4 exchanges in context
+  ];
+
+  try {
+    const resp = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${GROQ_API_KEY}`
+      },
+      body: JSON.stringify({ model: GROQ_MODEL, messages, max_tokens: 600, temperature: 0.3 })
+    });
+
+    if (!resp.ok) {
+      const err = await resp.json().catch(() => ({}));
+      throw new Error(err.error?.message || `HTTP ${resp.status}`);
+    }
+
+    const data = await resp.json();
+    const answer = data.choices?.[0]?.message?.content || 'No response received.';
+
+    typing.remove();
+    appendMsg('assistant', answer);
+    chatHistory.push({ role: 'assistant', content: answer });
+  } catch (e) {
+    typing.remove();
+    appendMsg('assistant', `Error: ${e.message}. Check your API key (GROQ_API_KEY in the HTML) and try again.`);
+  }
+
+  send.disabled = false;
+  input.focus();
+}
+
 // ── INIT ──────────────────────────────────
+loadKB();
 showModeSelect();
 </script>
 </body>
