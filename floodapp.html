@@ -2012,10 +2012,49 @@ function searchKB(query, topK = 5) {
 }
 
 function buildSystemPrompt(query) {
-  // Always include built-in program data
-  const builtIn = [...NATIONAL_PROGRAMS, ...Object.values(STATE_PROGRAMS).flat()]
+  // Filter programs to the user's state when known
+  const stateProgs = state.hw.state
+    ? (STATE_PROGRAMS[state.hw.state] || STATE_PROGRAMS['_default'])
+    : Object.values(STATE_PROGRAMS).flat();
+  const builtIn = [...NATIONAL_PROGRAMS, ...stateProgs]
     .map(p => `Program: ${p.name}\nDescription: ${p.desc}${p.note ? '\nNote: '+p.note : ''}`)
     .join('\n\n');
+
+  // Inject form answers so the assistant knows the user's specific situation
+  let userContext = '';
+  if (state.mode === 'homeowner' && (state.hw.state || state.hw.buildingType)) {
+    const hw = state.hw;
+    const lines = [];
+    if (hw.state)              lines.push(`Location: ${hw.state}`);
+    if (hw.buildingType)       lines.push(`Building type: ${hw.buildingType}`);
+    if (hw.materials.length)   lines.push(`Construction materials: ${hw.materials.join(', ')}`);
+    if (hw.age)                lines.push(`Building age: ${hw.age}`);
+    if (hw.designations.length) lines.push(`Historic designations: ${hw.designations.join(', ')}`);
+    const damaged = DAMAGE_CATEGORIES.filter(c => hw.damage[c.key] && hw.damage[c.key] !== 'none');
+    if (damaged.length) {
+      lines.push('Reported damage:');
+      damaged.forEach(c => lines.push(`  - ${c.label}: ${hw.damage[c.key]}`));
+    }
+    if (hw.affectedAreas.length) lines.push(`Affected areas: ${hw.affectedAreas.join(', ')}`);
+    if (lines.length) userContext = '\n\nUser\'s building and damage information (tailor your answers to this):\n' + lines.join('\n');
+  } else if (state.mode === 'assessor') {
+    const as = state.as;
+    const lines = [];
+    if (as.buildingName)         lines.push(`Building: ${as.buildingName}`);
+    if (as.address)              lines.push(`Address: ${as.address}`);
+    if (as.age)                  lines.push(`Age: ${as.age}`);
+    if (as.foundation)           lines.push(`Foundation type: ${as.foundation}`);
+    if (as.roof)                 lines.push(`Roof type: ${as.roof}`);
+    if (as.wallFinish)           lines.push(`Wall finish: ${as.wallFinish}`);
+    if (as.historicStatus.length) lines.push(`Historic status: ${as.historicStatus.join(', ')}`);
+    const damaged = DAMAGE_CATEGORIES.filter(c => as.rapidDamage[c.key] && as.rapidDamage[c.key] !== 'none');
+    if (damaged.length) {
+      lines.push('Assessed damage:');
+      damaged.forEach(c => lines.push(`  - ${c.label}: ${as.rapidDamage[c.key]}`));
+    }
+    if (as.overallDamage) lines.push(`Overall damage level: ${as.overallDamage}`);
+    if (lines.length) userContext = '\n\nBuilding being assessed (tailor your answers to this):\n' + lines.join('\n');
+  }
 
   // Add KB chunks if available
   const chunks = searchKB(query);
@@ -2025,7 +2064,7 @@ function buildSystemPrompt(query) {
 
   return `You are a helpful assistant for the Historic Flood Recovery Tool, which helps homeowners and preservation professionals navigate flood assistance programs and historic building repair guidance.
 
-Answer questions based on the following assistance programs and grant documents. Be concise and practical. If you don't know the answer from the provided information, say so clearly — do not make up program details.
+Answer questions based on the following assistance programs and grant documents. Be concise and practical. If you don't know the answer from the provided information, say so clearly — do not make up program details.${userContext}
 
 Built-in assistance programs:
 
