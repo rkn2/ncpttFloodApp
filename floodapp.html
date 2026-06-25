@@ -1479,7 +1479,7 @@ function showRapidStep2() {
     return `<div class="damage-row">
       <span class="damage-row-label">${cat.label}</span>
       <div class="severity-btns">
-        <button class="sev-btn ${cur==='none'?'sel-minor':''}" onclick="setRapidSev('${cat.key}','none',this)">None</button>
+        <button class="sev-btn ${cur==='none'?'sel-none':''}" onclick="setRapidSev('${cat.key}','none',this)">None</button>
         <button class="sev-btn ${cur==='minor'?'sel-minor':''}" onclick="setRapidSev('${cat.key}','minor',this)">Minor</button>
         <button class="sev-btn ${cur==='moderate'?'sel-moderate':''}" onclick="setRapidSev('${cat.key}','moderate',this)">Moderate</button>
         <button class="sev-btn ${cur==='severe'?'sel-severe':''}" onclick="setRapidSev('${cat.key}','severe',this)">Severe</button>
@@ -1513,7 +1513,7 @@ function setRapidSev(key, level, btn) {
   const row = btn.closest('.damage-row');
   row.querySelectorAll('.sev-btn').forEach(b => {
     b.className = 'sev-btn';
-    if (state.as.rapidDamage[key] === 'none' && b.textContent === 'None') b.classList.add('sel-minor');
+    if (state.as.rapidDamage[key] === 'none' && b.textContent === 'None') b.classList.add('sel-none');
     if (state.as.rapidDamage[key] === 'minor' && b.textContent === 'Minor') b.classList.add('sel-minor');
     if (state.as.rapidDamage[key] === 'moderate' && b.textContent === 'Moderate') b.classList.add('sel-moderate');
     if (state.as.rapidDamage[key] === 'severe' && b.textContent === 'Severe') b.classList.add('sel-severe');

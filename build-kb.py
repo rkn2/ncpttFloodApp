@@ -3,8 +3,8 @@
 build-kb.py — Build the knowledge base for the Historic Flood Recovery Tool chatbot.
 
 Usage:
-    brew install poppler   # provides pdftotext
-    pip install python-docx
+    brew install poppler tesseract   # provides pdftotext + OCR engine
+    pip install python-docx pytesseract pdf2image
     python build-kb.py
 
 Reads all .pdf, .txt, .docx, .md files from docs/,
@@ -19,22 +19,80 @@ import sys
 from datetime import datetime
 from pathlib import Path
 
-DOCS_DIR   = Path('docs')
-OUTPUT     = Path('knowledge-base.json')
-CHUNK_SIZE = 800   # characters
-OVERLAP    = 150   # characters of overlap between chunks
+DOCS_DIR        = Path('docs')
+OUTPUT          = Path('knowledge-base.json')
+CHUNK_SIZE      = 800   # characters
+OVERLAP         = 150   # characters of overlap between chunks
+CID_THRESHOLD   = 0.03  # fraction of (cid:…) sequences that triggers OCR fallback
+
+
+def _pdftotext(path, first_page=None, last_page=None):
+    cmd = ['pdftotext']
+    if first_page is not None:
+        cmd += ['-f', str(first_page)]
+    if last_page is not None:
+        cmd += ['-l', str(last_page)]
+    cmd += [str(path), '-']
+    try:
+        result = subprocess.run(cmd, capture_output=True, text=True, check=True)
+        return result.stdout
+    except FileNotFoundError:
+        print(f"\n  [skip] pdftotext not found — run: brew install poppler", end='')
+        return ''
+    except subprocess.CalledProcessError as e:
+        print(f"\n  [error] pdftotext: {e.stderr.strip()}", end='')
+        return ''
+
+
+def _pdf_page_count(path):
+    try:
+        result = subprocess.run(['pdfinfo', str(path)], capture_output=True, text=True, check=True)
+        for line in result.stdout.splitlines():
+            if line.startswith('Pages:'):
+                return int(line.split(':')[1].strip())
+    except Exception:
+        pass
+    return 0
+
+
+def _is_garbled(text):
+    if not text or not text.strip():
+        return True
+    n = len(text)
+    if text.count('(cid:') / n > CID_THRESHOLD:
+        return True
+    # \x0c is pdftotext's page-separator — exclude it; other control chars signal garbled font
+    ctrl = sum(1 for c in text if ord(c) < 32 and c not in '\t\n\r\x0c')
+    return ctrl / n > CID_THRESHOLD
+
+
+def _ocr_page(path, page_num):
+    try:
+        from pdf2image import convert_from_path
+        import pytesseract
+        images = convert_from_path(str(path), dpi=300, first_page=page_num, last_page=page_num)
+        return pytesseract.image_to_string(images[0]) if images else ''
+    except ImportError as e:
+        print(f"\n  [skip OCR] {e} — pip install pytesseract pdf2image", end='')
+        return ''
 
 
 def extract_pdf(path):
-    try:
-        result = subprocess.run(['pdftotext', str(path), '-'], capture_output=True, text=True, check=True)
-        return result.stdout
-    except FileNotFoundError:
-        print(f"  [skip] pdftotext not installed — run: brew install poppler")
-        return ''
-    except subprocess.CalledProcessError as e:
-        print(f"  [error] {path.name}: {e.stderr.strip()}")
-        return ''
+    page_count = _pdf_page_count(path)
+    if page_count == 0:
+        return _pdftotext(path)
+
+    pages_text, ocr_count = [], 0
+    for i in range(1, page_count + 1):
+        text = _pdftotext(path, first_page=i, last_page=i)
+        if _is_garbled(text):
+            text = _ocr_page(path, i)
+            ocr_count += 1
+        pages_text.append(text)
+
+    if ocr_count:
+        print(f"(OCR: {ocr_count}/{page_count} pages)", end=' ', flush=True)
+    return '\n\n'.join(pages_text)
 
 
 def extract_docx(path):
