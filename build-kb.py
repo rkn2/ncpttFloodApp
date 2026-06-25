@@ -3,7 +3,8 @@
 build-kb.py — Build the knowledge base for the Historic Flood Recovery Tool chatbot.
 
 Usage:
-    pip install pdfplumber python-docx
+    brew install poppler   # provides pdftotext
+    pip install python-docx
     python build-kb.py
 
 Reads all .pdf, .txt, .docx, .md files from docs/,
@@ -13,6 +14,7 @@ Re-run this script whenever you add or update documents in docs/.
 """
 
 import json
+import subprocess
 import sys
 from datetime import datetime
 from pathlib import Path
@@ -25,14 +27,13 @@ OVERLAP    = 150   # characters of overlap between chunks
 
 def extract_pdf(path):
     try:
-        import pdfplumber
-        with pdfplumber.open(path) as pdf:
-            return '\n'.join(page.extract_text() or '' for page in pdf.pages)
-    except ImportError:
-        print(f"  [skip] pdfplumber not installed — run: pip install pdfplumber")
+        result = subprocess.run(['pdftotext', str(path), '-'], capture_output=True, text=True, check=True)
+        return result.stdout
+    except FileNotFoundError:
+        print(f"  [skip] pdftotext not installed — run: brew install poppler")
         return ''
-    except Exception as e:
-        print(f"  [error] {path.name}: {e}")
+    except subprocess.CalledProcessError as e:
+        print(f"  [error] {path.name}: {e.stderr.strip()}")
         return ''
 
 
@@ -65,6 +66,8 @@ def chunk(text):
         piece = text[start:end].strip()
         if piece:
             chunks.append(piece)
+        if end >= len(text):
+            break
         start = end - OVERLAP
     return chunks
 
