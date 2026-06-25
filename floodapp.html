@@ -629,7 +629,7 @@
   <div id="chat-header">
     <div>
       <div>Grant &amp; Assistance Assistant</div>
-      <div class="chat-sub">Answers based on loaded program documents</div>
+      <div class="chat-sub">Fill out the questionnaire above for personalized answers</div>
     </div>
     <button id="chat-close" onclick="toggleChat()">✕</button>
   </div>
@@ -1957,6 +1957,7 @@ const GROQ_MODEL   = 'llama-3.1-8b-instant';
 
 let knowledgeBase = null;
 const chatHistory = [];  // {role, content}
+let chatTipShown = false;
 
 const BM25_K1 = 1.5;
 const BM25_B  = 0.75;
@@ -2073,7 +2074,12 @@ ${builtIn}${kbContext}`;
 
 function toggleChat() {
   const panel = document.getElementById('chat-panel');
+  const opening = !panel.classList.contains('open');
   panel.classList.toggle('open');
+  if (opening && !chatTipShown && !state.hw.state && !state.as.buildingName) {
+    chatTipShown = true;
+    appendChatNote('Tip: Fill out the questionnaire above first — your building type, location, and damage details help personalize these answers.');
+  }
 }
 
 function appendChatNote(text) {
