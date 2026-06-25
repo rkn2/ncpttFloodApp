@@ -624,7 +624,7 @@
 </div>
 
 <!-- Chat widget -->
-<button id="chat-btn" onclick="toggleChat()">💬 Ask about grants</button>
+<button id="chat-btn" onclick="toggleChat()" style="display:none">💬 Ask about grants</button>
 <div id="chat-panel">
   <div id="chat-header">
     <div>
@@ -972,8 +972,13 @@ function toggle(id) {
 // SCREENS
 // ═══════════════════════════════════════════════
 
+function setChatVisible(visible) {
+  document.getElementById('chat-btn').style.display = visible ? '' : 'none';
+}
+
 function showModeSelect() {
   state.mode = null; state.step = 0;
+  setChatVisible(false);
   badgeHtml(null);
   updateProgress(0, false);
   renderStepIndicator([], 0, false);
@@ -999,6 +1004,7 @@ function showModeSelect() {
 
 function startHomeowner() {
   state.mode = 'homeowner'; state.step = 0;
+  setChatVisible(true);
   badgeHtml('homeowner');
   showHwStep0();
 }
@@ -1184,6 +1190,33 @@ function showHwResults() {
         </div>`;
       }).join('');
 
+  const insuranceHtml = `
+    <p style="font-size:0.85rem;color:#555;margin-bottom:12px;">File your claim promptly and tell your insurer the building is historically significant. A few things that matter especially for historic properties:</p>
+    <div class="guidance-do" style="margin-bottom:10px;">
+      <strong>✔ Do first</strong>
+      <ul>
+        <li>Photograph and video all damage <em>before</em> any emergency repairs</li>
+        <li>Keep every receipt for emergency work (tarps, board-ups) — insurers require them for reimbursement</li>
+        <li>Call your insurer promptly; state that the building is historically significant</li>
+        <li>Get your claim number and adjuster's direct contact information</li>
+        <li>Check your declarations page: do you have <strong>Replacement Cost (RCV)</strong> or <strong>Actual Cash Value (ACV)</strong>?</li>
+      </ul>
+    </div>
+    <div class="warn-box" style="margin-bottom:10px;">
+      <strong>⚠ ACV policies can severely undervalue historic materials</strong><br>
+      ACV deducts depreciation — original plaster, ornamental woodwork, and old-growth floors may be valued at a small fraction of their replacement cost. RCV covers the full cost to repair or replace with like-kind materials. Know which you have before the adjuster arrives.
+    </div>
+    <div class="warn-box" style="margin-bottom:10px;">
+      <strong>⚠ Watch for "Functional Replacement" proposals</strong><br>
+      Insurers may propose cheaper modern substitutes: drywall instead of plaster, asphalt shingles instead of tile or slate. This conflicts with Secretary of Interior Standards and can jeopardize your historic designation. You can negotiate for like-kind materials — contact your SHPO if the insurer resists.
+    </div>
+    <div class="soi-note" style="margin-bottom:10px;">
+      📋 <strong>Ordinance &amp; Law coverage:</strong> Repairs that require bringing the building up to current codes (common after significant flood damage) are typically not covered by standard homeowners policies. Check your declarations page for this rider.
+    </div>
+    <p style="font-size:0.8rem;margin-top:12px;text-align:right;">
+      <a href="https://content.naic.org/sites/default/files/publication-post-disaster-claims-guide.pdf" target="_blank">📄 NAIC Post-Disaster Claims Guide →</a>
+    </p>`;
+
   const isListed = state.hw.designations.includes('Listed on the National Register of Historic Places');
   const listedNote = isListed
     ? `<div class="info-box">Your building is listed on the National Register of Historic Places. This provides additional protections under Section 106 of the National Historic Preservation Act when federal funds are involved (including FEMA assistance). Notify FEMA and your SHPO early in the process.</div>`
@@ -1202,6 +1235,16 @@ function showHwResults() {
         </div>
         <div class="result-panel-body" id="panel-assist" style="display:none;">
           ${assistHtml}
+        </div>
+      </div>
+
+      <div class="result-panel" style="border:1.5px solid var(--hw-border);margin-top:12px;">
+        <div class="result-panel-header" style="background:var(--hw-light);" onclick="togglePanel('panel-insurance','toggle-insurance')">
+          🛡️ Insurance Claims
+          <span class="toggle" id="toggle-insurance">▼ Show</span>
+        </div>
+        <div class="result-panel-body" id="panel-insurance" style="display:none;padding:16px;">
+          ${insuranceHtml}
         </div>
       </div>
 
@@ -1251,6 +1294,7 @@ function toggleGuidance(id) {
 
 function startAssessor() {
   state.mode = 'assessor'; state.step = 0;
+  setChatVisible(true);
   badgeHtml('assessor');
   showAssessorSubmode();
 }
