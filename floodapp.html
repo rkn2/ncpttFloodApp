@@ -585,12 +585,72 @@
     #chat-btn { right: 16px; bottom: 16px; }
   }
 
+  /* ── Saves panel ── */
+  #saves-btn {
+    position: fixed; bottom: 24px; left: 24px;
+    background: #2E6DA4; color: #FFF;
+    border: none; border-radius: 28px; padding: 12px 18px;
+    font-size: 0.85rem; font-weight: 600; cursor: pointer;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.22);
+    z-index: 900; transition: background 0.15s; display: none;
+  }
+  #saves-btn:hover { background: #1B3A5C; }
+  #saves-panel {
+    position: fixed; bottom: 80px; left: 24px;
+    width: 320px; max-width: calc(100vw - 32px);
+    max-height: calc(100vh - 120px);
+    background: #FFF; border-radius: 14px;
+    box-shadow: 0 8px 40px rgba(0,0,0,0.18);
+    display: flex; flex-direction: column;
+    z-index: 900;
+    transform: scale(0.92) translateY(16px); opacity: 0; pointer-events: none;
+    transition: transform 0.18s ease, opacity 0.18s ease; overflow: hidden;
+  }
+  #saves-panel.open { transform: scale(1) translateY(0); opacity: 1; pointer-events: all; }
+  #saves-header {
+    background: #2E6DA4; color: #FFF; padding: 12px 16px;
+    font-size: 0.88rem; font-weight: 600;
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  #saves-body { padding: 12px; overflow-y: auto; flex: 1; }
+  #saves-name-row { display: flex; gap: 8px; margin-bottom: 12px; }
+  #saves-name-input {
+    flex: 1; border: 1.5px solid #D0D5DD; border-radius: 8px;
+    padding: 7px 10px; font-size: 0.8rem; font-family: inherit; outline: none;
+  }
+  #saves-name-input:focus { border-color: #2E6DA4; }
+  .save-item { padding: 8px 0; border-bottom: 1px solid #EFEFEF; }
+  .save-item:last-child { border-bottom: none; }
+  .save-item-name { font-size: 0.83rem; font-weight: 600; color: #1B3A5C; }
+  .save-item-meta { font-size: 0.72rem; color: #888; margin-bottom: 4px; }
+  .save-item-actions { display: flex; gap: 8px; }
+  .save-item-actions button {
+    font-size: 0.75rem; padding: 3px 10px;
+    border: 1px solid #D0D5DD; border-radius: 6px;
+    background: #F7F8FA; cursor: pointer; font-family: inherit;
+  }
+  .save-item-actions button:hover { background: #E8EDF2; }
+  #saves-export-row {
+    display: flex; gap: 8px; padding: 10px 12px;
+    border-top: 1px solid #E8E8E8;
+  }
+  #saves-export-row button {
+    flex: 1; font-size: 0.75rem; padding: 7px 4px;
+    border: 1.5px solid #D0D5DD; border-radius: 8px;
+    background: #F7F8FA; cursor: pointer; font-family: inherit; font-weight: 600;
+  }
+  #saves-export-row button:hover { background: #E8EDF2; }
+  @media (max-width: 480px) {
+    #saves-panel { left: 8px; bottom: 72px; }
+    #saves-btn { left: 16px; bottom: 16px; }
+  }
+
   /* ── Print styles ── */
   @media print {
     body { background: #FFF; padding: 0; }
     #app-header, #progress-bar, #step-indicator, .btn-row, .mode-btn { display: none !important; }
     .sev-modal-overlay { display: none !important; }
-    #chat-btn, #chat-panel { display: none !important; }
+    #chat-btn, #chat-panel, #saves-btn, #saves-panel { display: none !important; }
     .card { box-shadow: none; margin: 0; border: none; }
     .guidance-card-body { display: block !important; }
     .result-panel-body { display: block !important; }
@@ -620,6 +680,26 @@
       <span class="sev-modal-desc">Major loss of material, structural compromise, or immediate safety concern. Do not use this part of the building until a professional has assessed it.</span>
     </div>
     <button class="sev-modal-close" onclick="closeSevModal()">Got it</button>
+  </div>
+</div>
+
+<!-- Saves panel -->
+<button id="saves-btn" onclick="toggleSavesPanel()">💾 Saves</button>
+<div id="saves-panel">
+  <div id="saves-header">
+    💾 Saved Assessments
+    <button onclick="toggleSavesPanel()" style="background:none;border:none;color:#FFF;font-size:1.1rem;cursor:pointer;line-height:1;">✕</button>
+  </div>
+  <div id="saves-body">
+    <div id="saves-name-row">
+      <input id="saves-name-input" type="text" placeholder="Name this assessment…">
+      <button onclick="saveAssessment(document.getElementById('saves-name-input').value)" style="background:#2E6DA4;color:#FFF;border:none;border-radius:8px;padding:0 14px;font-size:0.8rem;font-weight:600;cursor:pointer;white-space:nowrap;">Save</button>
+    </div>
+    <div id="saves-list"></div>
+  </div>
+  <div id="saves-export-row">
+    <button onclick="exportJSON()">📥 Export JSON</button>
+    <button id="saves-share-btn" onclick="copyShareLink()">🔗 Copy link</button>
   </div>
 </div>
 
@@ -974,6 +1054,7 @@ function toggle(id) {
 
 function setChatVisible(visible) {
   document.getElementById('chat-btn').style.display = visible ? '' : 'none';
+  document.getElementById('saves-btn').style.display = visible ? '' : 'none';
 }
 
 function showModeSelect() {
@@ -1076,6 +1157,7 @@ function saveHwStep0() {
 
 function showHwStep1() {
   state.step = 1;
+  autoSave();
   updateProgress(55, false);
   renderStepIndicator(HW_STEPS, 1, false);
 
@@ -1142,6 +1224,7 @@ function saveHwStep1() {
 
 function showHwResults() {
   state.step = 2;
+  autoSave();
   updateProgress(100, false);
   renderStepIndicator(HW_STEPS, 2, false);
 
@@ -2231,9 +2314,141 @@ async function sendChat() {
   input.focus();
 }
 
+// ── SAVES ─────────────────────────────────
+
+const LS_SAVES_KEY = 'floodapp_saves';
+let currentSaveName = '';
+
+function getSaves() {
+  try { return JSON.parse(localStorage.getItem(LS_SAVES_KEY) || '[]'); }
+  catch { return []; }
+}
+
+function currentStateData() {
+  return { mode: state.mode, step: state.step, hw: JSON.parse(JSON.stringify(state.hw)), as: JSON.parse(JSON.stringify(state.as)) };
+}
+
+function saveAssessment(name) {
+  if (!name || !name.trim()) { document.getElementById('saves-name-input').focus(); return; }
+  name = name.trim();
+  const saves = getSaves();
+  const existing = saves.findIndex(s => s.name === name);
+  const entry = { id: existing >= 0 ? saves[existing].id : Date.now().toString(36), name, savedAt: new Date().toISOString(), state: currentStateData() };
+  if (existing >= 0) saves[existing] = entry;
+  else saves.unshift(entry);
+  localStorage.setItem(LS_SAVES_KEY, JSON.stringify(saves));
+  currentSaveName = name;
+  renderSavesPanel();
+}
+
+function autoSave() {
+  if (currentSaveName) saveAssessment(currentSaveName);
+}
+
+function loadAssessment(id) {
+  const entry = getSaves().find(s => s.id === id);
+  if (!entry) return;
+  Object.assign(state, entry.state);
+  currentSaveName = entry.name;
+  document.getElementById('saves-panel').classList.remove('open');
+  setChatVisible(true);
+  if (state.mode === 'homeowner') {
+    badgeHtml('homeowner');
+    if (state.step >= 2) showHwResults();
+    else if (state.step >= 1) showHwStep1();
+    else showHwStep0();
+  } else if (state.mode === 'assessor') {
+    badgeHtml('assessor');
+    showAssessorSubmode();
+  } else {
+    showModeSelect();
+  }
+}
+
+function deleteAssessment(id) {
+  localStorage.setItem(LS_SAVES_KEY, JSON.stringify(getSaves().filter(s => s.id !== id)));
+  renderSavesPanel();
+}
+
+function toggleSavesPanel() {
+  const panel = document.getElementById('saves-panel');
+  if (!panel.classList.contains('open')) renderSavesPanel();
+  panel.classList.toggle('open');
+}
+
+function renderSavesPanel() {
+  const nameInput = document.getElementById('saves-name-input');
+  if (nameInput && !nameInput.value && currentSaveName) nameInput.value = currentSaveName;
+  const saves = getSaves();
+  const list = document.getElementById('saves-list');
+  if (!list) return;
+  if (!saves.length) {
+    list.innerHTML = '<p style="font-size:0.78rem;color:#888;text-align:center;padding:8px 0;">No saved assessments yet.<br>Enter a name above and click Save.</p>';
+    return;
+  }
+  list.innerHTML = saves.map(s => {
+    const dt = new Date(s.savedAt);
+    const label = dt.toLocaleDateString('en-US', { month:'short', day:'numeric' }) + ' ' + dt.toLocaleTimeString('en-US', { hour:'numeric', minute:'2-digit' });
+    return `<div class="save-item">
+      <div class="save-item-name">${s.name}</div>
+      <div class="save-item-meta">${label}</div>
+      <div class="save-item-actions">
+        <button onclick="loadAssessment('${s.id}')">Load</button>
+        <button onclick="deleteAssessment('${s.id}')" style="color:#B71C1C;">Delete</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function exportJSON() {
+  const data = { name: currentSaveName || 'assessment', exportedAt: new Date().toISOString(), ...currentStateData() };
+  const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = (currentSaveName || 'assessment').replace(/[^a-z0-9]/gi, '-').toLowerCase() + '.json';
+  a.click();
+}
+
+function copyShareLink() {
+  try {
+    const encoded = btoa(unescape(encodeURIComponent(JSON.stringify(currentStateData()))));
+    const url = location.origin + location.pathname + '#share=' + encoded;
+    navigator.clipboard.writeText(url).then(() => {
+      const btn = document.getElementById('saves-share-btn');
+      if (btn) { btn.textContent = '✓ Copied!'; setTimeout(() => { btn.textContent = '🔗 Copy link'; }, 2000); }
+    }).catch(() => prompt('Copy this link:', url));
+  } catch { alert('Nothing to share yet — fill out the form first.'); }
+}
+
+function checkShareHash() {
+  if (!location.hash.startsWith('#share=')) return false;
+  try {
+    const decoded = JSON.parse(decodeURIComponent(escape(atob(location.hash.slice(7)))));
+    Object.assign(state, decoded);
+    history.replaceState(null, '', location.pathname);
+    return true;
+  } catch { return false; }
+}
+
 // ── INIT ──────────────────────────────────
 loadKB();
-showModeSelect();
+if (checkShareHash()) {
+  // Shared link — restore state and navigate to the right screen
+  setChatVisible(!!state.mode);
+  if (state.mode === 'homeowner') {
+    badgeHtml('homeowner');
+    if (state.step >= 2) showHwResults();
+    else if (state.step >= 1) showHwStep1();
+    else showHwStep0();
+  } else if (state.mode === 'assessor') {
+    badgeHtml('assessor');
+    showAssessorSubmode();
+  } else {
+    showModeSelect();
+  }
+} else {
+  showModeSelect();
+}
 </script>
 </body>
 </html>
