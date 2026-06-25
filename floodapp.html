@@ -1958,11 +1958,17 @@ const GROQ_MODEL   = 'llama-3.1-8b-instant';
 let knowledgeBase = null;
 const chatHistory = [];  // {role, content}
 
+const BM25_K1 = 1.5;
+const BM25_B  = 0.75;
+let bm25Index = null;
+let bm25Avgdl = 150;
+
 async function loadKB() {
   try {
     const resp = await fetch('knowledge-base.json');
     if (resp.ok) {
       knowledgeBase = await resp.json();
+      buildBM25Index();
       appendChatNote(`📄 ${knowledgeBase.doc_count} document(s) loaded (${knowledgeBase.chunk_count} sections)`);
     }
   } catch (_) {
@@ -1974,15 +1980,29 @@ function tokenize(text) {
   return text.toLowerCase().replace(/[^a-z0-9\s]/g, ' ').split(/\s+/).filter(t => t.length > 2);
 }
 
+function buildBM25Index() {
+  bm25Avgdl = knowledgeBase.avg_chunk_len || 150;
+  bm25Index = knowledgeBase.chunks.map(chunk => {
+    const tokens = tokenize(chunk.text);
+    const tf = {};
+    tokens.forEach(t => { tf[t] = (tf[t] || 0) + 1; });
+    return { chunk, tf, len: tokens.length };
+  });
+}
+
 function searchKB(query, topK = 5) {
   if (!knowledgeBase || !knowledgeBase.chunks.length) return [];
-  const qTokens = new Set(tokenize(query));
-  const scored = knowledgeBase.chunks.map(chunk => {
-    const cTokens = tokenize(chunk.text);
-    const tf = {};
-    cTokens.forEach(t => { tf[t] = (tf[t] || 0) + 1; });
+  if (!bm25Index) buildBM25Index();
+  const qTokens = [...new Set(tokenize(query))];
+  const idf = knowledgeBase.idf || {};
+  const scored = bm25Index.map(({ chunk, tf, len }) => {
     let score = 0;
-    qTokens.forEach(t => { if (tf[t]) score += tf[t] / cTokens.length; });
+    qTokens.forEach(t => {
+      const freq = tf[t] || 0;
+      if (!freq) return;
+      const termIdf = idf[t] ?? Math.log(2);
+      score += termIdf * (freq * (BM25_K1 + 1)) / (freq + BM25_K1 * (1 - BM25_B + BM25_B * len / bm25Avgdl));
+    });
     return { chunk, score };
   });
   return scored.filter(s => s.score > 0)
@@ -2035,6 +2055,33 @@ function appendMsg(role, text, extraClass) {
   return div;
 }
 
+function appendOfflinePassages(chunks) {
+  const log = document.getElementById('chat-log');
+  const wrapper = document.createElement('div');
+  wrapper.className = 'chat-msg chat-assistant';
+  const note = document.createElement('em');
+  note.style.cssText = 'display:block;color:#888;margin-bottom:8px;font-size:0.85rem;';
+  note.textContent = 'Offline — showing relevant passages from loaded documents:';
+  wrapper.appendChild(note);
+  chunks.forEach((c, i) => {
+    if (i > 0) {
+      const hr = document.createElement('hr');
+      hr.style.cssText = 'border:none;border-top:1px solid #e0e0e0;margin:8px 0;';
+      wrapper.appendChild(hr);
+    }
+    const src = document.createElement('div');
+    src.style.cssText = 'font-size:0.72rem;font-weight:600;color:#2E6DA4;margin-bottom:3px;';
+    src.textContent = c.source;
+    wrapper.appendChild(src);
+    const text = document.createElement('div');
+    text.style.cssText = 'white-space:pre-wrap;font-size:0.85rem;';
+    text.textContent = c.text;
+    wrapper.appendChild(text);
+  });
+  log.appendChild(wrapper);
+  log.scrollTop = log.scrollHeight;
+}
+
 async function sendChat() {
   const input = document.getElementById('chat-input');
   const send  = document.getElementById('chat-send');
@@ -2043,10 +2090,21 @@ async function sendChat() {
 
   input.value = '';
   send.disabled = true;
-
   appendMsg('user', query);
-  const typing = appendMsg('assistant', 'Thinking…', 'typing-msg');
 
+  if (!navigator.onLine) {
+    const chunks = searchKB(query);
+    if (chunks.length) {
+      appendOfflinePassages(chunks);
+    } else {
+      appendMsg('assistant', 'Offline — no matching passages found in loaded documents.');
+    }
+    send.disabled = false;
+    input.focus();
+    return;
+  }
+
+  const typing = appendMsg('assistant', 'Thinking…', 'typing-msg');
   chatHistory.push({ role: 'user', content: query });
 
   const messages = [

@@ -14,6 +14,8 @@ Re-run this script whenever you add or update documents in docs/.
 """
 
 import json
+import math
+import re
 import subprocess
 import sys
 from datetime import datetime
@@ -111,6 +113,10 @@ def extract_text(path):
     return path.read_text(encoding='utf-8', errors='ignore')
 
 
+def tokenize(text):
+    return [t for t in re.sub(r'[^a-z0-9\s]', ' ', text.lower()).split() if len(t) > 2]
+
+
 def chunk(text):
     chunks, start = [], 0
     while start < len(text):
@@ -162,14 +168,31 @@ def main():
             chunks.append({'id': f"{path.stem}-{i}", 'source': path.name, 'chunk_index': i, 'text': c})
         print(f"{len(file_chunks)} chunks")
 
+    # Build BM25 IDF table
+    N = len(chunks)
+    idf, avg_chunk_len = {}, 0
+    if N > 0:
+        df = {}
+        lens = []
+        for c in chunks:
+            toks = tokenize(c['text'])
+            lens.append(len(toks))
+            for t in set(toks):
+                df[t] = df.get(t, 0) + 1
+        idf = {t: round(math.log((N - freq + 0.5) / (freq + 0.5) + 1), 4)
+               for t, freq in df.items()}
+        avg_chunk_len = round(sum(lens) / len(lens), 1)
+
     kb = {
-        'built_at':    datetime.now().isoformat(),
-        'doc_count':   len(docs),
-        'chunk_count': len(chunks),
-        'chunks':      chunks,
+        'built_at':      datetime.now().isoformat(),
+        'doc_count':     len(docs),
+        'chunk_count':   len(chunks),
+        'avg_chunk_len': avg_chunk_len,
+        'idf':           idf,
+        'chunks':        chunks,
     }
     OUTPUT.write_text(json.dumps(kb, indent=2, ensure_ascii=False))
-    print(f"\nWrote {OUTPUT}  ({len(chunks)} chunks from {len(docs)} documents)")
+    print(f"\nWrote {OUTPUT}  ({len(chunks)} chunks from {len(docs)} documents, {len(idf)} IDF terms)")
 
 
 if __name__ == '__main__':
