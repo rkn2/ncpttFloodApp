@@ -1,0 +1,42 @@
+{
+  "goal": "Pick the best offline in-browser search replacement for floodAPp's Groq RAG pipeline",
+  "vocabulary": ["bm25-keyword", "local-embeddings-webgpu", "local-embeddings-wasm", "passages-mode"],
+  "tree": {
+    "id": "root",
+    "children": [
+      {
+        "id": "H1",
+        "family": "bm25-keyword",
+        "status": "promising",
+        "attempts": [{"round": 1, "action": "Research BM25 pure-JS implementation", "verdict": "implement", "evidence": "rounds/round_01.md"}],
+        "posterior": {"gain": "med", "confidence": "high", "cost_to_probe": "low"},
+        "children": []
+      },
+      {
+        "id": "H2",
+        "family": "local-embeddings-webgpu",
+        "status": "dead",
+        "attempts": [{"round": 1, "action": "Research WebLLM / WebGPU", "verdict": "disqualified — device coverage gap", "evidence": "rounds/round_01.md"}],
+        "posterior": {"gain": "none", "confidence": "high", "cost_to_probe": "high"},
+        "children": []
+      },
+      {
+        "id": "H2b",
+        "family": "local-embeddings-wasm",
+        "status": "dead",
+        "attempts": [{"round": 1, "action": "Research wllama / WASM llama.cpp", "verdict": "quality risk too high for domain + audience", "evidence": "rounds/round_01.md"}],
+        "posterior": {"gain": "low", "confidence": "med", "cost_to_probe": "med"},
+        "children": []
+      },
+      {
+        "id": "H3",
+        "family": "passages-mode",
+        "status": "promising",
+        "attempts": [{"round": 1, "action": "Research passages display as offline fallback", "verdict": "implement as fallback", "evidence": "rounds/round_01.md"}],
+        "posterior": {"gain": "high", "confidence": "high", "cost_to_probe": "low"},
+        "children": []
+      }
+    ]
+  },
+  "frontier": []
+}

@@ -1,0 +1,13 @@
+{
+  "round": 1,
+  "best": {
+    "confidence": "HIGH",
+    "recommendation": "BM25 upgrade + passages mode offline fallback; skip in-browser LLM"
+  },
+  "budget": {
+    "spent_usd_est": 0.02,
+    "limit_usd": 0.50
+  },
+  "model": "sonnet",
+  "stopped": "HIGH confidence reached in round 1 — FINAL_REPORT.md written"
+}
