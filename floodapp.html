@@ -521,6 +521,24 @@
   }
   #chat-header .chat-sub { font-size: 0.7rem; font-weight: 400; opacity: 0.75; margin-top: 1px; }
   #chat-close { background: none; border: none; color: #FFF; font-size: 1.1rem; cursor: pointer; line-height: 1; }
+  #chat-key-btn { background: none; border: none; color: rgba(255,255,255,0.6); font-size: 0.85rem; cursor: pointer; padding: 0 4px; line-height: 1; }
+  #chat-key-btn:hover { color: #FFF; }
+  .chat-key-prompt {
+    align-self: stretch; background: #FFF; border: 1px solid #E0E4EA;
+    border-radius: 10px; padding: 12px; font-size: 0.8rem; color: #333;
+  }
+  .chat-key-prompt p { margin: 0 0 8px; line-height: 1.45; }
+  .chat-key-prompt a { color: #2E6DA4; }
+  .chat-key-prompt .key-row { display: flex; gap: 6px; margin-top: 8px; }
+  .chat-key-prompt input[type=password] {
+    flex: 1; border: 1.5px solid #D0D5DD; border-radius: 6px;
+    padding: 6px 8px; font-size: 0.8rem; font-family: inherit; outline: none;
+  }
+  .chat-key-prompt input[type=password]:focus { border-color: #2E6DA4; }
+  .chat-key-prompt button {
+    background: #1B3A5C; color: #FFF; border: none; border-radius: 6px;
+    padding: 0 12px; font-size: 0.8rem; font-weight: 600; cursor: pointer; white-space: nowrap;
+  }
   #chat-log {
     flex: 1;
     overflow-y: auto;
@@ -711,7 +729,10 @@
       <div>Grant &amp; Assistance Assistant</div>
       <div class="chat-sub">Fill out the questionnaire above for personalized answers</div>
     </div>
-    <button id="chat-close" onclick="toggleChat()">✕</button>
+    <div style="display:flex;gap:6px;align-items:center;">
+      <button id="chat-key-btn" onclick="showApiKeyPrompt()" title="Set API key">⚙</button>
+      <button id="chat-close" onclick="toggleChat()">✕</button>
+    </div>
   </div>
   <div id="chat-log"></div>
   <div id="chat-input-row">
@@ -974,7 +995,7 @@ let state = {
   step: 0,    // current step index
   // Homeowner
   hw: {
-    state: "", buildingType: "", materials: [], age: "", designations: [],
+    state: "", address: "", buildingType: "", materials: [], age: "", designations: [],
     affectedAreas: [], damage: {} // { structural: 'minor'|'moderate'|'severe', ... }
   },
   // Assessor
@@ -1100,6 +1121,10 @@ function showHwStep0() {
     <h2>Building Information</h2>
     <p class="section-desc">Tell us about your building. This tool is designed for historic structures — all building types are welcome.</p>
     <div class="field-group">
+      <label class="field-label">Building Address <span>(helps you find this entry later)</span></label>
+      <input type="text" id="hw-address" value="${state.hw.address}" placeholder="e.g. 123 Main St, Montpelier, VT">
+    </div>
+    <div class="field-group">
       <label class="field-label">State or Territory</label>
       <select id="hw-state">
         <option value="">— Select —</option>
@@ -1146,6 +1171,7 @@ function showHwStep0() {
 }
 
 function saveHwStep0() {
+  state.hw.address = document.getElementById('hw-address').value.trim();
   state.hw.state = document.getElementById('hw-state').value;
   state.hw.buildingType = document.querySelector('input[name="hw-btype"]:checked')?.value || '';
   state.hw.materials = [...document.querySelectorAll('input[name="hw-mat"]:checked')].map(i=>i.value);
@@ -2078,9 +2104,12 @@ function usStates() {
 
 // ── CHAT / RAG ────────────────────────────
 
-// Replace with your Groq API key — get one free at console.groq.com
-const GROQ_API_KEY = 'gsk_PASTE_YOUR_KEY_HERE';
-const GROQ_MODEL   = 'llama-3.1-8b-instant';
+const GROQ_MODEL = 'llama-3.1-8b-instant';
+const LS_GROQ_KEY = 'floodapp_groq_key';
+const GROQ_DEFAULT_KEY = 'gsk_REDACTED_leaked_key_scrubbed_from_history';
+
+function getGroqKey() { return localStorage.getItem(LS_GROQ_KEY) || GROQ_DEFAULT_KEY; }
+function saveGroqKey(key) { localStorage.setItem(LS_GROQ_KEY, key.trim()); }
 
 let knowledgeBase = null;
 const chatHistory = [];  // {role, content}
@@ -2254,6 +2283,41 @@ function appendOfflinePassages(chunks) {
   log.scrollTop = log.scrollHeight;
 }
 
+function showApiKeyPrompt() {
+  const log = document.getElementById('chat-log');
+  const existing = document.getElementById('chat-key-prompt');
+  if (existing) { existing.querySelector('input').focus(); return; }
+
+  const wrap = document.createElement('div');
+  wrap.id = 'chat-key-prompt';
+  wrap.className = 'chat-key-prompt';
+  wrap.innerHTML = `
+    <p><strong>Enter your Groq API key</strong> to enable AI-powered answers.<br>
+    Get a free key at <a href="https://console.groq.com" target="_blank" rel="noopener">console.groq.com</a> — takes about 30 seconds. Your key is saved only in this browser.</p>
+    <div class="key-row">
+      <input type="password" id="groq-key-input" placeholder="gsk_…" autocomplete="off" spellcheck="false" onkeydown="if(event.key==='Enter')submitApiKey()">
+      <button onclick="submitApiKey()">Save &amp; Continue</button>
+    </div>`;
+  log.appendChild(wrap);
+  log.scrollTop = log.scrollHeight;
+  wrap.querySelector('input').focus();
+}
+
+function submitApiKey() {
+  const input = document.getElementById('groq-key-input');
+  const key = input ? input.value.trim() : '';
+  if (!key.startsWith('gsk_')) {
+    input.style.borderColor = '#c0392b';
+    input.focus();
+    return;
+  }
+  saveGroqKey(key);
+  const prompt = document.getElementById('chat-key-prompt');
+  if (prompt) prompt.remove();
+  appendChatNote('API key saved. You can update it anytime with the ⚙ button.');
+  document.getElementById('chat-input').focus();
+}
+
 async function sendChat() {
   const input = document.getElementById('chat-input');
   const send  = document.getElementById('chat-send');
@@ -2263,6 +2327,12 @@ async function sendChat() {
   input.value = '';
   send.disabled = true;
   appendMsg('user', query);
+
+  if (!getGroqKey()) {
+    showApiKeyPrompt();
+    send.disabled = false;
+    return;
+  }
 
   if (!navigator.onLine) {
     const chunks = searchKB(query);
@@ -2289,7 +2359,7 @@ async function sendChat() {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${GROQ_API_KEY}`
+        'Authorization': `Bearer ${getGroqKey()}`
       },
       body: JSON.stringify({ model: GROQ_MODEL, messages, max_tokens: 600, temperature: 0.3 })
     });
@@ -2307,7 +2377,7 @@ async function sendChat() {
     chatHistory.push({ role: 'assistant', content: answer });
   } catch (e) {
     typing.remove();
-    appendMsg('assistant', `Error: ${e.message}. Check your API key (GROQ_API_KEY in the HTML) and try again.`);
+    appendMsg('assistant', `Error: ${e.message}. Try updating your API key using the ⚙ button above.`);
   }
 
   send.disabled = false;
@@ -2378,7 +2448,12 @@ function toggleSavesPanel() {
 
 function renderSavesPanel() {
   const nameInput = document.getElementById('saves-name-input');
-  if (nameInput && !nameInput.value && currentSaveName) nameInput.value = currentSaveName;
+  if (nameInput && !nameInput.value) {
+    const suggested = currentSaveName
+      || state.as.buildingName || state.as.address
+      || state.hw.buildingName || state.hw.address || '';
+    if (suggested) nameInput.value = suggested;
+  }
   const saves = getSaves();
   const list = document.getElementById('saves-list');
   if (!list) return;
