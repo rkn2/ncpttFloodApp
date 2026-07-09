@@ -1,0 +1,35 @@
+{
+  "gate": "flood-relevance",
+  "scope": "inland flooding; wind/hail/storm mitigation OUT of scope",
+  "result": {
+    "roof": {
+      "flood": 1,
+      "offscope": 5,
+      "generic": 3,
+      "verdict": "REMOVE - re-author"
+    },
+    "siding": {
+      "flood": 9,
+      "verdict": "keep"
+    },
+    "windows": {
+      "flood": 8,
+      "generic": 1,
+      "verdict": "keep"
+    },
+    "chimney": {
+      "flood": 4,
+      "generic": 3,
+      "verdict": "keep"
+    },
+    "insulation": {
+      "flood": 9,
+      "verdict": "keep"
+    },
+    "interior": {
+      "flood": 9,
+      "verdict": "keep"
+    }
+  },
+  "action": "roof removed from content-bundle (only 1/9 items flood-relevant; corpus lacks flood-specific roof guidance); app falls back to built-in flood-appropriate roof guidance; roof flagged for human authoring"
+}

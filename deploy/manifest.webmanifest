@@ -1,0 +1,19 @@
+{
+  "name": "Historic Flood Recovery Tool",
+  "short_name": "Flood Recovery",
+  "description": "Offline post-flood assessment and recovery guidance for historic buildings.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#ffffff",
+  "theme_color": "#2E5A6E",
+  "icons": [
+    {
+      "src": "icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

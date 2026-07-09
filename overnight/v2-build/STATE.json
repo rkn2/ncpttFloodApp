@@ -1,0 +1,48 @@
+{
+  "campaign": "floodapp-v2-build",
+  "round": 8,
+  "started_at": "2026-07-08",
+  "metric": {
+    "definition": "deliverables_passing / deliverables_defined",
+    "deliverables_passing": 9,
+    "deliverables_defined": 11,
+    "readiness": 0.82
+  },
+  "best": {
+    "note": "R7: i18n scaffold + Spanish entry screen; EN/ES switcher works. P0-P2 autonomous build complete (9/11 core, 2 partial, 1 manual-check)."
+  },
+  "budget": {
+    "paid_llm_calls_available": false,
+    "spent_usd_est": 0,
+    "limit_usd": 0,
+    "note": "No external LLM key in env; synthesis via in-loop subagents, validation via free Python."
+  },
+  "model": "opus (gate) + sonnet/opus (main)",
+  "citation_schema": "quote-match anchoring {source_file, quote, page?}; verify=normalized substring match",
+  "human_action_required": [
+    "REVOKE leaked Groq key gsk_rfyOhRY9... in Groq console (loop cannot).",
+    "Scrub git history (BFG/git-filter-repo) + force-push (loop must not rewrite pushed history unattended).",
+    "Later: deploy backend proxy so chat works without a user-supplied key.",
+    "Confirm offline once: open deployed site online, then airplane-mode reload (should load fully). Bump CACHE_VERSION in sw.js every deploy."
+  ],
+  "last_round_summary": "R8: added flood-relevance gate (advisor-caught blind spot). Roof was mostly wind/hail (out of inland-flood scope) -> removed from bundle (app falls back to built-in), flagged for human authoring. content-bundle now 5 records, 49/49 verified through 3 gates. Wrap-up green.",
+  "next_round_plan": "CAMPAIGN COMPLETE. Resume path if reopened: P3 (computer vision, Esri) and P4 (SHPO backend) require external dependencies \u2014 not autonomous. Or extend D2.3 (full-flow Spanish) and D0.4 (author 3 safety-critical categories).",
+  "open_finding_SOI": "secretary for interior.pdf garbled under pdftotext (ctrl=0.28). Cite SOI content only against OCR'd text or knowledge-base.json chunks.",
+  "stopped_reason": "All autonomously-achievable P0-P2 families addressed (frontier empty). 9/11 core deliverables validated, 2 partial. Wrap-up complete: regression sweep green, FINAL_REPORT.md written.",
+  "content_bundle": {
+    "records": 5,
+    "items": 43,
+    "citations_verified": "49/49",
+    "gates": [
+      "citation-verify",
+      "entailment",
+      "flood-relevance"
+    ],
+    "held_for_human": [
+      "structural",
+      "electrical",
+      "mold",
+      "roof"
+    ]
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "goal": "Find all authoritative publicly available documents on flood/disaster recovery for historic buildings and districts",
+  "vocabulary": ["fema-historic", "nps-preservation", "achp-section106", "national-trust", "shpo-guidance", "insurance-historic", "sba-disaster", "community-district-recovery", "state-specific"],
+  "tree": {
+    "id": "root",
+    "children": []
+  },
+  "frontier": []
+}

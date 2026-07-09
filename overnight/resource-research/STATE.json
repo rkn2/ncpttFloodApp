@@ -1,0 +1,15 @@
+{
+  "round": 1,
+  "best": {
+    "confidence": "HIGH",
+    "verified_sources": 35,
+    "tier1_count": 11,
+    "tier2_count": 8
+  },
+  "budget": {
+    "spent_usd_est": 0.25,
+    "limit_usd": 1.00
+  },
+  "model": "sonnet",
+  "stopped": "HIGH confidence reached in round 1 — all three domain families exhausted. FINAL_REPORT.md written."
+}
