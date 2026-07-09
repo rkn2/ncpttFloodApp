@@ -4,9 +4,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Historic Flood Recovery Tool</title>
-<link rel="manifest" href="manifest.webmanifest">
-<meta name="theme-color" content="#2E5A6E">
-<link rel="apple-touch-icon" href="icon.svg">
 <style>
   :root {
     --hw-primary: #7B5E3A;
@@ -409,22 +406,6 @@
     margin-top: 8px;
     font-style: italic;
   }
-  .cite {
-    cursor: help;
-    font-size: 0.82em;
-    opacity: 0.65;
-    margin-left: 2px;
-    text-decoration: none;
-  }
-  .cite:hover { opacity: 1; }
-  #lang-switcher { display: flex; gap: 2px; align-self: center; }
-  #lang-switcher button {
-    border: 1px solid rgba(255,255,255,0.5);
-    background: transparent; color: inherit;
-    font-size: 0.72rem; font-weight: 600; padding: 3px 8px;
-    cursor: pointer; border-radius: 4px;
-  }
-  #lang-switcher button.lang-active { background: rgba(255,255,255,0.85); color: #2E5A6E; }
 
   /* ── Assessor result card ── */
   .posting-badge {
@@ -767,10 +748,6 @@
     <div class="sub">National Park Service &bull; Preservation Assistance</div>
   </div>
   <span id="mode-badge-header" class="mode-badge hidden"></span>
-  <div id="lang-switcher" role="group" aria-label="Language">
-    <button id="lang-en" onclick="setLang('en')" class="lang-active">EN</button>
-    <button id="lang-es" onclick="setLang('es')">ES</button>
-  </div>
 </div>
 <div id="progress-bar"><div id="progress-fill" style="width:0%"></div></div>
 <div id="step-indicator"></div>
@@ -1047,56 +1024,6 @@ let state = {
 // RENDER HELPERS
 // ═══════════════════════════════════════════════
 
-// ═══════════════════════════════════════════════
-// i18n (scaffold) — externalized UI strings + language switcher.
-// Fully translates the entry/welcome screen (self-contained, no half-translated view).
-// Extend by moving more inline strings into I18N[...] and wrapping them in t('key').
-// t() falls back to English for any missing key, so a partial es table never shows a blank.
-// ═══════════════════════════════════════════════
-const I18N = {
-  en: {
-    welcome_title: "Welcome",
-    welcome_desc: "This tool helps owners of historic buildings respond to flood damage — both by identifying assistance programs and providing preservation-sensitive repair guidance. Select who is using the tool today.",
-    mode_ho_title: "Homeowner / Property Owner",
-    mode_ho_desc: "I own or occupy a historic building that was damaged by flooding and I need guidance on what assistance I may qualify for and how to repair my building appropriately.",
-    mode_as_title: "Field Assessor",
-    mode_as_desc: "I am a trained assessor (SHPO staff, NPS, emergency responder, volunteer) conducting building-by-building damage documentation in the field.",
-  },
-  es: {
-    welcome_title: "Bienvenido",
-    welcome_desc: "Esta herramienta ayuda a los propietarios de edificios históricos a responder a los daños por inundación, identificando programas de asistencia y ofreciendo orientación de reparación sensible a la preservación. Seleccione quién usa la herramienta hoy.",
-    mode_ho_title: "Propietario / Ocupante",
-    mode_ho_desc: "Soy dueño u ocupo un edificio histórico dañado por una inundación y necesito orientación sobre a qué asistencia puedo calificar y cómo reparar mi edificio de manera apropiada.",
-    mode_as_title: "Evaluador de campo",
-    mode_as_desc: "Soy un evaluador capacitado (personal de SHPO, NPS, personal de emergencia, voluntario) que realiza documentación de daños edificio por edificio en el campo.",
-  },
-};
-let LANG = (typeof localStorage !== 'undefined' && localStorage.getItem('floodapp_lang')) || 'en';
-function t(key) { return (I18N[LANG] && I18N[LANG][key]) || I18N.en[key] || key; }
-function setLang(l) {
-  LANG = l;
-  try { localStorage.setItem('floodapp_lang', l); } catch (_) {}
-  document.documentElement.lang = l;
-  syncLangUI();
-  renderCurrent();
-}
-function syncLangUI() {
-  const en = document.getElementById('lang-en'), es = document.getElementById('lang-es');
-  if (en) en.classList.toggle('lang-active', LANG === 'en');
-  if (es) es.classList.toggle('lang-active', LANG === 'es');
-}
-// Re-render whatever screen is currently shown (used when the language changes).
-function renderCurrent() {
-  if (!state.mode) return showModeSelect();
-  if (state.mode === 'homeowner') {
-    if (state.step >= 2) showHwResults();
-    else if (state.step >= 1) showHwStep1();
-    else showHwStep0();
-  } else {
-    showAssessorSubmode();
-  }
-}
-
 function screens() { return document.getElementById('screens'); }
 
 function updateProgress(pct, isAssessor) {
@@ -1158,18 +1085,18 @@ function showModeSelect() {
   updateProgress(0, false);
   renderStepIndicator([], 0, false);
   screens().innerHTML = card(`
-    <h2>${t('welcome_title')}</h2>
-    <p class="section-desc">${t('welcome_desc')}</p>
+    <h2>Welcome</h2>
+    <p class="section-desc">This tool helps owners of historic buildings respond to flood damage — both by identifying assistance programs and providing preservation-sensitive repair guidance. Select who is using the tool today.</p>
     <div id="mode-select-screen">
       <div class="mode-btn" onclick="startHomeowner()">
         <div class="mode-icon">🏡</div>
-        <div class="mode-title">${t('mode_ho_title')}</div>
-        <div class="mode-desc">${t('mode_ho_desc')}</div>
+        <div class="mode-title">Homeowner / Property Owner</div>
+        <div class="mode-desc">I own or occupy a historic building that was damaged by flooding and I need guidance on what assistance I may qualify for and how to repair my building appropriately.</div>
       </div>
       <div class="mode-btn assessor-btn" onclick="startAssessor()">
         <div class="mode-icon">📋</div>
-        <div class="mode-title">${t('mode_as_title')}</div>
-        <div class="mode-desc">${t('mode_as_desc')}</div>
+        <div class="mode-title">Field Assessor</div>
+        <div class="mode-desc">I am a trained assessor (SHPO staff, NPS, emergency responder, volunteer) conducting building-by-building damage documentation in the field.</div>
       </div>
     </div>
   `);
@@ -1348,20 +1275,26 @@ function showHwResults() {
     ? `<p style="font-size:0.85rem;color:#888;">No damage categories were selected. Go back and rate the areas that were affected.</p>`
     : damaged.map(cat => {
         const g = REPAIR_GUIDANCE[cat.key];
-        const cb = contentBundle[cat.key];
-        if (!g && !cb) return '';
-        const icon = g ? g.icon : '🔧';
-        const label = g ? g.label : (cb ? cb.label : cat.label);
+        if (!g) return '';
         const sev = state.hw.damage[cat.key];
         const sevColor = sev === 'severe' ? '#B71C1C' : sev === 'moderate' ? '#E65100' : '#2E7D32';
         return `<div class="guidance-card">
           <div class="guidance-card-header" onclick="toggleGuidance('g-${cat.key}')">
-            ${icon} ${label}
+            ${g.icon} ${g.label}
             <span style="margin-left:8px;font-size:0.72rem;font-weight:600;color:${sevColor};text-transform:uppercase;">${sev}</span>
             <span class="toggle" id="g-${cat.key}-toggle">▼ Show</span>
           </div>
           <div class="guidance-card-body" id="g-${cat.key}">
-            ${guidanceBodyHtml(cat.key)}
+            <div class="guidance-do">
+              <strong>✔ Do This</strong>
+              <ul>${g.do.map(d=>`<li>${d}</li>`).join('')}</ul>
+            </div>
+            <div class="guidance-dont">
+              <strong>✖ Do NOT Do This</strong>
+              <ul>${g.dont.map(d=>`<li>${d}</li>`).join('')}</ul>
+            </div>
+            ${g.pro ? `<div class="guidance-pro"><strong>⚠ Call a Professional</strong><p>${g.pro}</p></div>` : ''}
+            ${g.soi ? `<div class="soi-note">📜 ${g.soi}</div>` : ''}
           </div>
         </div>`;
       }).join('');
@@ -2173,10 +2106,9 @@ function usStates() {
 
 const GROQ_MODEL = 'llama-3.1-8b-instant';
 const LS_GROQ_KEY = 'floodapp_groq_key';
-// SECURITY: no API key is stored in source. The chat key is user-supplied and kept
-// only in the browser's localStorage (set via the ⚙ prompt). Do NOT hardcode a key here —
-// this file is served to every visitor. A backend proxy is the production-grade fix.
-function getGroqKey() { return localStorage.getItem(LS_GROQ_KEY) || ''; }
+const GROQ_DEFAULT_KEY = 'gsk_REDACTED_original_backup_key_removed_round1';
+
+function getGroqKey() { return localStorage.getItem(LS_GROQ_KEY) || GROQ_DEFAULT_KEY; }
 function saveGroqKey(key) { localStorage.setItem(LS_GROQ_KEY, key.trim()); }
 
 let knowledgeBase = null;
@@ -2199,68 +2131,6 @@ async function loadKB() {
   } catch (_) {
     appendChatNote('No grant documents loaded yet. Run build-kb.py to add them.');
   }
-}
-
-// ── COMPILED CITED GUIDANCE (content-bundle.json) ──
-// Built offline by the NLP authoring pipeline: each do/dont carries a source citation whose
-// verbatim quote was mechanically verified against the source document. Loaded if present;
-// the app falls back to the built-in REPAIR_GUIDANCE when it is absent.
-let contentBundle = {};
-async function loadContentBundle() {
-  try {
-    const resp = await fetch('content-bundle.json');
-    if (resp.ok) {
-      const data = await resp.json();
-      (data.guidance || []).forEach(r => { contentBundle[r.id] = r; });
-    }
-  } catch (_) { /* fall back to built-in REPAIR_GUIDANCE */ }
-}
-
-function escAttr(s) {
-  return String(s).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-}
-function sourceLabel(fn) {
-  return fn.replace(/\.pdf$/i,'').replace(/[-_]/g,' ')
-           .replace(/\b\w/g, c => c.toUpperCase()).slice(0, 60);
-}
-// Render one cited do/dont item. The 📄 tooltip shows the verbatim source quote — the provenance.
-function citedItemHtml(item) {
-  const cites = (item.citations || []).map(c =>
-    `<span class="cite" title="${escAttr('“'+c.quote+'” — '+sourceLabel(c.source_file))}">📄</span>`
-  ).join('');
-  return `<li>${item.text} ${cites}</li>`;
-}
-// Guidance-card body: prefer the compiled cited bundle; fall back to the built-in guidance.
-function guidanceBodyHtml(catKey) {
-  const cb = contentBundle[catKey];
-  if (cb) {
-    const srcs = [...new Set((cb.do||[]).concat(cb.dont||[])
-      .flatMap(it => (it.citations||[]).map(c => sourceLabel(c.source_file))))];
-    return `
-      <div class="guidance-do">
-        <strong>✔ Do This</strong>
-        <ul>${(cb.do||[]).map(citedItemHtml).join('')}</ul>
-      </div>
-      <div class="guidance-dont">
-        <strong>✖ Do NOT Do This</strong>
-        <ul>${(cb.dont||[]).map(citedItemHtml).join('')}</ul>
-      </div>
-      <div class="soi-note">📚 Every recommendation above is sourced from authoritative preservation
-        and disaster-recovery documents (hover 📄 for the exact quote). Sources: ${srcs.join('; ')}.</div>`;
-  }
-  const g = REPAIR_GUIDANCE[catKey];
-  if (!g) return '';
-  return `
-    <div class="guidance-do">
-      <strong>✔ Do This</strong>
-      <ul>${g.do.map(d=>`<li>${d}</li>`).join('')}</ul>
-    </div>
-    <div class="guidance-dont">
-      <strong>✖ Do NOT Do This</strong>
-      <ul>${g.dont.map(d=>`<li>${d}</li>`).join('')}</ul>
-    </div>
-    ${g.pro ? `<div class="guidance-pro"><strong>⚠ Call a Professional</strong><p>${g.pro}</p></div>` : ''}
-    ${g.soi ? `<div class="soi-note">📜 ${g.soi}</div>` : ''}`;
 }
 
 function tokenize(text) {
@@ -2458,7 +2328,12 @@ async function sendChat() {
   send.disabled = true;
   appendMsg('user', query);
 
-  // Offline-first: passage retrieval needs no API key — this is the core post-flood use case.
+  if (!getGroqKey()) {
+    showApiKeyPrompt();
+    send.disabled = false;
+    return;
+  }
+
   if (!navigator.onLine) {
     const chunks = searchKB(query);
     if (chunks.length) {
@@ -2468,12 +2343,6 @@ async function sendChat() {
     }
     send.disabled = false;
     input.focus();
-    return;
-  }
-
-  if (!getGroqKey()) {
-    showApiKeyPrompt();
-    send.disabled = false;
     return;
   }
 
@@ -2637,17 +2506,7 @@ function checkShareHash() {
 }
 
 // ── INIT ──────────────────────────────────
-// Register the service worker for offline use (core requirement: no cell after a flood).
-// Silently no-ops in dev if sw.js isn't served alongside the app.
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('sw.js').catch(() => {});
-  });
-}
 loadKB();
-loadContentBundle();
-document.documentElement.lang = LANG;
-syncLangUI();
 if (checkShareHash()) {
   // Shared link — restore state and navigate to the right screen
   setChatVisible(!!state.mode);

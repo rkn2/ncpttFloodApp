@@ -1,0 +1,502 @@
+{
+  "schema_version": "1.0",
+  "built_at": "2026-07-09",
+  "generator": "pipeline/ (extract->retrieve->synthesize->verify_citations->directive_lint->entailment audit)",
+  "provenance_note": "Every do/dont item carries >=1 citation whose verbatim quote was mechanically verified present in its cited docs/ source, and passed an independent LLM claim-entailment audit. Records are advisory preservation guidance, not a substitute for a professional assessment.",
+  "verification": {
+    "citations_verified": 49,
+    "citations_total": 49,
+    "items": 43,
+    "entailment_audited": true,
+    "entailment_dropped": [
+      "chimney: foundation-wall quote over-applied to chimney"
+    ],
+    "citation_dropped": [
+      "chimney: nps quote not verbatim in source (garbled OCR region)"
+    ],
+    "relevance_gate": "applied (inland-flood scope)",
+    "relevance_removed": [
+      "roof: 5/9 items wind/hail off-scope; corpus lacks flood roof guidance -> human authoring; app falls back to built-in"
+    ]
+  },
+  "categories": [
+    "siding",
+    "windows",
+    "chimney",
+    "insulation",
+    "interior"
+  ],
+  "guidance": [
+    {
+      "id": "siding",
+      "label": "Exterior Walls / Siding",
+      "audience": [
+        "homeowner"
+      ],
+      "summary": "Flood damage to wood exterior walls and siding is usually not serious as long as the wood is allowed to dry out afterward; the real danger comes from moisture that gets trapped and cannot evaporate, such as in wall cavities, behind insulation, or under impermeable paint finishes.",
+      "do": [
+        {
+          "text": "Let flood-saturated wood siding and framing dry out in place rather than assuming it needs replacement, since a one-time flood event usually does little lasting harm if the wood can dry.",
+          "citations": [
+            {
+              "source_file": "nthp-treatment-flood-damaged-historic-buildings.pdf",
+              "quote": "Damage from a one-time event, such as a flood, is usually negligible if the wood is allowed to air dry."
+            }
+          ]
+        },
+        {
+          "text": "Remove insulation from around wall sill areas so trapped water can evaporate and the wood framing can dry.",
+          "citations": [
+            {
+              "source_file": "nthp-treatment-flood-damaged-historic-buildings.pdf",
+              "quote": "Remove insulation at sill and allow wood to dry."
+            }
+          ]
+        },
+        {
+          "text": "Clear out any mud or silt left inside wall cavities, whether or not the insulation itself is removed.",
+          "citations": [
+            {
+              "source_file": "nthp-treatment-flood-damaged-historic-buildings.pdf",
+              "quote": "Any mud or silt that remains in the cavity should be removed regardless of the insulation’s condition."
+            }
+          ]
+        },
+        {
+          "text": "Evaluate insulation such as fiberglass battens on a case-by-case basis rather than automatically discarding it, since not all types need to come out.",
+          "citations": [
+            {
+              "source_file": "nthp-treatment-flood-damaged-historic-buildings.pdf",
+              "quote": "Other types of insulation, such as fiberglass battens, must be evaluated on a case-by-case basis."
+            }
+          ]
+        },
+        {
+          "text": "Watch for moisture getting trapped inside walls behind finishes or in cavities, since that trapped dampness, not the one-time flooding itself, is what causes lasting wood damage.",
+          "citations": [
+            {
+              "source_file": "historic-england-flooding-and-historic-buildings.pdf",
+              "quote": "Problems occur when moisture is trapped in the wood and cannot escape."
+            }
+          ]
+        }
+      ],
+      "dont": [
+        {
+          "text": "Don't leave saturated insulation sitting inside wall cavities, since it holds water that can keep wood, masonry, and steel destructively damp.",
+          "citations": [
+            {
+              "source_file": "nthp-treatment-flood-damaged-historic-buildings.pdf",
+              "quote": "Saturated insulation holds water which, if left in place, can perpetuate high moisture conditions destructive to wood, masonry, and steel."
+            }
+          ]
+        },
+        {
+          "text": "Don't seal damp wall assemblies back up behind impermeable finishes like oil-based gloss paint, or leave them enclosed in cavities and under floors, without letting them dry first.",
+          "citations": [
+            {
+              "source_file": "historic-england-flooding-and-historic-buildings.pdf",
+              "quote": "This can happen in wall cavities, in sill plates under floors, behind panelling and under impermeable finishes such as oil-based gloss paint."
+            }
+          ]
+        },
+        {
+          "text": "Don't leave fiberglass batt insulation in place if it is blocking airflow through the wall cavity and slowing the drying-out process.",
+          "citations": [
+            {
+              "source_file": "nthp-treatment-flood-damaged-historic-buildings.pdf",
+              "quote": "if they impede the flow of air in a wall cavity, and thus the drying-out process, it may be necessary to remove them."
+            }
+          ]
+        },
+        {
+          "text": "Don't let wood moisture levels stay elevated indefinitely; moisture content above roughly 28 percent creates conditions where dry rot spores could germinate.",
+          "citations": [
+            {
+              "source_file": "historic-england-flooding-and-historic-buildings.pdf",
+              "quote": "If the moisture content exceeds 28 per cent then dry rot spores could germinate."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "windows",
+      "label": "Windows and Doors",
+      "audience": [
+        "homeowner"
+      ],
+      "summary": "Flood-damaged historic windows and doors can often be saved rather than replaced if they are handled carefully during drying and cleanup. Original wood trim and panel doors tend to survive flooding better than expected and typically return to their original form once fully dried.",
+      "do": [
+        {
+          "text": "Retain original wood trim around baseboards, ceilings, doors, and windows, since it typically survives a flood and should return to its original form once dried.",
+          "citations": [
+            {
+              "source_file": "nthp-treatment-flood-damaged-historic-buildings.pdf",
+              "quote": "Wood trim around baseboards, ceilings, doors, and windows is likely to survive a flood"
+            },
+            {
+              "source_file": "treatment of flood damaged hist buildings.pdf",
+              "quote": "After drying, it should return to its original form and should be retained."
+            }
+          ]
+        },
+        {
+          "text": "Recognize that wooden doors in older and historic buildings are typically panel doors that contribute to the building's character, and weigh this when deciding on repair versus replacement.",
+          "citations": [
+            {
+              "source_file": "nthp-treatment-flood-damaged-historic-buildings.pdf",
+              "quote": "Wooden doors in older and historic buildings are likely to be panel doors that add to the character of the building."
+            }
+          ]
+        },
+        {
+          "text": "If a door cannot be saved and must be replaced, replicate the original panel door design rather than installing a generic replacement.",
+          "citations": [
+            {
+              "source_file": "treatment of flood damaged hist buildings.pdf",
+              "quote": "If you need to replace any doors, consider replicating original panel doors."
+            }
+          ]
+        },
+        {
+          "text": "Where a large historic window opening extends below the established flood risk level, use engineered structural reinforcing at the opening rather than removing or eliminating it.",
+          "citations": [
+            {
+              "source_file": "nps-flood-adaptation-guidelines-2021.pdf",
+              "quote": "the structural reinforcing required at large window openings that extend below the established flood risk level."
+            }
+          ]
+        },
+        {
+          "text": "Consider removable exterior storm windows over historic sash, and for stained glass use only ventilated storm units, so the cavity between the storm and the historic window can still be periodically vented.",
+          "citations": [
+            {
+              "source_file": "nps-preservation-brief-39-moisture-control.pdf",
+              "quote": "removable exterior storm windows, but allow operation of windows for periodic ventilation of cavity between exterior storm and historic sash."
+            },
+            {
+              "source_file": "nps-preservation-brief-39-moisture-control.pdf",
+              "quote": "For stained glass windows using protective glazing, use only ventilated storms to avoid condensation as well as heat build-up."
+            }
+          ]
+        }
+      ],
+      "dont": [
+        {
+          "text": "Don't attempt to repair or plane flood-affected doors until they are completely dry.",
+          "citations": [
+            {
+              "source_file": "nthp-treatment-flood-damaged-historic-buildings.pdf",
+              "quote": "Be sure that the doors are completely dry before attempting to repair or plane them."
+            }
+          ]
+        },
+        {
+          "text": "Don't count on hollow-core doors surviving a flood; their internal spacers are usually cardboard, which dissolves in water, so plan on replacement.",
+          "citations": [
+            {
+              "source_file": "treatment of flood damaged hist buildings.pdf",
+              "quote": "Hollow core doors will likely need to be replaced because their internal spacers are usually made of cardboard which dissolves in water."
+            }
+          ]
+        },
+        {
+          "text": "Don't apply sealants to wood while drying and treating for mold after a flood.",
+          "citations": [
+            {
+              "source_file": "nthp-treatment-flood-damaged-historic-buildings.pdf",
+              "quote": "Other fungicides may also help inhibit mold regrowth during drying. Do not apply sealants to wood."
+            }
+          ]
+        },
+        {
+          "text": "Don't default to permanently or temporarily blocking large historic window openings that extend below the flood risk level; reinforced glazing alternatives have been used instead of blocking.",
+          "citations": [
+            {
+              "source_file": "nps-flood-adaptation-guidelines-2021.pdf",
+              "quote": "Rather than blocking these windows, either permanently or temporarily, the owner elected to use aquarium glass in the lower sash."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "chimney",
+      "label": "Chimney",
+      "audience": [
+        "homeowner"
+      ],
+      "summary": "Historic masonry chimneys are especially vulnerable after a flood because their lime mortar can be eroded or washed out by floodwater, and any embedded metal is prone to rusting once wet. Once the water recedes and materials dry, inspect the mortar joints, embedded metal, and overall condition before deciding what to repair.",
+      "do": [
+        {
+          "text": "After floodwater recedes and materials dry, check the mortar joints near lintels for cracking or loss, and repoint promptly so water can't get in and cause further rusting of embedded metal.",
+          "citations": [
+            {
+              "source_file": "treatment of flood damaged hist buildings.pdf",
+              "quote": "check the mortar joints near the lintels to see that the mortar has not cracked or fallen out"
+            },
+            {
+              "source_file": "treatment of flood damaged hist buildings.pdf",
+              "quote": "If it has, repoint the area immediately to make sure that water cannot enter to create further rusting."
+            }
+          ]
+        },
+        {
+          "text": "Before repointing over embedded metal, scrape off any loose rust scale, and periodically inspect embedded iron-based metal in the masonry, repairing any surrounding cracks that develop.",
+          "citations": [
+            {
+              "source_file": "treatment of flood damaged hist buildings.pdf",
+              "quote": "Before repointing, scrape the metal to remove any loose rust scale."
+            },
+            {
+              "source_file": "treatment of flood damaged hist buildings.pdf",
+              "quote": "If other iron-based metals are imbedded in masonry or concrete, inspect them periodically and repair cracks in the surrounding materials if they occur."
+            }
+          ]
+        },
+        {
+          "text": "Remove deteriorated lime mortar by hand raking the joints, a careful approach that avoids damaging the surrounding historic masonry.",
+          "citations": [
+            {
+              "source_file": "secretary for interior.pdf",
+              "quote": "Removing deteriorated lime mortar carefully by hand raking the joints to avoid damaging"
+            }
+          ]
+        },
+        {
+          "text": "As part of routine maintenance, remove efflorescence (salt deposits) from the chimney's masonry using non-metallic bristle brushes.",
+          "citations": [
+            {
+              "source_file": "nps-preservation-brief-39-moisture-control.pdf",
+              "quote": "remove efflorescence from masonry with non-metallic bristle brushes"
+            }
+          ]
+        }
+      ],
+      "dont": [
+        {
+          "text": "Don't remove sound, non-deteriorated mortar from the chimney or repoint the whole structure just to make it look uniform.",
+          "citations": [
+            {
+              "source_file": "nps-flood-adaptation-guidelines-2021.pdf",
+              "quote": "Removing non-deteriorated mortar from sound features by repointing the mortar joints"
+            }
+          ]
+        },
+        {
+          "text": "Don't repoint flood-damaged historic chimney masonry with impermeable, heavily cement-based mortar, since it holds moisture in the masonry longer and can cause salts to crystallize within the historic material.",
+          "citations": [
+            {
+              "source_file": "historic-england-flooding-and-historic-buildings.pdf",
+              "quote": "Impermeable, heavily cement-based mortar will exacerbate deterioration during a flood because it holds the moisture in the masonry for longer and causes salts to crystallise within the historic materials."
+            }
+          ]
+        },
+        {
+          "text": "Don't leave flood-soaked chimney masonry wet going into freezing conditions, since spalling of soft brick or stone typically occurs when temperatures drop below freezing while moisture is still trapped in the walls.",
+          "citations": [
+            {
+              "source_file": "historic-england-flooding-and-historic-buildings.pdf",
+              "quote": "The spalling of soft brick or stonework usually occurs on building exteriors when the temperature drops below freezing while moisture is still trapped within walls."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "insulation",
+      "label": "Insulation",
+      "audience": [
+        "homeowner"
+      ],
+      "summary": "Insulation that gets wet during a flood tends to stay wet long after visible surfaces look dry, which can hide mold and decay growth inside historic wall cavities. Removing saturated fibrous insulation and any trapped mud or silt, then opening the cavity to ventilate, helps walls dry out. Not every material needs to go.",
+      "do": [
+        {
+          "text": "Remove all wet fibrous insulation, even if the wallboard or wall covering appears to be dry.",
+          "citations": [
+            {
+              "source_file": "nthp-treatment-flood-damaged-historic-buildings.pdf",
+              "quote": "Remove all wet fibrous insulation—even if wallboard appears to be dry."
+            }
+          ]
+        },
+        {
+          "text": "Remove moldy porous materials and bag them to reduce the spread of mold spores.",
+          "citations": [
+            {
+              "source_file": "nthp-treatment-flood-damaged-historic-buildings.pdf",
+              "quote": "Porous moldy or sewage-contaminated materials should be removed, put in plastic bags if possible, and thrown away."
+            }
+          ]
+        },
+        {
+          "text": "Remove any mud or silt left in the wall cavity, regardless of the insulation's condition.",
+          "citations": [
+            {
+              "source_file": "nthp-treatment-flood-damaged-historic-buildings.pdf",
+              "quote": "Any mud or silt that remains in the cavity should be removed regardless of the insulation’s condition."
+            }
+          ]
+        },
+        {
+          "text": "Cut holes in plaster or wallboard to remove wall insulation, and leave the holes open to ventilate the cavity.",
+          "citations": [
+            {
+              "source_file": "nthp-treatment-flood-damaged-historic-buildings.pdf",
+              "quote": "Cut holes in plaster or wallboard and remove wall insulation. Leave holes open to ventilate wall cavities."
+            }
+          ]
+        },
+        {
+          "text": "Evaluate fiberglass batt insulation case-by-case rather than assuming it must be discarded, since glass fibers themselves are not water absorbent, though they may still need removal if they impede the wall's ability to dry out.",
+          "citations": [
+            {
+              "source_file": "nthp-treatment-flood-damaged-historic-buildings.pdf",
+              "quote": "Other types of insulation, such as fiberglass battens, must be evaluated on a case-by-case basis."
+            },
+            {
+              "source_file": "nthp-treatment-flood-damaged-historic-buildings.pdf",
+              "quote": "Glass fibers, in themselves, are not water absorbent, but if they impede the flow of air in a wall cavity, and thus the drying-out process, it may be necessary to remove them."
+            }
+          ]
+        },
+        {
+          "text": "Keep dry, undamaged plaster, wood paneling, or non-paper-faced gypsum board walls with no insulation behind them by cleaning and sanitizing rather than removing them.",
+          "citations": [
+            {
+              "source_file": "nthp-treatment-flood-damaged-historic-buildings.pdf",
+              "quote": "Plaster, wood paneling, and non-paper faced gypsum board walls that are dry, in good condition, and have no insulation in the wall can be cleaned and sanitized to salvage them."
+            }
+          ]
+        }
+      ],
+      "dont": [
+        {
+          "text": "Don't assume that dry-looking wallboard means the insulation behind it is dry, since wet insulation stays wet far too long and can breed hidden mold and decay fungi inside the walls.",
+          "citations": [
+            {
+              "source_file": "nthp-treatment-flood-damaged-historic-buildings.pdf",
+              "quote": "Wet insulation will stay wet far too long, leading to the growth of hidden unhealthy mold and decay fungi inside the walls."
+            }
+          ]
+        },
+        {
+          "text": "Don't leave wet insulation packed against wood, masonry, or steel fasteners, since it holds moisture, keeps the inside of the wall wet, creates conditions for rotting, and rusts steel nails.",
+          "citations": [
+            {
+              "source_file": "nthp-treatment-flood-damaged-historic-buildings.pdf",
+              "quote": "Wet insulation holds moisture keeping inside of the wall wet and creating conditions for rotting."
+            },
+            {
+              "source_file": "nthp-treatment-flood-damaged-historic-buildings.pdf",
+              "quote": "Wet insulation packed between joists of sill plate keeps wood saturated and rusts steel nails."
+            }
+          ]
+        },
+        {
+          "text": "Don't leave heavily mold-affected porous materials in place hoping to salvage them; it's best to remove them, especially with heavy or long-term mold growth.",
+          "citations": [
+            {
+              "source_file": "nthp-treatment-flood-damaged-historic-buildings.pdf",
+              "quote": "It’s best to remove all moldly porous materials, especially if there is heavy or long-term mold growth"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "interior",
+      "label": "Interior Finishes",
+      "audience": [
+        "homeowner"
+      ],
+      "summary": "Flood-damaged historic interior finishes such as plaster, wallpaper, and flooring can often be saved, but each material needs to dry fully before you decide whether to repair, retain, or replace it. When a finish truly cannot be saved, keep documented samples so the historic material is preserved for the record.",
+      "do": [
+        {
+          "text": "Recognize that older, historic wallpaper can often be saved after a flood, even though deciding whether to retain or remove it is a difficult call.",
+          "citations": [
+            {
+              "source_file": "nthp-treatment-flood-damaged-historic-buildings.pdf",
+              "quote": "In many cases, older and historic wallpaper may be saved after a flood, but the decision to retain or remove it is a difficult one."
+            }
+          ]
+        },
+        {
+          "text": "Before removing damaged wallpaper, take samples from several different spots, including the ceiling, so you have a documented record of the pattern and material.",
+          "citations": [
+            {
+              "source_file": "nthp-treatment-flood-damaged-historic-buildings.pdf",
+              "quote": "take samples from several different locations including the ceiling"
+            }
+          ]
+        },
+        {
+          "text": "Store any wallpaper samples you remove in a dry part of the house until they can be properly preserved.",
+          "citations": [
+            {
+              "source_file": "nthp-treatment-flood-damaged-historic-buildings.pdf",
+              "quote": "store temporarily in a dry part of the house until the paper can be permanently preserved"
+            }
+          ]
+        },
+        {
+          "text": "Inspect plaster walls and ceilings for broken plaster keys, since moisture-swollen wood lath is a known cause of this kind of failure.",
+          "citations": [
+            {
+              "source_file": "nthp-treatment-flood-damaged-historic-buildings.pdf",
+              "quote": "Moisture causes wood lath to expand and deform, causing plaster keys to break off."
+            }
+          ]
+        },
+        {
+          "text": "Let plaster dry out fully and then inspect it before deciding whether it needs to be replaced.",
+          "citations": [
+            {
+              "source_file": "treatment of flood damaged hist buildings.pdf",
+              "quote": "the best way to determine whether plaster must be replaced is to let it dry and then inspect it"
+            }
+          ]
+        },
+        {
+          "text": "For historically significant sheet flooring like linoleum, let it dry and check that it is level and still adhered before deciding to leave it in place.",
+          "citations": [
+            {
+              "source_file": "nthp-treatment-flood-damaged-historic-buildings.pdf",
+              "quote": "Once dry, if the floor is level and the flooring adheres, you may leave it in place."
+            }
+          ]
+        }
+      ],
+      "dont": [
+        {
+          "text": "Don't stand directly beneath an area of plaster you are prodding to drain, since the plaster may loosen and fall.",
+          "citations": [
+            {
+              "source_file": "treatment of flood damaged hist buildings.pdf",
+              "quote": "Do not stand directly under the area being prodded in case the plaster loosens and falls."
+            }
+          ]
+        },
+        {
+          "text": "Don't judge whether plaster is sound just by looking at its surface condition.",
+          "citations": [
+            {
+              "source_file": "treatment of flood damaged hist buildings.pdf",
+              "quote": "The surface condition of plaster may not tell you whether it is sound."
+            }
+          ]
+        },
+        {
+          "text": "Don't throw away historic flooring that can't be re-laid without first saving samples of it.",
+          "citations": [
+            {
+              "source_file": "nthp-treatment-flood-damaged-historic-buildings.pdf",
+              "quote": "If it is impossible to re-lay the floor, make sure to save samples of the historic flooring."
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

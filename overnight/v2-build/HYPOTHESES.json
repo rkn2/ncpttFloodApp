@@ -1,0 +1,176 @@
+{
+  "goal": "Advance floodApp v1 -> v2 (P0-P2) overnight, every increment validated + critiqued",
+  "vocabulary": [
+    "security-hardening",
+    "provenance-citations",
+    "authoring-pipeline-deterministic",
+    "authoring-pipeline-synthesis",
+    "offline-pwa",
+    "i18n-localization",
+    "validation-tooling",
+    "right-thing-challenge"
+  ],
+  "citation_schema_decision": {
+    "chosen": "quote-match anchoring",
+    "record": "{source_file, quote (verbatim substring), page?}",
+    "verify": "normalized substring match of quote against extracted source text",
+    "rejected": "char-offset anchoring (offsets unstable across pdftotext/OCR)",
+    "round": 1
+  },
+  "tree": {
+    "id": "root",
+    "children": [
+      {
+        "id": "H1",
+        "family": "security-hardening",
+        "status": "promising",
+        "attempts": [
+          {
+            "round": 1,
+            "action": "remove GROQ_DEFAULT_KEY from both app files; getGroqKey->localStorage||''; offline-first reorder in sendChat; add scan_secrets.py guard",
+            "delta": "+3 deliverables (D0.1,D0.2,D0.3)",
+            "verdict": "helped",
+            "evidence": "rounds/round_01.md"
+          }
+        ],
+        "posterior": {
+          "gain": "high",
+          "confidence": "high",
+          "cost_to_probe": "low"
+        },
+        "children": [
+          {
+            "id": "H1.1",
+            "family": "security-hardening",
+            "status": "blocked-external",
+            "note": "backend proxy for chat key + git-history scrub + key revoke = needs Becca; documented for handoff",
+            "attempts": [],
+            "posterior": {}
+          }
+        ]
+      },
+      {
+        "id": "H2",
+        "family": "validation-tooling",
+        "status": "promising",
+        "note": "DONE R2: verify_citations.py (NFKD+de-hyphen+length-gate, strict substring) + extract.py fidelity precheck. Verified end-to-end on real PDF.",
+        "attempts": [
+          {
+            "round": 2,
+            "action": "build verifier + extraction/fidelity precheck with all gate mitigations",
+            "delta": "+1 core (D1.2) +1 bonus (D1.1b)",
+            "verdict": "helped",
+            "evidence": "rounds/round_02.md",
+            "finding": "SOI Standards PDF garbled under pdftotext (ctrl=0.28) -> must OCR or use KB chunks to cite it"
+          }
+        ],
+        "posterior": {
+          "gain": "high",
+          "confidence": "high",
+          "cost_to_probe": "low"
+        },
+        "children": []
+      },
+      {
+        "id": "H3",
+        "family": "authoring-pipeline-deterministic",
+        "status": "promising",
+        "note": "DONE R3: retrieve.py + corpus.py + guidance_schema.py. SOI resolved via KB chunks (garbled-recovered). D1.1 complete.",
+        "attempts": [
+          {
+            "round": 3,
+            "action": "retrieval helper + unified corpus + schema validator; SOI clean-text via KB chunks",
+            "delta": "+1 (D1.1)",
+            "verdict": "helped",
+            "evidence": "rounds/round_03.md",
+            "finding": "duplicate PDF in docs/ (nthp-treatment == treatment of flood damaged)"
+          }
+        ],
+        "posterior": {
+          "gain": "high",
+          "confidence": "high",
+          "cost_to_probe": "low"
+        },
+        "children": []
+      },
+      {
+        "id": "H4",
+        "family": "authoring-pipeline-synthesis",
+        "status": "promising",
+        "note": "DONE R4: 6 cited records synthesized + double-gated (verify_citations + entailment audit). content-bundle.json 60/60.",
+        "attempts": [
+          {
+            "round": 4,
+            "action": "6 synthesis subagents + mechanical + entailment gates; split safety-critical to human-authoring",
+            "delta": "+1 (D1.3)",
+            "verdict": "helped",
+            "evidence": "rounds/round_04.md",
+            "finding": "2 items dropped by gates (1 false-attribution, 1 over-claim) \u2014 gates work"
+          }
+        ],
+        "posterior": {
+          "gain": "high",
+          "confidence": "high",
+          "cost_to_probe": "med"
+        },
+        "children": []
+      },
+      {
+        "id": "H5",
+        "family": "provenance-citations",
+        "status": "promising",
+        "note": "PARTIAL via D1.4: 6/9 categories now render verified citations in-app; 3 safety-critical deferred to human authoring (needs_human_authoring.json).",
+        "attempts": [],
+        "posterior": {
+          "gain": "med",
+          "confidence": "high",
+          "cost_to_probe": "low"
+        },
+        "children": []
+      },
+      {
+        "id": "H6",
+        "family": "offline-pwa",
+        "status": "promising",
+        "note": "DONE* R6: manifest+sw.js precache shell/bundle/KB, versioned cache, Groq excluded, nav fallback. 1 manual offline-check pending.",
+        "attempts": [
+          {
+            "round": 6,
+            "action": "PWA manifest+sw+icon+registration; fail-closed precache; versioned cache",
+            "delta": "+1 (D2.1)",
+            "verdict": "helped",
+            "evidence": "rounds/round_06.md"
+          }
+        ],
+        "posterior": {
+          "gain": "high",
+          "confidence": "med",
+          "cost_to_probe": "med"
+        },
+        "children": []
+      },
+      {
+        "id": "H7",
+        "family": "i18n-localization",
+        "status": "promising",
+        "note": "DONE(scaffold) R7: t()+table+switcher+Spanish entry screen. D2.2 done, D2.3 partial (entry only).",
+        "attempts": [
+          {
+            "round": 7,
+            "action": "i18n infra + switcher + Spanish welcome screen",
+            "delta": "+1 (D2.2); D2.3 partial",
+            "verdict": "helped",
+            "evidence": "rounds/round_07.md"
+          }
+        ],
+        "posterior": {
+          "gain": "med",
+          "confidence": "med",
+          "cost_to_probe": "med"
+        },
+        "children": []
+      }
+    ]
+  },
+  "frontier": []
+}

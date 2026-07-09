@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="Historic Flood Recovery">
+  <rect width="512" height="512" rx="96" fill="#2E5A6E"/>
+  <!-- historic house -->
+  <path d="M256 120 L392 232 L360 232 L360 356 L152 356 L152 232 L120 232 Z" fill="#F5EFE2"/>
+  <rect x="196" y="268" width="48" height="88" fill="#2E5A6E"/>
+  <rect x="280" y="268" width="52" height="52" fill="#2E5A6E"/>
+  <!-- flood water -->
+  <path d="M64 388 q48 -28 96 0 t96 0 t96 0 t96 0 v72 q-48 28 -96 0 t-96 0 t-96 0 t-96 0 Z" fill="#7FB2C4"/>
+  <path d="M64 420 q48 -24 96 0 t96 0 t96 0 t96 0 v40 H64 Z" fill="#5F9AAE"/>
+</svg>

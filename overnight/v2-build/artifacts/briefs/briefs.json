@@ -1,0 +1,543 @@
+{
+  "roof": {
+    "label": "Roof",
+    "audience": [
+      "homeowner"
+    ],
+    "query": "flood damaged historic roof slate clay tile temporary tarp cover repair",
+    "auto_synth": true,
+    "top_score": 18.81,
+    "thin_coverage": false,
+    "passages": [
+      {
+        "source": "thc-historic-property-owners-disaster-handbook-2023.pdf",
+        "chunk_index": 106,
+        "score": 18.81,
+        "text": "RAPEFRUIT\n\nEXTENSIVE STRUCTURAL DAMAGE. RISK\nOF SEVERE OR FATAL INJURIES.\n\nH10\n\nSUPER\nHAILSTORMS\n\n>4.0\n\nSOFTBALL AND UP\n\nEXTENSIVE STRUCTURAL DAMAGE. RISK\nOF SEVERE OR FATAL INJURIES.\n\nTYPICAL DAMAGE IMPACTS\nNO DAMAGE\n\nWIDESPREAD GLASS DAMAGE\nDESTRUCTION OF GLASS, DAMAGE TO\nTILED ROOFS\n\nBEST PRACTICE GUIDE TO HISTORIC PROPERTY OWNERS\u2019 HANDBOOK |\n\n27\n\n\f\n\nMitigation measures to consider:\n\u0089 Include provisions that cover hail damage in the insurance policy for your historic\nproperty.\n\u0089 Hire a contractor after significant hail events to examine the roof for damage and\npossible replacement.\n\u0089 Install impact-resistant roofing materials such as metal, slate, tile, and asphalt."
+      },
+      {
+        "source": "louisiana-resilient-heritage-homeowner-guide.pdf",
+        "chunk_index": 79,
+        "score": 18.16,
+        "text": "and are frequently\nimproperly braced or connected to the\nbuilding\u2019s structure. These walls and roof\nedges are particularly susceptible to high\nwinds. Adding gable end bracing prevents\nfailure of the gable and securing the roof\nstructure to the end wall prevents uplift.\nThese retrofits can be easily and discretely\naccomplished from the attic space and should\nbe a high priority.\n\nGable\n\nDouble Pitch Hip\n\nChimneys should be braced and securely\nattached to the building to reduce the risk of\n19\n\n\f\n\nRoof\nMaterials\nRoof Materials (clockwise from\ntop left): standing seam metal,\nterracotta tile, slate, corrugated\nmetal, asbestos tile. Image Credits:\nNPS|Sarah Marie Jackson & Patrick\nSparks\n\nRoof\nStyles\n\nSide Gable\n\nShed\n\nHip\n\nParapet\n\nMansard\n\nGambrel\n20\n\nRoof styles drafted by Cynthia J."
+      },
+      {
+        "source": "thc-local-government-disaster-planning-2023.pdf",
+        "chunk_index": 143,
+        "score": 17.936,
+        "text": "RAPEFRUIT\n\nEXTENSIVE STRUCTURAL DAMAGE. RISK\nOF SEVERE OR FATAL INJURIES.\n\nH10\n\nSUPER\nHAILSTORMS\n\n>4.0\n\nSOFTBALL AND UP\n\nEXTENSIVE STRUCTURAL DAMAGE. RISK\nOF SEVERE OR FATAL INJURIES.\n\nTYPICAL DAMAGE IMPACTS\nNO DAMAGE\n\nWIDESPREAD GLASS DAMAGE\nDESTRUCTION OF GLASS, DAMAGE TO\nTILED ROOFS\n\n\u0089 Include provisions that cover hail damage in insurance policies for publicly owned\nhistoric properties.\n\u0089 Hire a contractor after significant hail events to examine the roof for damage and\npossible replacement.\n\u0089 Install impact-resistant roofing materials such as metal, slate, tile, and asphalt.\n\u0089 Install protective screens over skylights and other vulnerable areas to help prevent\nhail or ice from damaging the building."
+      },
+      {
+        "source": "post-disaster-claims-guide.pdf",
+        "chunk_index": 57,
+        "score": 16.756,
+        "text": "this time\nframe, ask your adjuster. You also can\ncontact your state insurance department.\n\nI was told I have to replace with \u201clike kind and quality\u201d. What does that mean?\nMost insurance policies that are Replacement Cost cover repairs or replacements with\nproperty of \u201clike kind and quality\u201d.\nYour insurance policy isn\u2019t intended to pay for expensive improvements or upgrades.\nFor example, if you had a 3-tab shingle roof before the loss, your insurance policy would\ncover the cost of another 3- tab shingle roof, but not a more expensive slate roof."
+      },
+      {
+        "source": "post-disaster-claims-guide.pdf",
+        "chunk_index": 58,
+        "score": 15.878,
+        "text": "a 3-tab shingle roof before the loss, your insurance policy would\ncover the cost of another 3- tab shingle roof, but not a more expensive slate roof. If you\nhad ceramic bathroom sinks in your home, your insurance policy won\u2019t pay the extra\ncost to replace those with granite countertops.\nWhat is \u201cFunctional Replacement\u201d?\nAnother type of coverage becoming more common, particularly with older homes,\nis known as \u201cFunctional Replacement Coverage\u201d (FRC). FRC replaces the damaged\nproperty with a functional replacement, which isn\u2019t necessarily the same quality and\ncraftsmanship as the original materials.\nA simple example would be replacing plaster walls with drywall. Both provide solid\nwalls and have the same function, yet the cost varies greatly between the two."
+      },
+      {
+        "source": "thc-historic-property-owners-disaster-handbook-2023.pdf",
+        "chunk_index": 107,
+        "score": 15.62,
+        "text": "events to examine the roof for damage and\npossible replacement.\n\u0089 Install impact-resistant roofing materials such as metal, slate, tile, and asphalt.\n\u0089 Install protective screens over skylights and other vulnerable areas to help prevent\nhail or ice from damaging the building.\n\u0089 Trim surrounding trees as overhanging branches near your building can break and\nbecome projectiles during hailstorms.\n\u0089 Install historically appropriate shutters on windows and doors to provide an additional\nlayer of protection against hail."
+      },
+      {
+        "source": "post-disaster-claims-guide.pdf",
+        "chunk_index": 0,
+        "score": 15.308,
+        "text": "Post-Disaster\nClaims Guide\n\n\f\n\nThere\u2019s Been a Disaster\u2014What Should I Do Now?\nLearn more in the sections described below.\nSAFE AND SOUND\n\nAfter a disaster hits, make sure you and your family are safe. Then secure your\nbelongings. Do what you can to secure your home and property to prevent more\ndamage or theft. For example, if windows are broken, board them up. If the roof has a\nfew holes, cover it with a tarp to prevent water damage.\nREPORT A CLAIM\n\nOnce you\u2019ve determined your home is damaged and needs to be repaired or rebuilt,\nreport or file a claim as soon as possible. The easiest way to report a claim is to call your\ninsurance company or agent. You may be able to report or file a claim online or from\nyour cell phone."
+      },
+      {
+        "source": "post-disaster-claims-guide.pdf",
+        "chunk_index": 59,
+        "score": 15.153,
+        "text": "mple would be replacing plaster walls with drywall. Both provide solid\nwalls and have the same function, yet the cost varies greatly between the two. Another\nexample would be a damaged banister in a home. The repair could be made with wood\ncarved in the same architectural style, but using a less expensive wood \u2013 for instance,\nreplacing an oak banister with a pine banister. Another example would be replacing a\ntile roof with a shingle roof.\n\nPost-Disaster Claims Guide\n\n16\n\n\f\n\nMy adjuster mentioned\nthat some of my\nproperty has a special\nlimit. What is that?\nA special limit caps how\nmuch money you\u2019ll be paid for certain\ntypes of property."
+      }
+    ]
+  },
+  "siding": {
+    "label": "Exterior Walls / Siding",
+    "audience": [
+      "homeowner"
+    ],
+    "query": "historic wood siding dry moisture repaint rot sill after flood",
+    "auto_synth": true,
+    "top_score": 23.31,
+    "thin_coverage": false,
+    "passages": [
+      {
+        "source": "nthp-treatment-flood-damaged-historic-buildings.pdf",
+        "chunk_index": 36,
+        "score": 23.31,
+        "text": "time in\norder for wood rot to be destructive. Damage from a one-time\nevent, such as a flood, is usually\nnegligible if the wood is allowed\nto air dry. Problems occur when\nsaturated wood is encapsulated so\nthat the water cannot evaporate.\nTwo areas where wood is normally encapsulated are wall cavities and sill plates, particularly\nwhen these areas are filled with\ninsulation. Figure 3 describes\ntreatment of walls and sill\nplates."
+      },
+      {
+        "source": "treatment of flood damaged hist buildings.pdf",
+        "chunk_index": 36,
+        "score": 23.31,
+        "text": "time in\norder for wood rot to be destructive. Damage from a one-time\nevent, such as a flood, is usually\nnegligible if the wood is allowed\nto air dry. Problems occur when\nsaturated wood is encapsulated so\nthat the water cannot evaporate.\nTwo areas where wood is normally encapsulated are wall cavities and sill plates, particularly\nwhen these areas are filled with\ninsulation. Figure 3 describes\ntreatment of walls and sill\nplates."
+      },
+      {
+        "source": "historic-england-flooding-and-historic-buildings.pdf",
+        "chunk_index": 159,
+        "score": 22.187,
+        "text": "panelling and returned\nto their original locations.\n\nMoreover, decay mechanisms must exist for a long\nperiod of time in order to become destructive. A\none-off event such as a flood should not cause\nserious damage as long as the wood is allowed to\ndry afterwards.\nProblems occur when moisture is trapped in the\nwood and cannot escape. This can happen in wall\ncavities, in sill plates under floors, behind panelling\nand under impermeable finishes such as oil-based\ngloss paint. If the moisture content exceeds 28 per\ncent then dry rot spores could germinate.\n< < Contents\n\nPanelled doors usually survive flooding surprisingly\nwell. They should be allowed to dry in place, but left\nopen to help air circulation."
+      },
+      {
+        "source": "nthp-treatment-flood-damaged-historic-buildings.pdf",
+        "chunk_index": 32,
+        "score": 19.394,
+        "text": "e, particularly\nloose-fill varieties, such as cellulose, vermiculite, rock wool,\nand blown fiberglass, which\ntend to collapse under their\nown weight.\n2)Saturated insulation holds\nwater which, if left in place,\ncan perpetuate high moisture\nconditions destructive to wood,\nmasonry, and steel.\nSome types of insulation may\nbe left in place after water contact, such as closed-cell styrene\nand urethane board insulations\nthat do not absorb water. These\nshould be inspected to determine\n\nRemove insulation at sill and\nallow wood to dry.\n\nSuggested treatment for ventilating saturated wood-framed\nwalls and floors.\n\nwhether they hold moisture\nagainst wood or masonry materials or steel fasteners. If so, the\ninsulation should be removed\nuntil all materials are dry."
+      },
+      {
+        "source": "treatment of flood damaged hist buildings.pdf",
+        "chunk_index": 32,
+        "score": 19.394,
+        "text": "e, particularly\nloose-fill varieties, such as cellulose, vermiculite, rock wool,\nand blown fiberglass, which\ntend to collapse under their\nown weight.\n2)Saturated insulation holds\nwater which, if left in place,\ncan perpetuate high moisture\nconditions destructive to wood,\nmasonry, and steel.\nSome types of insulation may\nbe left in place after water contact, such as closed-cell styrene\nand urethane board insulations\nthat do not absorb water. These\nshould be inspected to determine\n\nRemove insulation at sill and\nallow wood to dry.\n\nSuggested treatment for ventilating saturated wood-framed\nwalls and floors.\n\nwhether they hold moisture\nagainst wood or masonry materials or steel fasteners. If so, the\ninsulation should be removed\nuntil all materials are dry."
+      },
+      {
+        "source": "nthp-treatment-flood-damaged-historic-buildings.pdf",
+        "chunk_index": 33,
+        "score": 17.661,
+        "text": "whether they hold moisture\nagainst wood or masonry materials or steel fasteners. If so, the\ninsulation should be removed\nuntil all materials are dry. Any\nmud or silt that remains in the\ncavity should be removed regardless of the insulation\u2019s condition.\nOther types of insulation, such\nas fiberglass battens, must be evaluated on a case-by-case basis. Glass\nfibers, in themselves, are not water\nabsorbent, but if they impede the\nflow of air in a wall cavity, and thus\nthe drying-out process, it may be\nnecessary to remove them.\n\nFigure 3 Treatment for Saturated\nWood-framed Walls and Floors\n\nWood Rot\nWood rot occurs when natural\nfungi\u2014present in virtually all\nconstruction lumber\u2014grow in\nwood."
+      },
+      {
+        "source": "treatment of flood damaged hist buildings.pdf",
+        "chunk_index": 33,
+        "score": 17.661,
+        "text": "whether they hold moisture\nagainst wood or masonry materials or steel fasteners. If so, the\ninsulation should be removed\nuntil all materials are dry. Any\nmud or silt that remains in the\ncavity should be removed regardless of the insulation\u2019s condition.\nOther types of insulation, such\nas fiberglass battens, must be evaluated on a case-by-case basis. Glass\nfibers, in themselves, are not water\nabsorbent, but if they impede the\nflow of air in a wall cavity, and thus\nthe drying-out process, it may be\nnecessary to remove them.\n\nFigure 3 Treatment for Saturated\nWood-framed Walls and Floors\n\nWood Rot\nWood rot occurs when natural\nfungi\u2014present in virtually all\nconstruction lumber\u2014grow in\nwood."
+      },
+      {
+        "source": "nthp-treatment-flood-damaged-historic-buildings.pdf",
+        "chunk_index": 34,
+        "score": 16.932,
+        "text": "nt for Saturated\nWood-framed Walls and Floors\n\nWood Rot\nWood rot occurs when natural\nfungi\u2014present in virtually all\nconstruction lumber\u2014grow in\nwood. Like other living organisms, they need food (wood), air,\nproper temperatures (between\nabout 60-80 degrees F.), and\nwater in order to grow. In most\nwood construction, the missing\nelement is water which is why\nordinary wood lasts for centuries\nwhen protected from moisture.\n\n\u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022\n\nP R E S E RVAT I O N B O O K S\n\n5\n\n\f\n\nSoluble Salts\nWater trapped in\nmasonry walls\ndissolves soluble salts."
+      }
+    ]
+  },
+  "windows": {
+    "label": "Windows and Doors",
+    "audience": [
+      "homeowner"
+    ],
+    "query": "historic wood windows sash swelling repair replace dry after flood",
+    "auto_synth": true,
+    "top_score": 15.736,
+    "thin_coverage": false,
+    "passages": [
+      {
+        "source": "nthp-treatment-flood-damaged-historic-buildings.pdf",
+        "chunk_index": 62,
+        "score": 15.736,
+        "text": "e inspected before\ndetermining whether they need\nfurther repair. Be sure that the\ndoors are completely dry before\nattempting to repair or plane\nthem. Also, if the original glue was\nnot waterproof, the joints may\nhave to be re-glued.\nIf you need to replace any\ndoors, consider replicating original panel doors. Hollow core\ndoors will likely need to be\nreplaced because their internal\nspacers are usually made of cardboard which dissolves in water.\n\nWood lath\nFinished plaster surface\n\nPlaster\nkeys\nMoisture causes wood\nlath to expand and\ndeform, causing plaster\nkeys to break off.\n\nFigure 7."
+      },
+      {
+        "source": "treatment of flood damaged hist buildings.pdf",
+        "chunk_index": 62,
+        "score": 15.736,
+        "text": "e inspected before\ndetermining whether they need\nfurther repair. Be sure that the\ndoors are completely dry before\nattempting to repair or plane\nthem. Also, if the original glue was\nnot waterproof, the joints may\nhave to be re-glued.\nIf you need to replace any\ndoors, consider replicating original panel doors. Hollow core\ndoors will likely need to be\nreplaced because their internal\nspacers are usually made of cardboard which dissolves in water.\n\nWood lath\nFinished plaster surface\n\nPlaster\nkeys\nMoisture causes wood\nlath to expand and\ndeform, causing plaster\nkeys to break off.\n\nFigure 7."
+      },
+      {
+        "source": "nthp-treatment-flood-damaged-historic-buildings.pdf",
+        "chunk_index": 60,
+        "score": 15.641,
+        "text": "you\nhave a saturated hardwood floor,\nlet it dry thoroughly. Then, if it\nremains cupped, you can decide\nwhether to sand the floor flat or\nreplace it. When possible, retain\noriginal hardwood floors.\nNon-interlocking board floors,\nsuch as plain pine boards, stand a\ngood chance of returning to their\noriginal shapes when dried. A\nlight, surface sanding and some\nre-nailing may be necessary.\nWood trim around baseboards,\nceilings, doors, and windows is\nlikely to survive a flood because\nit can usually expand without\ncrushing its fibers. After drying,\nit should return to its original\nform and should be retained.\nWooden doors in older and historic buildings are likely to be panel\ndoors that add to the character of\nthe building."
+      },
+      {
+        "source": "treatment of flood damaged hist buildings.pdf",
+        "chunk_index": 60,
+        "score": 15.641,
+        "text": "you\nhave a saturated hardwood floor,\nlet it dry thoroughly. Then, if it\nremains cupped, you can decide\nwhether to sand the floor flat or\nreplace it. When possible, retain\noriginal hardwood floors.\nNon-interlocking board floors,\nsuch as plain pine boards, stand a\ngood chance of returning to their\noriginal shapes when dried. A\nlight, surface sanding and some\nre-nailing may be necessary.\nWood trim around baseboards,\nceilings, doors, and windows is\nlikely to survive a flood because\nit can usually expand without\ncrushing its fibers. After drying,\nit should return to its original\nform and should be retained.\nWooden doors in older and historic buildings are likely to be panel\ndoors that add to the character of\nthe building."
+      },
+      {
+        "source": "nps-flood-adaptation-guidelines-2021.pdf",
+        "chunk_index": 157,
+        "score": 15.138,
+        "text": "and floodborne debris.\nAnchoring the structure to the foundation with\nengineered solutions, to prevent movement or collapse\nof the historic building.\n\nAltering visible foundation walls to an extent that the\nhistoric character of a building is compromised.\n\n[49] These photos from an industrial mill in Baltimore,\nMD, show (a) the structural reinforcing required\nat large window openings that extend below the\nestablished flood risk level. Rather than blocking\nthese windows, either permanently or temporarily,\nthe owner elected to use aquarium glass in the lower\nsash. The steel reinforcing will later be concealed by\nwood trim. Certain compromises in the glass color\nand transparency, as well as frame details and muntin\nprofiles, were necessary to accommodate the thicker\nglass in the lower sash."
+      },
+      {
+        "source": "secretary for interior.pdf",
+        "chunk_index": 153,
+        "score": 15.138,
+        "text": "and floodborne debris.\nAnchoring the structure to the foundation with\nengineered solutions, to prevent movement or collapse\nof the historic building.\n\nAltering visible foundation walls to an extent that the\nhistoric character of a building is compromised.\n\n[49] These photos from an industrial mill in Baltimore,\nMD, show (a) the structural reinforcing required\nat large window openings that extend below the\nestablished flood risk level. Rather than blocking\nthese windows, either permanently or temporarily,\nthe owner elected to use aquarium glass in the lower\nsash. The steel reinforcing will later be concealed by\nwood trim. Certain compromises in the glass color\nand transparency, as well as frame details and muntin\nprofiles, were necessary to accommodate the thicker\nglass in the lower sash."
+      },
+      {
+        "source": "nps-preservation-brief-39-moisture-control.pdf",
+        "chunk_index": 113,
+        "score": 15.116,
+        "text": "onsider removable exterior storm windows, but allow\noperation of windows for periodic ventilation of cavity between exterior\nstorm and historic sash. For stained glass windows using protective\nglazing, use only ventilated storms to avoid condensation as well as heat\nbuild-up.\nGround: Control excessive ground moisture. This may require extensive excavations,\nnew drainage systems, and the use of substitute materials. These may include concrete or\nnew sustainable recycled materials for wood in damp areas when they do not impact the\nhistoric appearance of the building.\n\nB. Wood sills set on grade were replaced with\nconcrete pier foundation and new wooden sill\nplates. Changes were not visible on the exterior\n(see C)."
+      },
+      {
+        "source": "nthp-treatment-flood-damaged-historic-buildings.pdf",
+        "chunk_index": 93,
+        "score": 14.8,
+        "text": "reatment\n\nHaving a professional pest control applicator apply a borate treatment to wood framing can provide resistance to termites, decay,\nand mold. Other fungicides may also help inhibit mold regrowth\nduring drying. Do not apply sealants to wood.\n6. Flush the Air\n\nAfter cleaning and disinfecting, air out the building. Use fans in\nwindows to pull mold spores to the outdoors.\n7. Speed Dry\n\nDry all wet materials as quickly as possible. Close windows and\nturn on air conditioner or heat, run fans, and use a dehumidifier,\nif possible. If there is no power, keep windows open.\n8. Remain on Mold Alert\n\nContinue looking for signs of moisture or new mold growth. New\nmold can form in as little as two to three days if materials stay\nwet."
+      }
+    ]
+  },
+  "chimney": {
+    "label": "Chimney",
+    "audience": [
+      "homeowner"
+    ],
+    "query": "historic masonry chimney mortar joints repoint lime flood freeze thaw",
+    "auto_synth": true,
+    "top_score": 24.717,
+    "thin_coverage": false,
+    "passages": [
+      {
+        "source": "secretary for interior.pdf",
+        "chunk_index": 32,
+        "score": 24.717,
+        "text": "roject planning by providing general design and technical\nrecommendations. Unlike the Standards, guidelines are\nnot codified as program requirements. The Guidelines for\n\nRepairing masonry walls and other masonry Removing non-deteriorated mortar from sound\nfeatures by repointing the mortar joints joints and then repointing the entft\nwhere there is evidence of deterioration, such to achieve a more uni\n\nas disintegrating mortar, cracks in mortar\n\njoints, loose bricks, or damaged plaster on the\n\nRehabilitating Historic Buildings issued in 2017 should be interior\nconsulted along with any topic-specific guidelines. Removing deteriorated lime mortar carefully\n\nby hand raking the joints to avoid damaging\nGuidelines are presented in a \u201cRecommended\u201d vs. \u201cNot the masonry.\nRecommended\u201d format."
+      },
+      {
+        "source": "nthp-treatment-flood-damaged-historic-buildings.pdf",
+        "chunk_index": 20,
+        "score": 21.911,
+        "text": "groundwater pressure is\nhigh, foundation walls may collapse.\nFigure 1 Hydrostatic Pressure\n\nLoss of Mortar\nThe basement may leak and fill\nwith water. This is usually the case\nwith older buildings and actually\nprotects the foundation walls from\ncollapse if the groundwater level is\ntoo high. Unfortunately, as water\npasses through stone and brick\nfoundation walls, it sometimes\ncarries mortar with it.\nThe foundations of most older\nand historic buildings are masonry.\nStone foundation walls with soft\nlime mortar are very durable,\nalthough the lime mortar does not\nhold up well to water erosion.\nInspect the mortar of stone\nmasonry foundation walls to\nensure that it has not leeched\nfrom the joints and made the wall\nunstable."
+      },
+      {
+        "source": "treatment of flood damaged hist buildings.pdf",
+        "chunk_index": 20,
+        "score": 21.911,
+        "text": "groundwater pressure is\nhigh, foundation walls may collapse.\nFigure 1 Hydrostatic Pressure\n\nLoss of Mortar\nThe basement may leak and fill\nwith water. This is usually the case\nwith older buildings and actually\nprotects the foundation walls from\ncollapse if the groundwater level is\ntoo high. Unfortunately, as water\npasses through stone and brick\nfoundation walls, it sometimes\ncarries mortar with it.\nThe foundations of most older\nand historic buildings are masonry.\nStone foundation walls with soft\nlime mortar are very durable,\nalthough the lime mortar does not\nhold up well to water erosion.\nInspect the mortar of stone\nmasonry foundation walls to\nensure that it has not leeched\nfrom the joints and made the wall\nunstable."
+      },
+      {
+        "source": "historic-england-flooding-and-historic-buildings.pdf",
+        "chunk_index": 146,
+        "score": 21.29,
+        "text": "rames, wattle-and-daub\npanels, timber boarding and panelling, earthen\nwalls and floors, lime-plaster walls and ceilings\nand many decorative finishes.\n\nThe spalling of soft brick or stonework\nusually occurs on building exteriors when the\ntemperature drops below freezing while moisture\nis still trapped within walls. Water expands below\n4\u00b0C as it turns to ice crystals, causing spalling on\nwall faces. Lime-mortar joints can also become\nweakened by these processes and by the longterm seepage of contaminated water through\nmasonry. Impermeable, heavily cement-based\nmortar will exacerbate deterioration during\na flood because it holds the moisture in the\nmasonry for longer and causes salts to crystallise\nwithin the historic materials."
+      },
+      {
+        "source": "nps-flood-adaptation-guidelines-2021.pdf",
+        "chunk_index": 34,
+        "score": 20.054,
+        "text": "roject planning by providing general design and technical\nrecommendations. Unlike the Standards, guidelines are\nnot codified as program requirements. The Guidelines for\nRehabilitating Historic Buildings issued in 2017 should be\nconsulted along with any topic-specific guidelines.\n\nMASONRY: STONE, BRICK, TERRA COTTA, CONCRETE, ADOBE, STUCCO, AND MORTAR\n\nNOT RECOMMENDED\n\nRepairing masonry walls and other masonry\n\nRemoving non-deteriorated mortar from sound\n\nfeatures by repointing the mortar joints\n\njoints and then repointing the entire building\n\nwhere there is evidence of deterioration, such\n\nto achieve a more uniform appearance.\n\nas disintegrating mortar, cracks in mortar\njoints, loose bricks, or damaged plaster on the\ninterior."
+      },
+      {
+        "source": "nps-preservation-brief-39-moisture-control.pdf",
+        "chunk_index": 97,
+        "score": 20.014,
+        "text": "once a year, preferably spring;\nreplace missing or damaged roofing shingles, slates, or tiles; repair\nflashing; repair or replace cracked downspouts.\nWalls: Repair damaged surface materials; repoint masonry with\nappropriately formulated mortar; prime and repaint wooden, metal, or\nmasonry elements or surfaces; remove efflorescence from masonry with\nnon-metallic bristle brushes.\nWindow and door openings: Eliminate cracks or open joints; caulk or\nrep oint around openings or steps; repair or reset weatherstripping; check\nflashing; repaint, as necessary.\n\nA. Inspecting the overall building on at\n\nleast an annual basis will identify areas\nneeding maintenance. A bucket lift is\nhelpful for large buildings."
+      },
+      {
+        "source": "treatment of flood damaged hist buildings.pdf",
+        "chunk_index": 53,
+        "score": 19.098,
+        "text": "fter the water recedes and\nthe building materials dry, check\nthe mortar joints near the lintels\nto see that the mortar has not\ncracked or fallen out. If it has,\nrepoint the area immediately to\nmake sure that water cannot\nenter to create further rusting.\nBefore repointing, scrape the\nmetal to remove any loose rust\nscale. It is uncertain whether rust\ninhibitive primers are effective in\nretarding rust in these situations.\nIf other iron-based metals are\nimbedded in masonry or concrete, inspect them periodically\nand repair cracks in the surrounding materials if they occur.\n\nDamage to\nInterior Finishes\nDrywall\nDrywall that was submerged will\nprobably have to be replaced."
+      },
+      {
+        "source": "nps-flood-adaptation-guidelines-2021.pdf",
+        "chunk_index": 36,
+        "score": 18.226,
+        "text": ".\nThese Guidelines are intended to be used in the context of\nrehabilitating historic buildings and include sections on\na building\u2019s site and setting. They are not meant to fully\naddress the treatment of cultural landscapes, archeological\nresources, historic districts, and other types of historic\nresources.\n\ne\nl\n\nRECOMMENDED\n\nthe masonry.\n\nx\n\np\n\nUsing power tools only on horizontal joints\n\nAllowing unskilled workers to use masonry\n\non brick masonry in conjunction with hand\n\nsaws or mechanical tools to remove\n\nchiseling to remove hard mortar that is\n\ndeteriorated mortar from joints prior to\n\ndeteriorated or that is a non-historic material\n\nrepointing.\n\nE\n\nwhich is causing damage to the masonry\n\nunits."
+      }
+    ]
+  },
+  "insulation": {
+    "label": "Insulation",
+    "audience": [
+      "homeowner"
+    ],
+    "query": "wet insulation remove wall cavity dry moisture meter flood mold",
+    "auto_synth": true,
+    "top_score": 27.852,
+    "thin_coverage": false,
+    "passages": [
+      {
+        "source": "nthp-treatment-flood-damaged-historic-buildings.pdf",
+        "chunk_index": 89,
+        "score": 27.852,
+        "text": "lboard appears\nto be dry. Wet insulation will stay wet far too long, leading to\nthe growth of hidden unhealthy mold and decay fungi inside\nthe walls. Cut wall covering above the level that was wet;\nwater can wick up above the flood level.\n\u2022 It\u2019s best to remove all moldly porous materials, especially if there\nis heavy or long-term mold growth\u2014including gypsum wallboard, processed wood products, ceiling tiles, and paper products.\n\u2022 Plaster, wood paneling, and non-paper faced gypsum board\nwalls that are dry, in good condition, and have no insulation in\nthe wall can be cleaned and sanitized to salvage them."
+      },
+      {
+        "source": "treatment of flood damaged hist buildings.pdf",
+        "chunk_index": 89,
+        "score": 27.852,
+        "text": "lboard appears\nto be dry. Wet insulation will stay wet far too long, leading to\nthe growth of hidden unhealthy mold and decay fungi inside\nthe walls. Cut wall covering above the level that was wet;\nwater can wick up above the flood level.\n\u2022 It\u2019s best to remove all moldly porous materials, especially if there\nis heavy or long-term mold growth\u2014including gypsum wallboard, processed wood products, ceiling tiles, and paper products.\n\u2022 Plaster, wood paneling, and non-paper faced gypsum board\nwalls that are dry, in good condition, and have no insulation in\nthe wall can be cleaned and sanitized to salvage them."
+      },
+      {
+        "source": "nthp-treatment-flood-damaged-historic-buildings.pdf",
+        "chunk_index": 88,
+        "score": 25.791,
+        "text": "3. Remove Moldy Porous Materials\n\nPorous moldy or sewage-contaminated materials should be\nremoved, put in plastic bags if possible, and thrown away. To\nreduce the release and spread of mold spores, it is helpful to cover\nmoldy material with plastic sheeting before removing it.\n\n\u2022 Remove all wet fibrous insulation\u2014even if wallboard appears\nto be dry. Wet insulation will stay wet far too long, leading to\nthe growth of hidden unhealthy mold and decay fungi inside\nthe walls."
+      },
+      {
+        "source": "treatment of flood damaged hist buildings.pdf",
+        "chunk_index": 88,
+        "score": 25.791,
+        "text": "3. Remove Moldy Porous Materials\n\nPorous moldy or sewage-contaminated materials should be\nremoved, put in plastic bags if possible, and thrown away. To\nreduce the release and spread of mold spores, it is helpful to cover\nmoldy material with plastic sheeting before removing it.\n\n\u2022 Remove all wet fibrous insulation\u2014even if wallboard appears\nto be dry. Wet insulation will stay wet far too long, leading to\nthe growth of hidden unhealthy mold and decay fungi inside\nthe walls."
+      },
+      {
+        "source": "nthp-treatment-flood-damaged-historic-buildings.pdf",
+        "chunk_index": 33,
+        "score": 25.364,
+        "text": "whether they hold moisture\nagainst wood or masonry materials or steel fasteners. If so, the\ninsulation should be removed\nuntil all materials are dry. Any\nmud or silt that remains in the\ncavity should be removed regardless of the insulation\u2019s condition.\nOther types of insulation, such\nas fiberglass battens, must be evaluated on a case-by-case basis. Glass\nfibers, in themselves, are not water\nabsorbent, but if they impede the\nflow of air in a wall cavity, and thus\nthe drying-out process, it may be\nnecessary to remove them.\n\nFigure 3 Treatment for Saturated\nWood-framed Walls and Floors\n\nWood Rot\nWood rot occurs when natural\nfungi\u2014present in virtually all\nconstruction lumber\u2014grow in\nwood."
+      },
+      {
+        "source": "treatment of flood damaged hist buildings.pdf",
+        "chunk_index": 33,
+        "score": 25.364,
+        "text": "whether they hold moisture\nagainst wood or masonry materials or steel fasteners. If so, the\ninsulation should be removed\nuntil all materials are dry. Any\nmud or silt that remains in the\ncavity should be removed regardless of the insulation\u2019s condition.\nOther types of insulation, such\nas fiberglass battens, must be evaluated on a case-by-case basis. Glass\nfibers, in themselves, are not water\nabsorbent, but if they impede the\nflow of air in a wall cavity, and thus\nthe drying-out process, it may be\nnecessary to remove them.\n\nFigure 3 Treatment for Saturated\nWood-framed Walls and Floors\n\nWood Rot\nWood rot occurs when natural\nfungi\u2014present in virtually all\nconstruction lumber\u2014grow in\nwood."
+      },
+      {
+        "source": "nthp-treatment-flood-damaged-historic-buildings.pdf",
+        "chunk_index": 29,
+        "score": 22.755,
+        "text": "ses under its\nown weight inside the wall.\n\nCut holes in plaster or wallboard and\nremove wall insulation. Leave holes open to\nventilate wall cavities. If possible remove\nbase trim, then reinstall after patching holes.\n\nWet insulation holds moisture keeping inside of the\nwall wet and creating conditions for rotting.\n\nWet insulation packed between\njoists of sill plate keeps wood\nsaturated and rusts steel nails.\n\nWater saturation in wood-framed walls and floors\n\nThe soil may be \u201cdished\u201d next\nto the building which may result\nin additional damage from future\nrain. The soil adjacent to the\nbuilding should slope away from\nit to ensure that future rains do\nnot drain into the building."
+      },
+      {
+        "source": "treatment of flood damaged hist buildings.pdf",
+        "chunk_index": 29,
+        "score": 22.755,
+        "text": "ses under its\nown weight inside the wall.\n\nCut holes in plaster or wallboard and\nremove wall insulation. Leave holes open to\nventilate wall cavities. If possible remove\nbase trim, then reinstall after patching holes.\n\nWet insulation holds moisture keeping inside of the\nwall wet and creating conditions for rotting.\n\nWet insulation packed between\njoists of sill plate keeps wood\nsaturated and rusts steel nails.\n\nWater saturation in wood-framed walls and floors\n\nThe soil may be \u201cdished\u201d next\nto the building which may result\nin additional damage from future\nrain. The soil adjacent to the\nbuilding should slope away from\nit to ensure that future rains do\nnot drain into the building."
+      }
+    ]
+  },
+  "interior": {
+    "label": "Interior Finishes",
+    "audience": [
+      "homeowner"
+    ],
+    "query": "historic plaster flooring wallpaper dry repair delamination flood",
+    "auto_synth": true,
+    "top_score": 17.451,
+    "thin_coverage": false,
+    "passages": [
+      {
+        "source": "nthp-treatment-flood-damaged-historic-buildings.pdf",
+        "chunk_index": 66,
+        "score": 17.451,
+        "text": "efully remove several square\nfeet, all the way down to the plaster. If possible, take samples from\nseveral different locations including the ceiling. Label which room\nthe paper came from and store\ntemporarily in a dry part of the\nhouse until the paper can be permanently preserved.\n\nWallpaper\n\nFloor Coverings\n\nIn many cases, older and historic\nwallpaper may be saved after a\nflood, but the decision to retain\nor remove it is a difficult one."
+      },
+      {
+        "source": "treatment of flood damaged hist buildings.pdf",
+        "chunk_index": 66,
+        "score": 17.451,
+        "text": "efully remove several square\nfeet, all the way down to the plaster. If possible, take samples from\nseveral different locations including the ceiling. Label which room\nthe paper came from and store\ntemporarily in a dry part of the\nhouse until the paper can be permanently preserved.\n\nWallpaper\n\nFloor Coverings\n\nIn many cases, older and historic\nwallpaper may be saved after a\nflood, but the decision to retain\nor remove it is a difficult one."
+      },
+      {
+        "source": "nps-flood-adaptation-guidelines-2021.pdf",
+        "chunk_index": 305,
+        "score": 14.104,
+        "text": "S IN ACCORDANCE WITH SECTION 4.5.1 OF ASCE 7.\n\nELEVATE THE INTERIOR STRUCTURE\n\nADJ. R\nOCCUPANCY\n\nFRIDGE\n\nSTANCHION\n\nFRIDGE\n\nEXISTING STAIR\nTO REMAIN. ADD HANDRAILS.\n\nPASTRY\n\nG TRAP\n\nCERAMIC\nFLOORING\n\nHANDSINK AND\nTRASH BELOW\n42\" COUNTER\n\nPOS REG\n\nEQ105\nPOS REG\n\nCERAMIC\nFLOORING\n\nFD\n\nMICRO\nSHELF\n\nPREP CASE\n\n6' SS TABLE\n\nICE CREAM\n\nSANDWICH\nPREP\n\nMOVABLE DISPLAY\nTHROUGHOUT RETAIL\n\nINSTALL 42\" METAL GUARDRAIL\nAT ELEVATION CHANGE\n\nNEW 42x12\" BAR COUNTER\nAT ELEVATION CHANGE\nDELI CASE\n\nFD MENS\nROOM\n\nSODA\n\nFRIDGE\nFREZR\n\nMECH\nROOM\n\nEXIST'G\nCONCRETE\n\n2016\n\nFD\n\nHWH\n\nFRIDGE\n\nSTRAND\n\nFD\n\nWOMENS\nROOM\n\nSLICE\n\nICE MKR\n\n20' ALLEY\n\n60x22.5\" SS SINK\nW DRAINBRDS\n& SS DRY RACK ABV\n\nFRIDGE\n\n22\"\n\nREMOVE PEELING PLASTER\nAND RECOAT WITH LIME PLASTER\n\nEXIST'G\nRAMP\n\nLEVEL LANDING\n\nEXIST'G\nRAMP\n\nSERVICE\nENTRY"
+      },
+      {
+        "source": "nthp-treatment-flood-damaged-historic-buildings.pdf",
+        "chunk_index": 62,
+        "score": 13.367,
+        "text": "e inspected before\ndetermining whether they need\nfurther repair. Be sure that the\ndoors are completely dry before\nattempting to repair or plane\nthem. Also, if the original glue was\nnot waterproof, the joints may\nhave to be re-glued.\nIf you need to replace any\ndoors, consider replicating original panel doors. Hollow core\ndoors will likely need to be\nreplaced because their internal\nspacers are usually made of cardboard which dissolves in water.\n\nWood lath\nFinished plaster surface\n\nPlaster\nkeys\nMoisture causes wood\nlath to expand and\ndeform, causing plaster\nkeys to break off.\n\nFigure 7."
+      },
+      {
+        "source": "treatment of flood damaged hist buildings.pdf",
+        "chunk_index": 62,
+        "score": 13.367,
+        "text": "e inspected before\ndetermining whether they need\nfurther repair. Be sure that the\ndoors are completely dry before\nattempting to repair or plane\nthem. Also, if the original glue was\nnot waterproof, the joints may\nhave to be re-glued.\nIf you need to replace any\ndoors, consider replicating original panel doors. Hollow core\ndoors will likely need to be\nreplaced because their internal\nspacers are usually made of cardboard which dissolves in water.\n\nWood lath\nFinished plaster surface\n\nPlaster\nkeys\nMoisture causes wood\nlath to expand and\ndeform, causing plaster\nkeys to break off.\n\nFigure 7."
+      },
+      {
+        "source": "nthp-treatment-flood-damaged-historic-buildings.pdf",
+        "chunk_index": 71,
+        "score": 13.094,
+        "text": "e sheet flooring,\nsuch as linoleum, may be historically significant. If this is the case\nand you wish to retain it, let the\nfloor dry as best it can. Once dry,\nif the floor is level and the flooring adheres, you may leave it in\nplace. If the bond between the\nfloor and the covering fails, you\nmay be able to remove and re-lay\nthe flooring. There is no guarantee that either of these techniques\nwill succeed. If it is impossible to\nre-lay the floor, make sure to save\nsamples of the historic flooring.\n\nExterior Paint Problems\nPaint failure is likely to occur on\nany painted surface wet directly\nby floodwater or on surfaces\nthrough which excessive amounts\nof water will evaporate."
+      },
+      {
+        "source": "treatment of flood damaged hist buildings.pdf",
+        "chunk_index": 71,
+        "score": 13.094,
+        "text": "e sheet flooring,\nsuch as linoleum, may be historically significant. If this is the case\nand you wish to retain it, let the\nfloor dry as best it can. Once dry,\nif the floor is level and the flooring adheres, you may leave it in\nplace. If the bond between the\nfloor and the covering fails, you\nmay be able to remove and re-lay\nthe flooring. There is no guarantee that either of these techniques\nwill succeed. If it is impossible to\nre-lay the floor, make sure to save\nsamples of the historic flooring.\n\nExterior Paint Problems\nPaint failure is likely to occur on\nany painted surface wet directly\nby floodwater or on surfaces\nthrough which excessive amounts\nof water will evaporate."
+      },
+      {
+        "source": "treatment of flood damaged hist buildings.pdf",
+        "chunk_index": 56,
+        "score": 12.503,
+        "text": "o repair the\ndamage. That portion of the ceiling may need to be removed with\ncare. Falling plaster, especially\nwet falling plaster, can be dangerous. If the water level was above\nthe ceiling and you suspect that it\nmay contain standing water, you\nmay want to poke drain holes\u2014\nwith a nail attached to the end of\na long stick\u2014in the plaster before\nattempting to remove it. Do not\nstand directly under the area\nbeing prodded in case the plaster\nloosens and falls.\nExcept for areas of obvious\ndamage, the best way to determine\nwhether plaster must be replaced\nis to let it dry and then inspect it.\nHere are some suggestions about\nhow to determine whether plaster\nshould be replaced:\n\u2022 The surface condition of plaster may not tell you whether it\nis sound."
+      }
+    ]
+  },
+  "structural": {
+    "label": "Structural / Foundation",
+    "audience": [
+      "homeowner",
+      "assessor"
+    ],
+    "query": "flooded basement pump hydrostatic pressure groundwater foundation wall crack masonry",
+    "auto_synth": false,
+    "top_score": 35.624,
+    "thin_coverage": false,
+    "passages": [
+      {
+        "source": "nthp-treatment-flood-damaged-historic-buildings.pdf",
+        "chunk_index": 15,
+        "score": 35.624,
+        "text": "ntinue to seep in until the\ngroundwater level drops.\n\nFoundation Collapse\nYou should be aware that pumping water from your basement\ncan be dangerous. This water\nmay be providing the necessary\npressure to balance the hydrostatic pressure of the groundwater. If\nthe groundwater level is higher\nthan your basement floor and you\npump the water from your basement, the foundation walls could\nbe pushed inward and collapse.\nIf your basement is flooded\nwith several feet of water and you\nare reasonably certain that your\nfloor drains are operational, you\ncan assume that the groundwater\ntable is high. It is advisable to\nleave the water in place until the\ngroundwater table sinks and the\nwater recedes by itself."
+      },
+      {
+        "source": "treatment of flood damaged hist buildings.pdf",
+        "chunk_index": 15,
+        "score": 35.624,
+        "text": "ntinue to seep in until the\ngroundwater level drops.\n\nFoundation Collapse\nYou should be aware that pumping water from your basement\ncan be dangerous. This water\nmay be providing the necessary\npressure to balance the hydrostatic pressure of the groundwater. If\nthe groundwater level is higher\nthan your basement floor and you\npump the water from your basement, the foundation walls could\nbe pushed inward and collapse.\nIf your basement is flooded\nwith several feet of water and you\nare reasonably certain that your\nfloor drains are operational, you\ncan assume that the groundwater\ntable is high. It is advisable to\nleave the water in place until the\ngroundwater table sinks and the\nwater recedes by itself."
+      },
+      {
+        "source": "nthp-treatment-flood-damaged-historic-buildings.pdf",
+        "chunk_index": 17,
+        "score": 32.65,
+        "text": "y sanitizing agent that can be used to treat\nstanding water in the basement.\nWater can exert tremendous\npressure on foundation walls and\nfloor slabs. If any portion of a\nbuilding lies below the groundwater level, one of two things\nwill happen: basement slab heaving or loss of mortar.\n\nGroundwater level\n\nHydrostatic\npressure\n\nInterior water pressure\n\nHydrostatic\npressure\n\nWater in basement can help to offset high groundwater pressure.\n\nBasement Slab Heaving\nIf foundation walls are tight\nenough to hold back groundwater,\nit is likely to seep through the\nfloor slab, causing it to leak or\nheave."
+      },
+      {
+        "source": "treatment of flood damaged hist buildings.pdf",
+        "chunk_index": 17,
+        "score": 32.65,
+        "text": "y sanitizing agent that can be used to treat\nstanding water in the basement.\nWater can exert tremendous\npressure on foundation walls and\nfloor slabs. If any portion of a\nbuilding lies below the groundwater level, one of two things\nwill happen: basement slab heaving or loss of mortar.\n\nGroundwater level\n\nHydrostatic\npressure\n\nInterior water pressure\n\nHydrostatic\npressure\n\nWater in basement can help to offset high groundwater pressure.\n\nBasement Slab Heaving\nIf foundation walls are tight\nenough to hold back groundwater,\nit is likely to seep through the\nfloor slab, causing it to leak or\nheave."
+      },
+      {
+        "source": "nthp-treatment-flood-damaged-historic-buildings.pdf",
+        "chunk_index": 19,
+        "score": 30.959,
+        "text": "sually poured over a sand\nbed, which helps them to resist\nsoil pressures, while older concrete floors were often poured\nright over the existing dirt. If you\npour a new slab or surface-coat\nthe existing slab before the clay\ndries, the new slab or surface\ncould crack when the clay\nshrinks to its normal dimensions.\nIf the slab is still heaved or\ncracks remain after the water\nrecedes and the soil has dried,\nthere is little you can do except to\nrepair the cracks or, in the case of\nsevere heaving, pour a new slab.\n\nGroundwater level\nHydrostatic\npressure\n\nHydrostatic\npressure\n\nIf water is pumped from basement when groundwater pressure is\nhigh, foundation walls may collapse.\nFigure 1 Hydrostatic Pressure\n\nLoss of Mortar\nThe basement may leak and fill\nwith water."
+      },
+      {
+        "source": "treatment of flood damaged hist buildings.pdf",
+        "chunk_index": 19,
+        "score": 30.959,
+        "text": "sually poured over a sand\nbed, which helps them to resist\nsoil pressures, while older concrete floors were often poured\nright over the existing dirt. If you\npour a new slab or surface-coat\nthe existing slab before the clay\ndries, the new slab or surface\ncould crack when the clay\nshrinks to its normal dimensions.\nIf the slab is still heaved or\ncracks remain after the water\nrecedes and the soil has dried,\nthere is little you can do except to\nrepair the cracks or, in the case of\nsevere heaving, pour a new slab.\n\nGroundwater level\nHydrostatic\npressure\n\nHydrostatic\npressure\n\nIf water is pumped from basement when groundwater pressure is\nhigh, foundation walls may collapse.\nFigure 1 Hydrostatic Pressure\n\nLoss of Mortar\nThe basement may leak and fill\nwith water."
+      },
+      {
+        "source": "nthp-treatment-flood-damaged-historic-buildings.pdf",
+        "chunk_index": 20,
+        "score": 29.089,
+        "text": "groundwater pressure is\nhigh, foundation walls may collapse.\nFigure 1 Hydrostatic Pressure\n\nLoss of Mortar\nThe basement may leak and fill\nwith water. This is usually the case\nwith older buildings and actually\nprotects the foundation walls from\ncollapse if the groundwater level is\ntoo high. Unfortunately, as water\npasses through stone and brick\nfoundation walls, it sometimes\ncarries mortar with it.\nThe foundations of most older\nand historic buildings are masonry.\nStone foundation walls with soft\nlime mortar are very durable,\nalthough the lime mortar does not\nhold up well to water erosion.\nInspect the mortar of stone\nmasonry foundation walls to\nensure that it has not leeched\nfrom the joints and made the wall\nunstable."
+      },
+      {
+        "source": "treatment of flood damaged hist buildings.pdf",
+        "chunk_index": 20,
+        "score": 29.089,
+        "text": "groundwater pressure is\nhigh, foundation walls may collapse.\nFigure 1 Hydrostatic Pressure\n\nLoss of Mortar\nThe basement may leak and fill\nwith water. This is usually the case\nwith older buildings and actually\nprotects the foundation walls from\ncollapse if the groundwater level is\ntoo high. Unfortunately, as water\npasses through stone and brick\nfoundation walls, it sometimes\ncarries mortar with it.\nThe foundations of most older\nand historic buildings are masonry.\nStone foundation walls with soft\nlime mortar are very durable,\nalthough the lime mortar does not\nhold up well to water erosion.\nInspect the mortar of stone\nmasonry foundation walls to\nensure that it has not leeched\nfrom the joints and made the wall\nunstable."
+      }
+    ]
+  },
+  "electrical": {
+    "label": "Electrical / Mechanical / HVAC",
+    "audience": [
+      "homeowner"
+    ],
+    "query": "electrical system flood submerged inspect licensed electrician power HVAC mold",
+    "auto_synth": false,
+    "top_score": 21.571,
+    "thin_coverage": false,
+    "passages": [
+      {
+        "source": "nthp-treatment-flood-damaged-historic-buildings.pdf",
+        "chunk_index": 2,
+        "score": 21.571,
+        "text": "ooklet.\nOnce you are able to return to\nyour building, the first tasks will\nlikely be to remove mud and\ndebris and to inspect the building\nfor damage. Saving your building, no matter how historic, is\nnot worth losing your life or risking permanent injury. Please\nobserve these safety precautions:\n\u2022 Do not walk through flowing\nwater.\n\u2022 Do not drive through a flooded\narea.\n\n\u2022 Stay away from power lines\nand electrical wires.\n\u2022 Make sure that all of your electricity is turned off. If any electrical wiring was submerged,\nhave it inspected before turning the power back on.\n\u2022 Look before you step."
+      },
+      {
+        "source": "treatment of flood damaged hist buildings.pdf",
+        "chunk_index": 2,
+        "score": 21.571,
+        "text": "ooklet.\nOnce you are able to return to\nyour building, the first tasks will\nlikely be to remove mud and\ndebris and to inspect the building\nfor damage. Saving your building, no matter how historic, is\nnot worth losing your life or risking permanent injury. Please\nobserve these safety precautions:\n\u2022 Do not walk through flowing\nwater.\n\u2022 Do not drive through a flooded\narea.\n\n\u2022 Stay away from power lines\nand electrical wires.\n\u2022 Make sure that all of your electricity is turned off. If any electrical wiring was submerged,\nhave it inspected before turning the power back on.\n\u2022 Look before you step."
+      },
+      {
+        "source": "historic-england-flooding-and-historic-buildings.pdf",
+        "chunk_index": 94,
+        "score": 19.262,
+        "text": "o avert the need for\ndismantling and rebuilding.\n\nReconnecting services\nConsult the local utility companies before\nturning on power and gas supplies. To prevent\nresidual moisture or contaminants from causing\nshort circuits when the power is switched back\non, electrical systems need to be opened up,\ncleaned, and either dried or replaced depending\non the severity of the problem. Systems should\nbe inspected and certified by an appropriately\nqualified electrician before use.\n\nStructural issues\n\nGas supplies, pipe-work and meters are normally\nresistant to water. During floods, however, mud\nand moisture can enter the burners, jets and\nelectrical components of fires and boilers and\ndamage them."
+      },
+      {
+        "source": "nps-preservation-brief-39-moisture-control.pdf",
+        "chunk_index": 90,
+        "score": 18.567,
+        "text": "g maintenance and vigilance to situations that could\npotentially cause moisture damage must become a routine\npart of the everyday life of a building. The owner or staff\nresponsible for the upkeep of the building should inspect\nthe property weekly and note any leaks, mustiness, or\nblocked drains. Again, observing the building during a rain\nwill test whether ground and gutter drainage are working\nwell.\nFor some buildings a back-up power system may be\nnecessary to keep sump pumps working during storms\nwhen electrical power may be lost."
+      },
+      {
+        "source": "nps-flood-adaptation-guidelines-2021.pdf",
+        "chunk_index": 215,
+        "score": 16.191,
+        "text": "a pumping system in an accessible location\nto drain the space if necessary.\n\nNeglecting to install a pumping system if needed to\nfacilitate drainage.\n\nSYSTEMS RELOCATION\n(SEE PROTECT UTILITIES)\n\nRECOMMENDED\n\nNOT RECOMMENDED\n\nRelocating all systems and utilities currently within\nthe basement, including HVAC, plumbing, and\nelectrical, above the established flood risk level to a\nsecondary interior space with minimal significance\nand visibility, such as an attic or closet.\n\nRelocating systems and utilities to a historicallysignificant interior space or a highly-visible location."
+      },
+      {
+        "source": "secretary for interior.pdf",
+        "chunk_index": 211,
+        "score": 16.191,
+        "text": "a pumping system in an accessible location\nto drain the space if necessary.\n\nNeglecting to install a pumping system if needed to\nfacilitate drainage.\n\nSYSTEMS RELOCATION\n(SEE PROTECT UTILITIES)\n\nRECOMMENDED\n\nNOT RECOMMENDED\n\nRelocating all systems and utilities currently within\nthe basement, including HVAC, plumbing, and\nelectrical, above the established flood risk level to a\nsecondary interior space with minimal significance\nand visibility, such as an attic or closet.\n\nRelocating systems and utilities to a historicallysignificant interior space or a highly-visible location."
+      },
+      {
+        "source": "nthp-treatment-flood-damaged-historic-buildings.pdf",
+        "chunk_index": 3,
+        "score": 15.193,
+        "text": "f your electricity is turned off. If any electrical wiring was submerged,\nhave it inspected before turning the power back on.\n\u2022 Look before you step. Floods\ndeposit mud which makes most\nwalking surfaces very slippery.\n\u2022 Be alert for gas leaks.\n\u2022 Carbon monoxide exhaust kills.\nIf you use electrical generators\nor charcoal grills, make sure\nthat they are properly vented.\n\u2022 Clean everything that got wet.\nFloodwaters carry sewage and\nchemicals. Hose down concrete and masonry walls. Scrub\nall surfaces with disinfectant.\nDiscard any food and medicine that came in contact with\nfloodwater."
+      },
+      {
+        "source": "treatment of flood damaged hist buildings.pdf",
+        "chunk_index": 3,
+        "score": 15.193,
+        "text": "f your electricity is turned off. If any electrical wiring was submerged,\nhave it inspected before turning the power back on.\n\u2022 Look before you step. Floods\ndeposit mud which makes most\nwalking surfaces very slippery.\n\u2022 Be alert for gas leaks.\n\u2022 Carbon monoxide exhaust kills.\nIf you use electrical generators\nor charcoal grills, make sure\nthat they are properly vented.\n\u2022 Clean everything that got wet.\nFloodwaters carry sewage and\nchemicals. Hose down concrete and masonry walls. Scrub\nall surfaces with disinfectant.\nDiscard any food and medicine that came in contact with\nfloodwater."
+      }
+    ]
+  },
+  "mold": {
+    "label": "Mold / Contamination",
+    "audience": [
+      "homeowner"
+    ],
+    "query": "mold remediation flood porous materials bleach disinfect respirator ventilation",
+    "auto_synth": false,
+    "top_score": 22.991,
+    "thin_coverage": false,
+    "passages": [
+      {
+        "source": "nthp-treatment-flood-damaged-historic-buildings.pdf",
+        "chunk_index": 87,
+        "score": 22.991,
+        "text": "ww.bt.cdc.gov/disasters/mold/report/.\n1. Wear Protective Gear During Cleanup\n\nPeople are mainly exposed to mold by breathing spores and skin\ncontact. Wear gloves, goggles, and a respirator rated N-95 or\nhigher. Some respirators have valves to make it easier to breathe.\n2. Isolate Work Area and Ventilate to Outdoors\n\nDisturbing mold colonies during cleanup can cause a huge release\nof spores into the air, so seal off the moldy areas from the rest of\nthe house. Open windows, and don\u2019t run the central air system\n\n3. Remove Moldy Porous Materials\n\nPorous moldy or sewage-contaminated materials should be\nremoved, put in plastic bags if possible, and thrown away."
+      },
+      {
+        "source": "treatment of flood damaged hist buildings.pdf",
+        "chunk_index": 87,
+        "score": 22.991,
+        "text": "ww.bt.cdc.gov/disasters/mold/report/.\n1. Wear Protective Gear During Cleanup\n\nPeople are mainly exposed to mold by breathing spores and skin\ncontact. Wear gloves, goggles, and a respirator rated N-95 or\nhigher. Some respirators have valves to make it easier to breathe.\n2. Isolate Work Area and Ventilate to Outdoors\n\nDisturbing mold colonies during cleanup can cause a huge release\nof spores into the air, so seal off the moldy areas from the rest of\nthe house. Open windows, and don\u2019t run the central air system\n\n3. Remove Moldy Porous Materials\n\nPorous moldy or sewage-contaminated materials should be\nremoved, put in plastic bags if possible, and thrown away."
+      },
+      {
+        "source": "nthp-treatment-flood-damaged-historic-buildings.pdf",
+        "chunk_index": 92,
+        "score": 21.074,
+        "text": "ment. Hose out opened wall cavities.\n\u2022 Wash dirty or moldy materials with non-phosphate all-purpose\ncleaners. Rough surfaces may need to be scrubbed. Rinse surfaces,\nbut avoid pressure spray which can force water into materials.\n\u2022 Disinfect wall cavities and other materials after cleaning. Soil\ncan make some disinfectants less effective. On colorfast, nonmetal surfaces, you can disinfect with a solution of 1/2 to 1 cup\nhousehold chlorine bleach per gallon of water. Do not use in\nthe air conditioning system. Milder, less corrosive disinfectants\ninclude alcohols, phenolics, and hydrogen peroxide.\n5. Consider Borate Treatment\n\nHaving a professional pest control applicator apply a borate treatment to wood framing can provide resistance to termites, decay,\nand mold."
+      },
+      {
+        "source": "treatment of flood damaged hist buildings.pdf",
+        "chunk_index": 92,
+        "score": 21.074,
+        "text": "ment. Hose out opened wall cavities.\n\u2022 Wash dirty or moldy materials with non-phosphate all-purpose\ncleaners. Rough surfaces may need to be scrubbed. Rinse surfaces,\nbut avoid pressure spray which can force water into materials.\n\u2022 Disinfect wall cavities and other materials after cleaning. Soil\ncan make some disinfectants less effective. On colorfast, nonmetal surfaces, you can disinfect with a solution of 1/2 to 1 cup\nhousehold chlorine bleach per gallon of water. Do not use in\nthe air conditioning system. Milder, less corrosive disinfectants\ninclude alcohols, phenolics, and hydrogen peroxide.\n5. Consider Borate Treatment\n\nHaving a professional pest control applicator apply a borate treatment to wood framing can provide resistance to termites, decay,\nand mold."
+      },
+      {
+        "source": "nthp-treatment-flood-damaged-historic-buildings.pdf",
+        "chunk_index": 91,
+        "score": 20.498,
+        "text": "blems.\nAfter cleaning, you may use a disinfectant to kill any mold\nmissed by the cleaning. If there was sewage contamination, disinfection is a must. If you disinfect, follow label directions and warnings, handle carefully, and never mix bleach with ammonia or\nacids. Many disinfectants kill molds, but do not prevent regrowth.\n\n12 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022\n\nP R E S E RVAT I O N B O O K S\n\n\f\n\n\u2022 Remove any sediment. Hose out opened wall cavities.\n\u2022 Wash dirty or moldy materials with non-phosphate all-purpose\ncleaners. Rough surfaces may need to be scrubbed."
+      },
+      {
+        "source": "treatment of flood damaged hist buildings.pdf",
+        "chunk_index": 91,
+        "score": 20.498,
+        "text": "blems.\nAfter cleaning, you may use a disinfectant to kill any mold\nmissed by the cleaning. If there was sewage contamination, disinfection is a must. If you disinfect, follow label directions and warnings, handle carefully, and never mix bleach with ammonia or\nacids. Many disinfectants kill molds, but do not prevent regrowth.\n\n12 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022 \u2022\n\nP R E S E RVAT I O N B O O K S\n\n\f\n\n\u2022 Remove any sediment. Hose out opened wall cavities.\n\u2022 Wash dirty or moldy materials with non-phosphate all-purpose\ncleaners. Rough surfaces may need to be scrubbed."
+      },
+      {
+        "source": "nthp-treatment-flood-damaged-historic-buildings.pdf",
+        "chunk_index": 90,
+        "score": 19.224,
+        "text": "non-paper faced gypsum board\nwalls that are dry, in good condition, and have no insulation in\nthe wall can be cleaned and sanitized to salvage them. There is\na risk of mold on the back side, however, which can release\nspores into the home through air leaks in the walls.\n\u2022 Remove vinyl wallpaper, flooring, and other coverings of wet\nmaterials.\n4. Clean and Disinfect\n\nSurface mold can be effectively cleaned from non-porous materials such as hard plastic, concrete, glass, and metal. Solid wood\ncan also be cleaned. Cleaning should remove, not just kill, the\nmold, because dead spores can still cause health problems.\nAfter cleaning, you may use a disinfectant to kill any mold\nmissed by the cleaning. If there was sewage contamination, disinfection is a must."
+      },
+      {
+        "source": "treatment of flood damaged hist buildings.pdf",
+        "chunk_index": 90,
+        "score": 19.224,
+        "text": "non-paper faced gypsum board\nwalls that are dry, in good condition, and have no insulation in\nthe wall can be cleaned and sanitized to salvage them. There is\na risk of mold on the back side, however, which can release\nspores into the home through air leaks in the walls.\n\u2022 Remove vinyl wallpaper, flooring, and other coverings of wet\nmaterials.\n4. Clean and Disinfect\n\nSurface mold can be effectively cleaned from non-porous materials such as hard plastic, concrete, glass, and metal. Solid wood\ncan also be cleaned. Cleaning should remove, not just kill, the\nmold, because dead spores can still cause health problems.\nAfter cleaning, you may use a disinfectant to kill any mold\nmissed by the cleaning. If there was sewage contamination, disinfection is a must."
+      }
+    ]
+  }
+}

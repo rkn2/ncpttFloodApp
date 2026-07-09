@@ -1,0 +1,168 @@
+{
+  "schema_version": "1.0",
+  "built_at": "2026-07-09",
+  "reason": "Safety-critical categories held back from the runtime bundle. A subtly wrong directive on structural/electrical/mold advice can injure people; RAG's failure mode is confident plausibility. An expert (APTI DRI) must author these from the retrieved passages below.",
+  "records": [
+    {
+      "id": "structural",
+      "label": "Structural / Foundation",
+      "audience": [
+        "homeowner",
+        "assessor"
+      ],
+      "status": "needs_human_authoring",
+      "retrieved_passages": [
+        {
+          "source_file": "nthp-treatment-flood-damaged-historic-buildings.pdf",
+          "score": 35.624,
+          "text": "ntinue to seep in until the groundwater level drops. Foundation Collapse You should be aware that pumping water from your basement can be dangerous. This water may be providing the necessary pressure to balance the hydrostatic pressure of the groundwater. If the groundwater level is higher than your basement floor and you pump the water from your basement, the foundation walls could be pushed inward and collapse. If your basement is flooded with several feet of water and you are reasonably certain that your floor drains are operational, you can assume that the groundwater table is high. It is advisable to leave the water in place until the groundwater table sinks and the water recedes by itself."
+        },
+        {
+          "source_file": "treatment of flood damaged hist buildings.pdf",
+          "score": 35.624,
+          "text": "ntinue to seep in until the groundwater level drops. Foundation Collapse You should be aware that pumping water from your basement can be dangerous. This water may be providing the necessary pressure to balance the hydrostatic pressure of the groundwater. If the groundwater level is higher than your basement floor and you pump the water from your basement, the foundation walls could be pushed inward and collapse. If your basement is flooded with several feet of water and you are reasonably certain that your floor drains are operational, you can assume that the groundwater table is high. It is advisable to leave the water in place until the groundwater table sinks and the water recedes by itself."
+        },
+        {
+          "source_file": "nthp-treatment-flood-damaged-historic-buildings.pdf",
+          "score": 32.65,
+          "text": "y sanitizing agent that can be used to treat standing water in the basement. Water can exert tremendous pressure on foundation walls and floor slabs. If any portion of a building lies below the groundwater level, one of two things will happen: basement slab heaving or loss of mortar. Groundwater level Hydrostatic pressure Interior water pressure Hydrostatic pressure Water in basement can help to offset high groundwater pressure. Basement Slab Heaving If foundation walls are tight enough to hold back groundwater, it is likely to seep through the floor slab, causing it to leak or heave."
+        },
+        {
+          "source_file": "treatment of flood damaged hist buildings.pdf",
+          "score": 32.65,
+          "text": "y sanitizing agent that can be used to treat standing water in the basement. Water can exert tremendous pressure on foundation walls and floor slabs. If any portion of a building lies below the groundwater level, one of two things will happen: basement slab heaving or loss of mortar. Groundwater level Hydrostatic pressure Interior water pressure Hydrostatic pressure Water in basement can help to offset high groundwater pressure. Basement Slab Heaving If foundation walls are tight enough to hold back groundwater, it is likely to seep through the floor slab, causing it to leak or heave."
+        },
+        {
+          "source_file": "nthp-treatment-flood-damaged-historic-buildings.pdf",
+          "score": 30.959,
+          "text": "sually poured over a sand bed, which helps them to resist soil pressures, while older concrete floors were often poured right over the existing dirt. If you pour a new slab or surface-coat the existing slab before the clay dries, the new slab or surface could crack when the clay shrinks to its normal dimensions. If the slab is still heaved or cracks remain after the water recedes and the soil has dried, there is little you can do except to repair the cracks or, in the case of severe heaving, pour a new slab. Groundwater level Hydrostatic pressure Hydrostatic pressure If water is pumped from basement when groundwater pressure is high, foundation walls may collapse. Figure 1 Hydrostatic Pressure Loss of Mortar The basement may leak and fill with water."
+        },
+        {
+          "source_file": "treatment of flood damaged hist buildings.pdf",
+          "score": 30.959,
+          "text": "sually poured over a sand bed, which helps them to resist soil pressures, while older concrete floors were often poured right over the existing dirt. If you pour a new slab or surface-coat the existing slab before the clay dries, the new slab or surface could crack when the clay shrinks to its normal dimensions. If the slab is still heaved or cracks remain after the water recedes and the soil has dried, there is little you can do except to repair the cracks or, in the case of severe heaving, pour a new slab. Groundwater level Hydrostatic pressure Hydrostatic pressure If water is pumped from basement when groundwater pressure is high, foundation walls may collapse. Figure 1 Hydrostatic Pressure Loss of Mortar The basement may leak and fill with water."
+        },
+        {
+          "source_file": "nthp-treatment-flood-damaged-historic-buildings.pdf",
+          "score": 29.089,
+          "text": "groundwater pressure is high, foundation walls may collapse. Figure 1 Hydrostatic Pressure Loss of Mortar The basement may leak and fill with water. This is usually the case with older buildings and actually protects the foundation walls from collapse if the groundwater level is too high. Unfortunately, as water passes through stone and brick foundation walls, it sometimes carries mortar with it. The foundations of most older and historic buildings are masonry. Stone foundation walls with soft lime mortar are very durable, although the lime mortar does not hold up well to water erosion. Inspect the mortar of stone masonry foundation walls to ensure that it has not leeched from the joints and made the wall unstable."
+        },
+        {
+          "source_file": "treatment of flood damaged hist buildings.pdf",
+          "score": 29.089,
+          "text": "groundwater pressure is high, foundation walls may collapse. Figure 1 Hydrostatic Pressure Loss of Mortar The basement may leak and fill with water. This is usually the case with older buildings and actually protects the foundation walls from collapse if the groundwater level is too high. Unfortunately, as water passes through stone and brick foundation walls, it sometimes carries mortar with it. The foundations of most older and historic buildings are masonry. Stone foundation walls with soft lime mortar are very durable, although the lime mortar does not hold up well to water erosion. Inspect the mortar of stone masonry foundation walls to ensure that it has not leeched from the joints and made the wall unstable."
+        }
+      ]
+    },
+    {
+      "id": "electrical",
+      "label": "Electrical / Mechanical / HVAC",
+      "audience": [
+        "homeowner"
+      ],
+      "status": "needs_human_authoring",
+      "retrieved_passages": [
+        {
+          "source_file": "nthp-treatment-flood-damaged-historic-buildings.pdf",
+          "score": 21.571,
+          "text": "ooklet. Once you are able to return to your building, the first tasks will likely be to remove mud and debris and to inspect the building for damage. Saving your building, no matter how historic, is not worth losing your life or risking permanent injury. Please observe these safety precautions: • Do not walk through flowing water. • Do not drive through a flooded area. • Stay away from power lines and electrical wires. • Make sure that all of your electricity is turned off. If any electrical wiring was submerged, have it inspected before turning the power back on. • Look before you step."
+        },
+        {
+          "source_file": "treatment of flood damaged hist buildings.pdf",
+          "score": 21.571,
+          "text": "ooklet. Once you are able to return to your building, the first tasks will likely be to remove mud and debris and to inspect the building for damage. Saving your building, no matter how historic, is not worth losing your life or risking permanent injury. Please observe these safety precautions: • Do not walk through flowing water. • Do not drive through a flooded area. • Stay away from power lines and electrical wires. • Make sure that all of your electricity is turned off. If any electrical wiring was submerged, have it inspected before turning the power back on. • Look before you step."
+        },
+        {
+          "source_file": "historic-england-flooding-and-historic-buildings.pdf",
+          "score": 19.262,
+          "text": "o avert the need for dismantling and rebuilding. Reconnecting services Consult the local utility companies before turning on power and gas supplies. To prevent residual moisture or contaminants from causing short circuits when the power is switched back on, electrical systems need to be opened up, cleaned, and either dried or replaced depending on the severity of the problem. Systems should be inspected and certified by an appropriately qualified electrician before use. Structural issues Gas supplies, pipe-work and meters are normally resistant to water. During floods, however, mud and moisture can enter the burners, jets and electrical components of fires and boilers and damage them."
+        },
+        {
+          "source_file": "nps-preservation-brief-39-moisture-control.pdf",
+          "score": 18.567,
+          "text": "g maintenance and vigilance to situations that could potentially cause moisture damage must become a routine part of the everyday life of a building. The owner or staff responsible for the upkeep of the building should inspect the property weekly and note any leaks, mustiness, or blocked drains. Again, observing the building during a rain will test whether ground and gutter drainage are working well. For some buildings a back-up power system may be necessary to keep sump pumps working during storms when electrical power may be lost."
+        },
+        {
+          "source_file": "nps-flood-adaptation-guidelines-2021.pdf",
+          "score": 16.191,
+          "text": "a pumping system in an accessible location to drain the space if necessary. Neglecting to install a pumping system if needed to facilitate drainage. SYSTEMS RELOCATION (SEE PROTECT UTILITIES) RECOMMENDED NOT RECOMMENDED Relocating all systems and utilities currently within the basement, including HVAC, plumbing, and electrical, above the established flood risk level to a secondary interior space with minimal significance and visibility, such as an attic or closet. Relocating systems and utilities to a historicallysignificant interior space or a highly-visible location."
+        },
+        {
+          "source_file": "secretary for interior.pdf",
+          "score": 16.191,
+          "text": "a pumping system in an accessible location to drain the space if necessary. Neglecting to install a pumping system if needed to facilitate drainage. SYSTEMS RELOCATION (SEE PROTECT UTILITIES) RECOMMENDED NOT RECOMMENDED Relocating all systems and utilities currently within the basement, including HVAC, plumbing, and electrical, above the established flood risk level to a secondary interior space with minimal significance and visibility, such as an attic or closet. Relocating systems and utilities to a historicallysignificant interior space or a highly-visible location."
+        },
+        {
+          "source_file": "nthp-treatment-flood-damaged-historic-buildings.pdf",
+          "score": 15.193,
+          "text": "f your electricity is turned off. If any electrical wiring was submerged, have it inspected before turning the power back on. • Look before you step. Floods deposit mud which makes most walking surfaces very slippery. • Be alert for gas leaks. • Carbon monoxide exhaust kills. If you use electrical generators or charcoal grills, make sure that they are properly vented. • Clean everything that got wet. Floodwaters carry sewage and chemicals. Hose down concrete and masonry walls. Scrub all surfaces with disinfectant. Discard any food and medicine that came in contact with floodwater."
+        },
+        {
+          "source_file": "treatment of flood damaged hist buildings.pdf",
+          "score": 15.193,
+          "text": "f your electricity is turned off. If any electrical wiring was submerged, have it inspected before turning the power back on. • Look before you step. Floods deposit mud which makes most walking surfaces very slippery. • Be alert for gas leaks. • Carbon monoxide exhaust kills. If you use electrical generators or charcoal grills, make sure that they are properly vented. • Clean everything that got wet. Floodwaters carry sewage and chemicals. Hose down concrete and masonry walls. Scrub all surfaces with disinfectant. Discard any food and medicine that came in contact with floodwater."
+        }
+      ]
+    },
+    {
+      "id": "mold",
+      "label": "Mold / Contamination",
+      "audience": [
+        "homeowner"
+      ],
+      "status": "needs_human_authoring",
+      "retrieved_passages": [
+        {
+          "source_file": "nthp-treatment-flood-damaged-historic-buildings.pdf",
+          "score": 22.991,
+          "text": "ww.bt.cdc.gov/disasters/mold/report/. 1. Wear Protective Gear During Cleanup People are mainly exposed to mold by breathing spores and skin contact. Wear gloves, goggles, and a respirator rated N-95 or higher. Some respirators have valves to make it easier to breathe. 2. Isolate Work Area and Ventilate to Outdoors Disturbing mold colonies during cleanup can cause a huge release of spores into the air, so seal off the moldy areas from the rest of the house. Open windows, and don’t run the central air system 3. Remove Moldy Porous Materials Porous moldy or sewage-contaminated materials should be removed, put in plastic bags if possible, and thrown away."
+        },
+        {
+          "source_file": "treatment of flood damaged hist buildings.pdf",
+          "score": 22.991,
+          "text": "ww.bt.cdc.gov/disasters/mold/report/. 1. Wear Protective Gear During Cleanup People are mainly exposed to mold by breathing spores and skin contact. Wear gloves, goggles, and a respirator rated N-95 or higher. Some respirators have valves to make it easier to breathe. 2. Isolate Work Area and Ventilate to Outdoors Disturbing mold colonies during cleanup can cause a huge release of spores into the air, so seal off the moldy areas from the rest of the house. Open windows, and don’t run the central air system 3. Remove Moldy Porous Materials Porous moldy or sewage-contaminated materials should be removed, put in plastic bags if possible, and thrown away."
+        },
+        {
+          "source_file": "nthp-treatment-flood-damaged-historic-buildings.pdf",
+          "score": 21.074,
+          "text": "ment. Hose out opened wall cavities. • Wash dirty or moldy materials with non-phosphate all-purpose cleaners. Rough surfaces may need to be scrubbed. Rinse surfaces, but avoid pressure spray which can force water into materials. • Disinfect wall cavities and other materials after cleaning. Soil can make some disinfectants less effective. On colorfast, nonmetal surfaces, you can disinfect with a solution of 1/2 to 1 cup household chlorine bleach per gallon of water. Do not use in the air conditioning system. Milder, less corrosive disinfectants include alcohols, phenolics, and hydrogen peroxide. 5. Consider Borate Treatment Having a professional pest control applicator apply a borate treatment to wood framing can provide resistance to termites, decay, and mold."
+        },
+        {
+          "source_file": "treatment of flood damaged hist buildings.pdf",
+          "score": 21.074,
+          "text": "ment. Hose out opened wall cavities. • Wash dirty or moldy materials with non-phosphate all-purpose cleaners. Rough surfaces may need to be scrubbed. Rinse surfaces, but avoid pressure spray which can force water into materials. • Disinfect wall cavities and other materials after cleaning. Soil can make some disinfectants less effective. On colorfast, nonmetal surfaces, you can disinfect with a solution of 1/2 to 1 cup household chlorine bleach per gallon of water. Do not use in the air conditioning system. Milder, less corrosive disinfectants include alcohols, phenolics, and hydrogen peroxide. 5. Consider Borate Treatment Having a professional pest control applicator apply a borate treatment to wood framing can provide resistance to termites, decay, and mold."
+        },
+        {
+          "source_file": "nthp-treatment-flood-damaged-historic-buildings.pdf",
+          "score": 20.498,
+          "text": "blems. After cleaning, you may use a disinfectant to kill any mold missed by the cleaning. If there was sewage contamination, disinfection is a must. If you disinfect, follow label directions and warnings, handle carefully, and never mix bleach with ammonia or acids. Many disinfectants kill molds, but do not prevent regrowth. 12 • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • P R E S E RVAT I O N B O O K S • Remove any sediment. Hose out opened wall cavities. • Wash dirty or moldy materials with non-phosphate all-purpose cleaners. Rough surfaces may need to be scrubbed."
+        },
+        {
+          "source_file": "treatment of flood damaged hist buildings.pdf",
+          "score": 20.498,
+          "text": "blems. After cleaning, you may use a disinfectant to kill any mold missed by the cleaning. If there was sewage contamination, disinfection is a must. If you disinfect, follow label directions and warnings, handle carefully, and never mix bleach with ammonia or acids. Many disinfectants kill molds, but do not prevent regrowth. 12 • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • P R E S E RVAT I O N B O O K S • Remove any sediment. Hose out opened wall cavities. • Wash dirty or moldy materials with non-phosphate all-purpose cleaners. Rough surfaces may need to be scrubbed."
+        },
+        {
+          "source_file": "nthp-treatment-flood-damaged-historic-buildings.pdf",
+          "score": 19.224,
+          "text": "non-paper faced gypsum board walls that are dry, in good condition, and have no insulation in the wall can be cleaned and sanitized to salvage them. There is a risk of mold on the back side, however, which can release spores into the home through air leaks in the walls. • Remove vinyl wallpaper, flooring, and other coverings of wet materials. 4. Clean and Disinfect Surface mold can be effectively cleaned from non-porous materials such as hard plastic, concrete, glass, and metal. Solid wood can also be cleaned. Cleaning should remove, not just kill, the mold, because dead spores can still cause health problems. After cleaning, you may use a disinfectant to kill any mold missed by the cleaning. If there was sewage contamination, disinfection is a must."
+        },
+        {
+          "source_file": "treatment of flood damaged hist buildings.pdf",
+          "score": 19.224,
+          "text": "non-paper faced gypsum board walls that are dry, in good condition, and have no insulation in the wall can be cleaned and sanitized to salvage them. There is a risk of mold on the back side, however, which can release spores into the home through air leaks in the walls. • Remove vinyl wallpaper, flooring, and other coverings of wet materials. 4. Clean and Disinfect Surface mold can be effectively cleaned from non-porous materials such as hard plastic, concrete, glass, and metal. Solid wood can also be cleaned. Cleaning should remove, not just kill, the mold, because dead spores can still cause health problems. After cleaning, you may use a disinfectant to kill any mold missed by the cleaning. If there was sewage contamination, disinfection is a must."
+        }
+      ]
+    },
+    {
+      "id": "roof",
+      "label": "Roof",
+      "audience": [
+        "homeowner"
+      ],
+      "status": "needs_human_authoring",
+      "reason": "Flood damage is largely bottom-up; the corpus has little flood-specific roof-repair guidance, and auto-retrieval pulled out-of-scope wind/hail mitigation. The app falls back to the built-in flood-appropriate roof guidance (tarp against water intrusion, dry the substrate, retain historic roofing) until an expert authors a cited version.",
+      "note": "See built-in REPAIR_GUIDANCE.roof in floodapp.html for flood-appropriate hand-authored text to cite."
+    }
+  ]
+}

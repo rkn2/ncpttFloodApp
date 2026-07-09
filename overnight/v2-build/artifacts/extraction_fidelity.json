@@ -1,0 +1,100 @@
+{
+  "fema-386-6-historic-property-hazard-mitigation.pdf": {
+    "chars": 415099,
+    "cid_ratio": 0.0,
+    "ctrl_ratio": 0.0,
+    "verdict": "ok",
+    "cached": false
+  },
+  "fema-p467-historic-structures-floodplain.pdf": {
+    "chars": 60544,
+    "cid_ratio": 0.0,
+    "ctrl_ratio": 0.0,
+    "verdict": "ok",
+    "cached": false
+  },
+  "historic-england-flooding-and-historic-buildings.pdf": {
+    "chars": 102428,
+    "cid_ratio": 0.0,
+    "ctrl_ratio": 0.0,
+    "verdict": "ok",
+    "cached": false
+  },
+  "louisiana-resilient-heritage-homeowner-guide.pdf": {
+    "chars": 59953,
+    "cid_ratio": 0.0,
+    "ctrl_ratio": 0.0,
+    "verdict": "ok",
+    "cached": false
+  },
+  "nc-historic-resilience-community-planning-2023.pdf": {
+    "chars": 158653,
+    "cid_ratio": 0.0,
+    "ctrl_ratio": 0.00034,
+    "verdict": "ok",
+    "cached": false
+  },
+  "nps-before-after-disasters-shpo-guide.pdf": {
+    "chars": 165061,
+    "cid_ratio": 0.0,
+    "ctrl_ratio": 0.0,
+    "verdict": "ok",
+    "cached": false
+  },
+  "nps-flood-adaptation-guidelines-2021.pdf": {
+    "chars": 208005,
+    "cid_ratio": 0.0,
+    "ctrl_ratio": 0.0,
+    "verdict": "ok",
+    "cached": false
+  },
+  "nps-preservation-brief-39-moisture-control.pdf": {
+    "chars": 69246,
+    "cid_ratio": 0.0,
+    "ctrl_ratio": 0.0,
+    "verdict": "ok",
+    "cached": false
+  },
+  "nthp-treatment-flood-damaged-historic-buildings.pdf": {
+    "chars": 55126,
+    "cid_ratio": 0.0,
+    "ctrl_ratio": 0.0,
+    "verdict": "ok",
+    "cached": false
+  },
+  "post-disaster-claims-guide.pdf": {
+    "chars": 42510,
+    "cid_ratio": 0.0,
+    "ctrl_ratio": 0.0,
+    "verdict": "ok",
+    "cached": false
+  },
+  "secretary for interior.pdf": {
+    "chars": 196836,
+    "cid_ratio": 0.0,
+    "ctrl_ratio": 0.28348,
+    "verdict": "garbled",
+    "cached": false
+  },
+  "thc-historic-property-owners-disaster-handbook-2023.pdf": {
+    "chars": 58999,
+    "cid_ratio": 0.0,
+    "ctrl_ratio": 0.0,
+    "verdict": "ok",
+    "cached": false
+  },
+  "thc-local-government-disaster-planning-2023.pdf": {
+    "chars": 77124,
+    "cid_ratio": 0.0,
+    "ctrl_ratio": 0.0,
+    "verdict": "ok",
+    "cached": false
+  },
+  "treatment of flood damaged hist buildings.pdf": {
+    "chars": 59636,
+    "cid_ratio": 0.0,
+    "ctrl_ratio": 0.0,
+    "verdict": "ok",
+    "cached": false
+  }
+}
