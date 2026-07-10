@@ -88,8 +88,8 @@
       "test": "Headless-browser walkthrough (the repo's established verification pattern, cf. commit 87b3936) with network disabled: complete Building Information and Flood Damage steps manually; assert no CV UI rendered beyond the 'available online' note, zero console errors; repeat online with the function stubbed to fail and assert non-blocking error handling.",
       "pass_criteria": "Both walkthroughs clean end-to-end.",
       "failure_mode": "Any manual-entry path blocked by CV code is a P0 bug - fix before the campaign can close.",
-      "status": "untested",
-      "evidence": null
+      "status": "pass",
+      "evidence": "overnight/v3-cv-build/rounds/round_02.md -- offline: upload button replaced by the offline note (no CV UI rendered), full manual walkthrough (Building Info -> Flood Damage -> Results) completed with network disabled, zero CV-related console errors. Online-but-unreachable: uploaded a real file, the (locally unimplemented) /api/vision-assess call failed with HTTP 501, the panel showed a non-blocking 'Couldn't analyze that photo... You can still fill the form in manually' message, and the manual radio/checkbox inputs remained enabled throughout -- confirmed via Playwright, not just visual inspection."
     },
     {
       "id": "H6",

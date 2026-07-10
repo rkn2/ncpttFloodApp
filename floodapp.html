@@ -238,6 +238,37 @@
     .sev-btn { flex: 1; padding: 8px 4px; font-size: 0.75rem; }
   }
 
+  /* ── Computer vision photo assist (v3) ── */
+  .cv-panel {
+    background: #F7F8FA; border: 1.5px dashed #C4B896; border-radius: 10px;
+    padding: 14px; margin-top: 4px;
+  }
+  .cv-upload-btn {
+    display: block; text-align: center; padding: 12px; cursor: pointer;
+    font-size: 0.85rem; font-weight: 600; color: var(--hw-primary);
+    border: 1.5px solid var(--hw-accent); border-radius: 8px; background: #FFF;
+  }
+  .cv-upload-btn:hover { background: var(--hw-light); }
+  .cv-status { font-size: 0.82rem; color: #666; text-align: center; padding: 8px; }
+  .cv-error { font-size: 0.82rem; color: #B22222; padding: 8px; }
+  .cv-offline-note { font-size: 0.8rem; color: #888; font-style: italic; }
+  .cv-thumb { max-width: 160px; max-height: 160px; border-radius: 8px; display: block; margin-bottom: 8px; }
+  .cv-suggestions { display: flex; flex-direction: column; gap: 8px; margin-bottom: 10px; }
+  .cv-suggestion-row {
+    display: flex; gap: 8px; align-items: flex-start; background: #FFF;
+    border: 1px solid #E0E4EA; border-radius: 8px; padding: 8px 10px; cursor: pointer;
+  }
+  .cv-suggestion-row input[type=checkbox] { margin-top: 3px; flex-shrink: 0; }
+  .cv-suggestion-main { font-size: 0.85rem; }
+  .cv-confidence { font-size: 0.7rem; text-transform: uppercase; font-weight: 600; margin-left: 6px; }
+  .cv-critic-badge { font-size: 0.78rem; }
+  .cv-suggestion-reason { font-size: 0.78rem; color: #666; margin-top: 2px; }
+  .cv-apply-btn { width: 100%; margin-bottom: 6px; }
+  .cv-retake-btn {
+    width: 100%; background: none; border: none; color: #888; font-size: 0.78rem;
+    cursor: pointer; text-decoration: underline; padding: 4px;
+  }
+
   /* ── Severity info modal ── */
   .sev-modal-overlay {
     display: none;
@@ -1016,6 +1047,262 @@ const ARCH_STYLES = [
 ];
 
 // ═══════════════════════════════════════════════
+// COMPUTER VISION PHOTO ASSIST (v3)
+// ═══════════════════════════════════════════════
+// Server-side proxy only -- no API key ever touches the browser (api/vision-assess.py
+// holds it). Every suggestion requires an explicit checked-and-applied action; nothing
+// auto-fills. Design + hypotheses: overnight/v3-cv-build/.
+// SCOPE (tonight): homeowner Building Information + Flood Damage steps only. Assessor
+// mode (archStyle, RAPID_DAMAGE_CATS) is not wired up -- a straightforward follow-on,
+// not done here to keep tonight's surface reviewable.
+
+const CV_ENDPOINT = '/api/vision-assess';
+const CV_MAX_LONG_EDGE = 1568;
+const CV_JPEG_QUALITY = 0.85;
+
+let cvState = { facade: null, damage: null }; // transient UI state only, never saved/exported
+
+function downscaleImageFile(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onerror = () => reject(new Error('could not read the photo file'));
+    reader.onload = () => {
+      const img = new Image();
+      img.onerror = () => reject(new Error('could not decode the photo'));
+      img.onload = () => {
+        let { width, height } = img;
+        const longEdge = Math.max(width, height);
+        if (longEdge > CV_MAX_LONG_EDGE) {
+          const scale = CV_MAX_LONG_EDGE / longEdge;
+          width = Math.round(width * scale);
+          height = Math.round(height * scale);
+        }
+        const canvas = document.createElement('canvas');
+        canvas.width = width; canvas.height = height;
+        canvas.getContext('2d').drawImage(img, 0, 0, width, height);
+        const dataUrl = canvas.toDataURL('image/jpeg', CV_JPEG_QUALITY);
+        resolve({ base64: dataUrl.split(',')[1], mediaType: 'image/jpeg', dataUrl });
+      };
+      img.src = reader.result;
+    };
+    reader.readAsDataURL(file);
+  });
+}
+
+async function callVisionAssess(task, imageBase64, mediaType, fields) {
+  const resp = await fetch(CV_ENDPOINT, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ task, imageBase64, mediaType, fields })
+  });
+  const data = await resp.json().catch(() => ({}));
+  if (!resp.ok) throw new Error(data.error || `HTTP ${resp.status}`);
+  return data;
+}
+
+function cvOfflineNoteHtml(label) {
+  return `<p class="cv-offline-note">📷 ${label} — available when you're back online.</p>`;
+}
+
+function cvSuggestionRowHtml(key, label, value, confidence, reasoning) {
+  const confColor = confidence === 'high' ? '#2E7D32' : confidence === 'medium' ? '#E65100' : '#999';
+  const defaultChecked = confidence !== 'low';
+  return `<label class="cv-suggestion-row">
+    <input type="checkbox" class="cv-apply-check" data-cv-key="${key}" ${defaultChecked ? 'checked' : ''}>
+    <div class="cv-suggestion-body">
+      <div class="cv-suggestion-main">
+        <strong>${label}:</strong> ${value}
+        <span class="cv-confidence" style="color:${confColor}">${confidence}</span>
+        <span class="cv-critic-badge" id="cv-critic-${key}"></span>
+      </div>
+      <div class="cv-suggestion-reason">${reasoning}</div>
+    </div>
+  </label>`;
+}
+
+function applyCriticBadges(findings) {
+  const flagged = new Set(findings.map(f => f.field));
+  document.querySelectorAll('.cv-critic-badge').forEach(el => {
+    const key = el.id.replace('cv-critic-', '');
+    const checkbox = document.querySelector(`.cv-apply-check[data-cv-key="${key}"]`);
+    if (flagged.has(key)) {
+      const issue = findings.find(f => f.field === key);
+      el.innerHTML = ` ⚠ <span title="${escAttr(issue.issue)}">flagged</span>`;
+      if (checkbox) checkbox.checked = false;
+    } else {
+      el.textContent = ' ✓';
+    }
+  });
+}
+
+// ── Facade photo → Building Information ──────────────────────────
+
+function facadePhotoAssistHtml() {
+  if (!navigator.onLine) return cvOfflineNoteHtml('Photo-based building suggestions');
+  return `
+    <div class="cv-panel" id="facade-cv-panel">
+      <label class="cv-upload-btn" for="facade-photo-input">📷 Take or upload a photo of the building's front — Claude can suggest a few fields below</label>
+      <input type="file" id="facade-photo-input" accept="image/*" capture="environment" style="display:none" onchange="handleFacadePhoto(this)">
+    </div>`;
+}
+
+async function handleFacadePhoto(input) {
+  const file = input.files && input.files[0];
+  if (!file) return;
+  const panel = document.getElementById('facade-cv-panel');
+  panel.innerHTML = `<p class="cv-status">Analyzing photo…</p>`;
+  try {
+    const { base64, mediaType, dataUrl } = await downscaleImageFile(file);
+    const result = await callVisionAssess('facade', base64, mediaType);
+    cvState.facade = { result, imageB64: base64, mediaType, dataUrl };
+    renderFacadeSuggestions();
+    runFacadeCritic();
+  } catch (e) {
+    panel.innerHTML = `<p class="cv-error">Couldn't analyze that photo (${e.message}). You can still fill the form in manually.</p>`;
+  }
+}
+
+function renderFacadeSuggestions() {
+  const panel = document.getElementById('facade-cv-panel');
+  if (!panel || !cvState.facade) return;
+  const { result, dataUrl } = cvState.facade;
+  const rows = [
+    ['buildingType', 'Building Type', result.buildingType],
+    ['age', 'Approximate Age', result.age],
+  ].filter(([, , v]) => v).map(([key, label, v]) => cvSuggestionRowHtml(key, label, v.value, v.confidence, v.reasoning));
+  if (result.materials) {
+    rows.push(cvSuggestionRowHtml('materials', 'Construction Material', result.materials.values.join(', '), result.materials.confidence, result.materials.reasoning));
+  }
+  panel.innerHTML = `
+    <img src="${dataUrl}" class="cv-thumb" alt="Uploaded photo">
+    <div class="cv-suggestions" id="facade-cv-suggestions">
+      ${rows.join('') || '<p class="cv-status">No confident suggestions from this photo — fill the form in manually.</p>'}
+    </div>
+    ${rows.length ? `<button type="button" class="btn btn-primary cv-apply-btn" onclick="applyFacadeSuggestions()">Apply checked suggestions</button>` : ''}
+    <button type="button" class="cv-retake-btn" onclick="resetFacadeCv()">Try a different photo</button>`;
+}
+
+function applyFacadeSuggestions() {
+  if (!cvState.facade) return;
+  const r = cvState.facade.result;
+  const isChecked = key => document.querySelector(`.cv-apply-check[data-cv-key="${key}"]`)?.checked;
+  if (r.buildingType && isChecked('buildingType')) state.hw.buildingType = r.buildingType.value;
+  if (r.materials && isChecked('materials')) state.hw.materials = r.materials.values;
+  if (r.age && isChecked('age')) state.hw.age = r.age.value;
+  cvState.facade = null;
+  showHwStep0();
+}
+
+function resetFacadeCv() {
+  cvState.facade = null;
+  const panel = document.getElementById('facade-cv-panel');
+  if (panel) panel.outerHTML = facadePhotoAssistHtml();
+}
+
+async function runFacadeCritic() {
+  if (!cvState.facade) return;
+  const { result, imageB64, mediaType } = cvState.facade;
+  const fields = {};
+  if (result.buildingType) fields.buildingType = result.buildingType.value;
+  if (result.materials) fields.materials = result.materials.values;
+  if (result.age) fields.age = result.age.value;
+  if (!Object.keys(fields).length) return;
+  try {
+    const critique = await callVisionAssess('critic', imageB64, mediaType, fields);
+    applyCriticBadges(critique.findings || []);
+  } catch (e) {
+    document.querySelectorAll('#facade-cv-suggestions .cv-critic-badge').forEach(el => el.textContent = ' (unverified)');
+  }
+}
+
+// ── Damage photo → Flood Damage ──────────────────────────
+
+function damagePhotoAssistHtml() {
+  if (!navigator.onLine) return cvOfflineNoteHtml('Photo-based damage suggestions');
+  return `
+    <div class="cv-panel" id="damage-cv-panel">
+      <label class="cv-upload-btn" for="damage-photo-input">📷 Take or upload a photo of the damage — Claude can suggest severity for what's visible</label>
+      <input type="file" id="damage-photo-input" accept="image/*" capture="environment" style="display:none" onchange="handleDamagePhoto(this)">
+    </div>`;
+}
+
+async function handleDamagePhoto(input) {
+  const file = input.files && input.files[0];
+  if (!file) return;
+  const panel = document.getElementById('damage-cv-panel');
+  panel.innerHTML = `<p class="cv-status">Analyzing photo…</p>`;
+  try {
+    const { base64, mediaType, dataUrl } = await downscaleImageFile(file);
+    const result = await callVisionAssess('damage', base64, mediaType);
+    cvState.damage = { result, imageB64: base64, mediaType, dataUrl };
+    renderDamageSuggestions();
+    runDamageCritic();
+  } catch (e) {
+    panel.innerHTML = `<p class="cv-error">Couldn't analyze that photo (${e.message}). You can still rate categories manually below.</p>`;
+  }
+}
+
+function renderDamageSuggestions() {
+  const panel = document.getElementById('damage-cv-panel');
+  if (!panel || !cvState.damage) return;
+  const { result, dataUrl } = cvState.damage;
+  const rows = DAMAGE_CATEGORIES
+    .map(cat => [cat.key, cat.label, result.categories && result.categories[cat.key]])
+    .filter(([, , v]) => v && v.severity !== 'not_assessable')
+    .map(([key, label, v]) => cvSuggestionRowHtml(key, label, v.severity, v.confidence, v.reasoning));
+  const areasNote = (result.affectedAreas && result.affectedAreas.length)
+    ? `<p class="cv-status">Suggested affected areas: ${result.affectedAreas.join(', ')}</p>` : '';
+  panel.innerHTML = `
+    <img src="${dataUrl}" class="cv-thumb" alt="Uploaded photo">
+    ${areasNote}
+    <div class="cv-suggestions" id="damage-cv-suggestions">
+      ${rows.join('') || '<p class="cv-status">No categories were clearly visible in this photo — rate them manually below, or try another photo.</p>'}
+    </div>
+    ${rows.length ? `<button type="button" class="btn btn-primary cv-apply-btn" onclick="applyDamageSuggestions()">Apply checked suggestions</button>` : ''}
+    <button type="button" class="cv-retake-btn" onclick="resetDamageCv()">Add another photo</button>`;
+}
+
+function applyDamageSuggestions() {
+  if (!cvState.damage) return;
+  const r = cvState.damage.result;
+  const isChecked = key => document.querySelector(`.cv-apply-check[data-cv-key="${key}"]`)?.checked;
+  DAMAGE_CATEGORIES.forEach(cat => {
+    const v = r.categories && r.categories[cat.key];
+    if (v && v.severity !== 'not_assessable' && isChecked(cat.key)) {
+      state.hw.damage[cat.key] = v.severity;
+    }
+  });
+  if (r.affectedAreas && r.affectedAreas.length) {
+    state.hw.affectedAreas = [...new Set([...state.hw.affectedAreas, ...r.affectedAreas])];
+  }
+  cvState.damage = null;
+  showHwStep1();
+}
+
+function resetDamageCv() {
+  cvState.damage = null;
+  const panel = document.getElementById('damage-cv-panel');
+  if (panel) panel.outerHTML = damagePhotoAssistHtml();
+}
+
+async function runDamageCritic() {
+  if (!cvState.damage) return;
+  const { result, imageB64, mediaType } = cvState.damage;
+  const fields = {};
+  DAMAGE_CATEGORIES.forEach(cat => {
+    const v = result.categories && result.categories[cat.key];
+    if (v && v.severity !== 'not_assessable') fields[cat.key] = v.severity;
+  });
+  if (!Object.keys(fields).length) return;
+  try {
+    const critique = await callVisionAssess('critic', imageB64, mediaType, fields);
+    applyCriticBadges(critique.findings || []);
+  } catch (e) {
+    document.querySelectorAll('#damage-cv-suggestions .cv-critic-badge').forEach(el => el.textContent = ' (unverified)');
+  }
+}
+
+// ═══════════════════════════════════════════════
 // APP STATE
 // ═══════════════════════════════════════════════
 
@@ -1242,6 +1529,9 @@ function showHwStep0() {
         ).join('')}
       </div>
     </div>
+    <div class="field-group">
+      ${facadePhotoAssistHtml()}
+    </div>
     <div class="btn-row">
       <button class="btn btn-secondary" onclick="showModeSelect()">← Back</button>
       <button class="btn btn-primary" onclick="saveHwStep0()">Next: Flood Damage →</button>
@@ -1294,6 +1584,9 @@ function showHwStep1() {
     <div class="damage-section">
       <div class="damage-section-header">🔍 Damage by Category</div>
       ${catHtml}
+    </div>
+    <div class="damage-section" style="border:none;padding:12px 0 0;">
+      ${damagePhotoAssistHtml()}
     </div>
     <div class="btn-row">
       <button class="btn btn-secondary" onclick="showHwStep0()">← Back</button>

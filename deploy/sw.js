@@ -7,7 +7,7 @@
  * CACHE_VERSION MUST be bumped on every deploy — otherwise returning users are stranded on the
  * old cached app forever. This is the #1 hand-written-SW failure mode.
  */
-const CACHE_VERSION = 'flood-recovery-v1';   // ⬅ bump this string on every deploy
+const CACHE_VERSION = 'flood-recovery-v2';   // ⬅ bump this string on every deploy
 const SHELL = [
   './',
   './index.html',
