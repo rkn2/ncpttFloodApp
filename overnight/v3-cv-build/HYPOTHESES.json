@@ -1,0 +1,119 @@
+{
+  "goal": "floodApp v3 computer vision: facade->building-info and damage-photo->severity suggestions via a server-side proxy, every increment hypothesis-tested before dependent work is built",
+  "conventions": {
+    "statuses": ["untested", "pass", "fail", "pending-key", "cut-with-evidence"],
+    "rule": "No phase builds on a hypothesis still 'untested'. 'pending-key' blocks only live-call claims, not structural ones. A 'fail' requires either the listed fallback or a recorded cut, never a silent workaround.",
+    "write_back": "Update status + evidence (round file ref, command, output) after every test run."
+  },
+  "architecture_pivot": {
+    "when": "mid-build, after Phase 0 was drafted for Netlify but before any code was written",
+    "what": "Netlify Functions -> Vercel Python Functions. Becca explicitly directed 'just use python for the computer vision'. Verified via WebFetch to Netlify's own docs (functions overview + Lambda-compatibility page) that Netlify Functions supports ONLY JavaScript/TypeScript and Go -- no Python runtime exists there, so the original plan could not honor that instruction on Netlify. Verified via WebFetch to Vercel's docs that Vercel Python Functions are a first-class, well-documented runtime (api/*.py, handler(BaseHTTPRequestHandler) for a single lightweight endpoint, requirements.txt for deps, git-linked deploy to the same GitHub repo). All references to Netlify/netlify.toml/.mjs test harness in the original PROTOCOL.md/V3_CV_PLAN.md draft are superseded by this pivot; H0a/H0b below describe the Python/Vercel implementation that was actually built.",
+    "what_stayed_the_same": "The core architecture decision (server-side proxy holding the real API key, task-enum contract, fixed server-side prompts, structured JSON output, offline-first degradation, critic pass) is unchanged -- only the hosting runtime and language changed."
+  },
+  "hypotheses": [
+    {
+      "id": "H0a",
+      "phase": 0,
+      "statement": "A bare Vercel Python function (api/vision-assess.py, handler(BaseHTTPRequestHandler), zero non-anthropic dependencies) can be loaded and invoked locally by a plain Python test script without the Vercel CLI, so the proxy is testable before any deploy exists.",
+      "test": "python3 overnight/v3-cv-build/artifacts/test_function_local.py --mock  # loads the handler by file path (hyphenated filename isn't a valid module name for normal import), drives do_POST() directly with a fake request/response, Anthropic client mocked",
+      "pass_criteria": "All assertions pass: 200 + schema-valid JSON on the happy path; 400/413/500 on each rejection path; mocked Anthropic client called exactly once on the happy path and zero times on rejection paths.",
+      "failure_mode": "N/A -- passed on first implementation, no fallback needed.",
+      "status": "pass",
+      "evidence": "overnight/v3-cv-build/rounds/round_01.md -- 14/14 assertions passed, local venv with `anthropic` installed, no network calls made (Anthropic client mocked)."
+    },
+    {
+      "id": "H0b",
+      "phase": 0,
+      "statement": "The handler with a real ANTHROPIC_API_KEY can call Anthropic's REST API (via the official `anthropic` Python SDK) with claude-sonnet-5 + one downscaled image + thinking disabled + output_config.format json_schema, and return schema-valid JSON in under 8 seconds.",
+      "test": "ANTHROPIC_API_KEY=... python3 overnight/v3-cv-build/artifacts/test_function_local.py --live  # photos from scratchpad llmDamagev3 ref_photos/after/; logs wall-clock latency and response.usage per call",
+      "pass_criteria": "Every call returns JSON matching the declared schema AND every wall-clock latency < 8s AND per-call cost from usage fields < $0.03.",
+      "failure_mode": "Latency >= 8s: reduce max_tokens and image long edge, retest. No key available: mark pending-key; downstream live hypotheses inherit pending-key and FINAL_REPORT must say so.",
+      "status": "pending-key",
+      "evidence": "overnight/v3-cv-build/rounds/round_01.md -- confirmed no ANTHROPIC_API_KEY and no `ant` CLI in the local environment (checked directly, not assumed). Harness is written and ready; running it live is the first thing to do once a key exists."
+    },
+    {
+      "id": "H0c",
+      "phase": 0,
+      "statement": "Client-side canvas downscaling (long edge <= 1568px, JPEG quality ~0.85) turns any realistic phone photo into a base64 payload well under Vercel's request size limits, and keeps image cost near the ~1.6k-token tier instead of the ~4.8k high-res tier.",
+      "test": "Generated a synthetic large source image (sips-upscaled from an llmDamagev3 reference photo to 8471x3549px, 3.75MB JPEG q95 -- a deliberately oversized stress case, larger than a typical phone photo) then downscaled it via sips to the exact target client-side params (long edge 1568px, JPEG q85) and measured base64 length.",
+      "pass_criteria": "base64 length <= 1.5MB for the worst sample.",
+      "failure_mode": "N/A -- passed with large margin.",
+      "status": "pass",
+      "evidence": "overnight/v3-cv-build/rounds/round_01.md -- downscaled output: 1568x657px, 251,578 bytes raw JPEG, 335,441 bytes base64 (~0.34MB) -- well under the 1.5MB target and the function's own 2,000,000-byte MAX_IMAGE_BYTES_B64 cap. Image-token count (the ~1.6k vs ~4.8k half of this hypothesis) still needs a live H0b run to confirm from actual usage.input_tokens."
+    },
+    {
+      "id": "H1",
+      "phase": 1,
+      "statement": "A task-enum contract (facade|damage|critic) with all prompts fixed server-side, plus cheap validation (unknown task -> 400, oversized body -> 413, missing/non-image payload -> 400, foreign Origin -> 403), prevents the proxy from being used as a general-purpose Claude endpoint by casual/browser-based abusers. (Honest limit: origin headers are spoofable outside browsers; the durable backstop is the Anthropic workspace spend cap, a PENDING-HUMAN item.)",
+      "test": "test_function_local.py --mock covers: unknown task, missing image, bad media type, oversized image, critic-without-fields, and missing-API-key paths -- asserts correct status AND that the mocked Anthropic client is never invoked on any rejected request.",
+      "pass_criteria": "All rejection cases return the specified status with a JSON error body; zero Anthropic calls on rejected requests; happy path unaffected.",
+      "failure_mode": "N/A -- passed on first implementation. Origin/Referer check is implemented (403 when ALLOWED_ORIGIN is set and doesn't match) but not exercised by the mock harness since it requires setting an env var + Origin header combination; the code path was reviewed by hand instead of test-asserted -- noted as a minor gap, not blocking.",
+      "status": "pass",
+      "evidence": "overnight/v3-cv-build/rounds/round_01.md -- all 5 rejection cases + the missing-key path returned correct statuses (400/413/500) with zero Anthropic calls; 14/14 total assertions passed alongside H0a."
+    },
+    {
+      "id": "H2",
+      "phase": 2,
+      "statement": "claude-sonnet-5 maps a single facade photo onto the app's exact enum strings (buildingType: 4 options; materials: 4 options multi-select; age: 4 bands incl. en-dashes; archStyle: ARCH_STYLES list) with suggestion-grade accuracy. Supported by llmDamagev3's analyze_visual_attributes.py doing comparable extraction (cladding/stories/roof) on claude-sonnet-4-6; the model-version carryover and the age/style fields are the untested parts.",
+      "test": "Live function against 8-10 hand-labeled facade photos (llmDamagev3 ref_photos + building_details + Street View captures); score per field.",
+      "pass_criteria": "100% of outputs are schema/enum-valid (structured outputs should guarantee it - assert anyway); >= 7/10 correct on materials AND buildingType; age and archStyle >= 5/10 with errors accompanied by confidence != high.",
+      "failure_mode": "Systematic misses (e.g. everything 'Mixed'): add per-enum visual criteria to the rubric, one iteration. If age/archStyle remain wrong at high confidence after that, drop them from auto-fill (ship materials+type only) and record the cut. designations[] is excluded up front - not visually inferable, suggesting it would be fabrication.",
+      "status": "pending-key",
+      "evidence": "Client UI wiring and the facade schema/prompt are built (api/vision-assess.py FACADE_SYSTEM/_facade_schema, floodapp.html facade photo panel). Accuracy is UNVALIDATED -- this is the honest state, not assumed to work."
+    },
+    {
+      "id": "H3",
+      "phase": 3,
+      "statement": "A single after-only damage photo supports per-category severity suggestions (9 DAMAGE_CATEGORIES x none/minor/moderate/severe, plus not_assessable) using a new rubric adapted from damage_scale.py's water-line anchors. EXPLICITLY AN EXTRAPOLATION: llmDamagev3 validated whole-building 0-4 from before+after pairs, not this.",
+      "test": "Live function against llmDamagev3 ref_photos/after/ (5 Montpelier buildings), hand-label which categories are visible and their severity; score only categories the model marks assessable.",
+      "pass_criteria": ">= 70% exact-level agreement on assessable categories; ZERO cases of true-severe suggested as none (the dangerous miss); < 20% of suggestions are for categories not actually visible in frame.",
+      "failure_mode": "Model hallucinates non-visible categories (interior/mold from an exterior shot): add an explicit only-what-is-in-frame gate to the rubric and make it a critic focus; one iteration allowed. If accuracy stays under the bar, degrade the feature to affectedAreas + estimated water-line height only (honest, still useful) and record the cut with the measured numbers.",
+      "status": "pending-key",
+      "evidence": "Client UI wiring and the damage schema/prompt (WATER_LINE_RUBRIC, per-category severity+not_assessable) are built. Accuracy is UNVALIDATED and this is explicitly the riskiest, least-supported hypothesis in the whole plan -- treat any deployed damage-suggestion feature as unverified until this runs."
+    },
+    {
+      "id": "H4",
+      "phase": 4,
+      "statement": "A second adversarial critic call (same photo + the fields about to be applied, task='critic', separate function invocation running while the user reads the suggestions) catches real errors that self-reported confidence misses, at interactive-acceptable cost - transplanting llmDamagev3's validated critic finding into a per-photo, apply-scoped form.",
+      "test": "Seed 2 deliberately wrong fields into each of 5 known-truth photos' suggestion sets; run task='critic'; score detection and false-flag rates; log latency.",
+      "pass_criteria": ">= 8/10 seeded errors flagged with a specific reason; <= 2 false flags across all correct fields; latency < 8s per call. UI contract verified: critic failure/timeout leaves suggestions usable and labeled 'unverified' (never blocks).",
+      "failure_mode": "Detection < 6/10: the critic adds latency without trust and is CUT for v3 - recorded with the numbers so the decision is revisitable; fallback UI treats medium/low-confidence fields as default-unchecked in the Apply panel.",
+      "status": "pending-key",
+      "evidence": "Critic schema/prompt built (CRITIC_SYSTEM/_critic_schema, task='critic' routing). Client UI shows suggestions as 'checking...' while critic runs, degrades to 'unverified' on failure/timeout (structural behavior, not yet live-tested)."
+    },
+    {
+      "id": "H5",
+      "phase": 5,
+      "statement": "CV is pure progressive enhancement: offline (navigator.onLine false, mirroring sendChat's gate) or on any proxy error, both wizard steps remain fully completable manually with no console errors and no dangling UI.",
+      "test": "Headless-browser walkthrough (the repo's established verification pattern, cf. commit 87b3936) with network disabled: complete Building Information and Flood Damage steps manually; assert no CV UI rendered beyond the 'available online' note, zero console errors; repeat online with the function stubbed to fail and assert non-blocking error handling.",
+      "pass_criteria": "Both walkthroughs clean end-to-end.",
+      "failure_mode": "Any manual-entry path blocked by CV code is a P0 bug - fix before the campaign can close.",
+      "status": "untested",
+      "evidence": null
+    },
+    {
+      "id": "H6",
+      "phase": "2-4 (measured throughout)",
+      "statement": "A typical full CV-assisted assessment (1 facade photo + ~2 damage photos + critic passes, ~5-6 model calls) costs <= $0.25 at claude-sonnet-5 sticker pricing ($3/$15 per MTok; intro $2/$10 through 2026-08-31), typically <= $0.10.",
+      "test": "Sum actual response.usage token counts from the H2/H3/H4 live runs; compute cost at sticker rates; record the per-call and per-assessment table in the round files and V3_CV_PLAN.md.",
+      "pass_criteria": "Measured typical assessment <= $0.10 and worst-case (5 photos + critics) <= $0.30.",
+      "failure_mode": "Costs exceed estimates (likely cause: high-res image tokens ~3x, i.e. H0c downscaling not applied) - fix downscaling before blaming the model; if genuinely over budget, drop critic to damage-only or cap photos per assessment.",
+      "status": "pending-key",
+      "evidence": "Cannot measure real token usage without live calls. Estimated table in V3_CV_PLAN.md is clearly labeled as estimates pending measurement."
+    }
+  ],
+  "pending_human": [
+    "Create fresh Anthropic API key and set ANTHROPIC_API_KEY as a Vercel environment variable (Project Settings -> Environment Variables) -- never in the repo/browser",
+    "Set a monthly spend limit on that Anthropic workspace (the real abuse backstop for a public endpoint)",
+    "Deploy via Vercel, git-linked to the existing GitHub remote (github.com/rkn2/ncpttFloodApp.git) -- Vercel auto-detects api/*.py as Python functions and serves the rest of the repo as static files",
+    "Optional: provide ANTHROPIC_API_KEY locally so H0b/H2/H3/H4/H6 run live instead of pending-key",
+    "Carry-over from v2: revoke the leaked Groq key"
+  ],
+  "discrepancies_flagged": [
+    "deploy/index.html is stale vs floodapp.html (commit 87b3936 touched only floodapp.html); the manual sync convention was missed - v3 Phase 5 syncs and flags it",
+    "llmDamagev3 uses claude-sonnet-4-6 on Vertex, not claude-sonnet-5 - its validation is supporting evidence, not proof, for the newer model",
+    "llmDamagev3's damage scale is whole-building 0-4 from before+after pairs; the app needs per-category 4-level from single after-only photos - new rubric required, tested by H3",
+    "The repo DOES have a git remote (origin -> github.com/rkn2/ncpttFloodApp.git, reachable) - an earlier draft of this plan and stale project memory both said otherwise. This was caught and corrected mid-build.",
+    "ARCHITECTURE PIVOT mid-build: Netlify Functions do not support Python (verified via Netlify's own docs) -- moved the proxy to Vercel Python Functions per Becca's explicit direction to use Python. See the architecture_pivot key above for full reasoning. All Netlify-specific file paths/commands in the original planning docs are superseded."
+  ]
+}

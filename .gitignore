@@ -11,3 +11,6 @@ overnight/v2-build/extracted/
 # python bytecode
 __pycache__/
 *.pyc
+
+# regenerable local test venv (recreate: python3 -m venv overnight/v3-cv-build/artifacts/venv)
+overnight/v3-cv-build/artifacts/venv/
