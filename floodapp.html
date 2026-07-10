@@ -232,6 +232,12 @@
   .sev-btn.sel-moderate { border-color: #FF9800; background: #FFF3E0; color: #E65100; }
   .sev-btn.sel-severe { border-color: #F44336; background: #FFEBEE; color: #B71C1C; }
 
+  @media (max-width: 480px) {
+    .damage-row { flex-direction: column; align-items: stretch; }
+    .severity-btns { width: 100%; }
+    .sev-btn { flex: 1; padding: 8px 4px; font-size: 0.75rem; }
+  }
+
   /* ── Severity info modal ── */
   .sev-modal-overlay {
     display: none;
@@ -498,14 +504,14 @@
   #chat-btn {
     position: fixed;
     bottom: 24px; right: 24px;
+    width: 56px; height: 56px;
     background: #1B3A5C;
     color: #FFF;
-    border: none; border-radius: 28px;
-    padding: 12px 20px;
-    font-size: 0.85rem; font-weight: 600;
+    border: none; border-radius: 50%;
+    font-size: 1.4rem;
     cursor: pointer;
     box-shadow: 0 4px 16px rgba(0,0,0,0.22);
-    display: flex; align-items: center; gap: 8px;
+    display: flex; align-items: center; justify-content: center;
     z-index: 900;
     transition: background 0.15s;
   }
@@ -741,7 +747,7 @@
 </div>
 
 <!-- Chat widget -->
-<button id="chat-btn" onclick="toggleChat()" style="display:none">💬 Ask about grants</button>
+<button id="chat-btn" onclick="toggleChat()" style="display:none" aria-label="Ask about grants" title="Ask about grants">💬</button>
 <div id="chat-panel">
   <div id="chat-header">
     <div>
