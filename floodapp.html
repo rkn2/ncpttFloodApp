@@ -3312,8 +3312,10 @@ function checkShareHash() {
 
 // ── SHPO SYNC CLIENT ──────────────────────
 // Offline-first assessment sync queue. Completed assessments are queued in localStorage.
-// When connectivity returns, the queue drains to the SHPO backend (endpoint not yet stood up).
+// When connectivity returns, the queue drains to the Google Sheet via Apps Script.
 // Submission is never blocking — the field user always succeeds locally.
+// To set up: deploy sync/google-apps-script.js to a Google Sheet and paste the URL below.
+const SYNC_ENDPOINT = ''; // ← paste your Google Apps Script web app URL here
 const LS_SYNC_KEY = 'floodapp_sync_queue';
 
 function getSyncQueue() {
@@ -3383,7 +3385,7 @@ function showSyncPanel() {
   } else {
     queue.forEach(e => {
       const statusColor = e.status === 'pending' ? '#E65100' : '#2E7D32';
-      const statusLabel = e.status === 'pending' ? t('sync_queued') : t('sync_none');
+      const statusLabel = e.status === 'synced' ? '✓ Synced' : (SYNC_ENDPOINT ? t('sync_queued') : 'No endpoint configured');
       const dt = new Date(e.queuedAt);
       const loc = LANG === 'es' ? 'es' : 'en-US';
       html += `<div style="border:1px solid #E0E0E0;border-radius:8px;padding:10px;margin-bottom:8px;display:flex;justify-content:space-between;align-items:center;">
@@ -3401,12 +3403,26 @@ function showSyncPanel() {
   document.body.insertAdjacentHTML('beforeend', html);
 }
 
-function attemptSync() {
+async function attemptSync() {
+  if (!SYNC_ENDPOINT || !navigator.onLine) return;
   const queue = getSyncQueue();
   const pending = queue.filter(e => e.status === 'pending');
-  if (!pending.length || !navigator.onLine) return;
-  // Backend endpoint not yet configured — mark as pending.
-  // When the SHPO backend is stood up, this will POST each entry and mark as 'synced'.
+  if (!pending.length) return;
+  for (const entry of pending) {
+    try {
+      const resp = await fetch(SYNC_ENDPOINT, {
+        method: 'POST',
+        headers: { 'Content-Type': 'text/plain' },
+        body: JSON.stringify(entry),
+        mode: 'no-cors'
+      });
+      entry.status = 'synced';
+      entry.syncedAt = new Date().toISOString();
+    } catch (_) {
+      // Will retry next time we're online
+    }
+  }
+  try { localStorage.setItem(LS_SYNC_KEY, JSON.stringify(queue)); } catch (_) {}
   updateSyncBadge();
 }
 
@@ -3432,6 +3448,7 @@ loadContentBundle();
 document.documentElement.lang = LANG;
 syncLangUI();
 updateSyncBadge();
+attemptSync();
 if (checkShareHash()) {
   state.hw.safetyChecked = state.hw.safetyChecked || {};
   state.hw.walkAnswers = state.hw.walkAnswers || {};
