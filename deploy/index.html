@@ -524,27 +524,27 @@
   }
   .walk-icon { font-size: 1.3rem; flex-shrink: 0; width: 32px; text-align: center; }
 
-  /* ── Chat widget ── */
-  #chat-btn {
+  /* ── Guide panel (replaces chat widget) ── */
+  #guide-btn {
     position: fixed;
     bottom: 24px; right: 24px;
-    width: 56px; height: 56px;
     background: #1B3A5C;
     color: #FFF;
-    border: none; border-radius: 50%;
-    font-size: 1.4rem;
+    border: none; border-radius: 28px;
+    padding: 12px 20px;
+    font-size: 0.85rem; font-weight: 600;
     cursor: pointer;
     box-shadow: 0 4px 16px rgba(0,0,0,0.22);
-    display: flex; align-items: center; justify-content: center;
+    display: flex; align-items: center; gap: 8px;
     z-index: 900;
     transition: background 0.15s;
   }
-  #chat-btn:hover { background: #2E6DA4; }
-  #chat-panel {
+  #guide-btn:hover { background: #2E6DA4; }
+  #guide-panel {
     position: fixed;
     bottom: 80px; right: 24px;
-    width: 360px; max-width: calc(100vw - 32px);
-    height: 480px; max-height: calc(100vh - 120px);
+    width: 380px; max-width: calc(100vw - 32px);
+    max-height: calc(100vh - 120px);
     background: #FFF;
     border-radius: 14px;
     box-shadow: 0 8px 40px rgba(0,0,0,0.18);
@@ -554,102 +554,74 @@
     opacity: 0;
     pointer-events: none;
     transition: transform 0.18s ease, opacity 0.18s ease;
+    overflow: hidden;
   }
-  #chat-panel.open {
+  #guide-panel.open {
     transform: scale(1) translateY(0);
     opacity: 1;
     pointer-events: all;
   }
-  #chat-header {
+  #guide-header {
     background: #1B3A5C;
     color: #FFF;
     padding: 12px 16px;
-    border-radius: 14px 14px 0 0;
     font-size: 0.88rem; font-weight: 600;
     display: flex; justify-content: space-between; align-items: center;
+    flex-shrink: 0;
   }
-  #chat-header .chat-sub { font-size: 0.7rem; font-weight: 400; opacity: 0.75; margin-top: 1px; }
-  #chat-close { background: none; border: none; color: #FFF; font-size: 1.1rem; cursor: pointer; line-height: 1; }
-  #chat-key-btn { background: none; border: none; color: rgba(255,255,255,0.6); font-size: 0.85rem; cursor: pointer; padding: 0 4px; line-height: 1; }
-  #chat-key-btn:hover { color: #FFF; }
-  .chat-key-prompt {
-    align-self: stretch; background: #FFF; border: 1px solid #E0E4EA;
-    border-radius: 10px; padding: 12px; font-size: 0.8rem; color: #333;
-  }
-  .chat-key-prompt p { margin: 0 0 8px; line-height: 1.45; }
-  .chat-key-prompt a { color: #2E6DA4; }
-  .chat-key-prompt .key-row { display: flex; gap: 6px; margin-top: 8px; }
-  .chat-key-prompt input[type=password] {
-    flex: 1; border: 1.5px solid #D0D5DD; border-radius: 6px;
-    padding: 6px 8px; font-size: 0.8rem; font-family: inherit; outline: none;
-  }
-  .chat-key-prompt input[type=password]:focus { border-color: #2E6DA4; }
-  .chat-key-prompt button {
-    background: #1B3A5C; color: #FFF; border: none; border-radius: 6px;
-    padding: 0 12px; font-size: 0.8rem; font-weight: 600; cursor: pointer; white-space: nowrap;
-  }
-  #chat-log {
+  #guide-header .guide-sub { font-size: 0.7rem; font-weight: 400; opacity: 0.75; margin-top: 1px; }
+  #guide-close { background: none; border: none; color: #FFF; font-size: 1.1rem; cursor: pointer; line-height: 1; }
+  #guide-body {
     flex: 1;
     overflow-y: auto;
     padding: 12px;
-    display: flex; flex-direction: column; gap: 8px;
     background: #F7F8FA;
   }
-  .chat-msg {
-    max-width: 88%;
-    padding: 8px 12px;
+  .guide-topic {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 14px;
+    border: 1.5px solid #E0E4EA;
     border-radius: 10px;
-    font-size: 0.8rem;
-    line-height: 1.45;
-    white-space: pre-wrap;
-  }
-  .chat-user {
-    align-self: flex-end;
-    background: #1B3A5C;
-    color: #FFF;
-    border-bottom-right-radius: 3px;
-  }
-  .chat-assistant {
-    align-self: flex-start;
     background: #FFF;
-    color: #222;
-    border: 1px solid #E0E4EA;
-    border-bottom-left-radius: 3px;
-  }
-  .chat-assistant.typing-msg { color: #999; font-style: italic; }
-  .chat-kb-note {
-    font-size: 0.72rem; color: #888; text-align: center;
-    padding: 4px 8px; background: #F0F0F0; border-radius: 6px;
-    align-self: center;
-  }
-  #chat-input-row {
-    display: flex; gap: 8px;
-    padding: 10px 12px;
-    border-top: 1px solid #E8E8E8;
-    background: #FFF;
-    border-radius: 0 0 14px 14px;
-  }
-  #chat-input {
-    flex: 1;
-    border: 1.5px solid #D0D5DD;
-    border-radius: 8px;
-    padding: 7px 10px;
-    font-size: 0.8rem;
-    font-family: inherit;
-    resize: none; height: 36px;
-    outline: none;
-  }
-  #chat-input:focus { border-color: #2E6DA4; }
-  #chat-send {
-    background: #1B3A5C; color: #FFF;
-    border: none; border-radius: 8px;
-    padding: 0 14px; font-size: 0.8rem; font-weight: 600;
     cursor: pointer;
+    font-size: 0.84rem;
+    color: #333;
+    margin-bottom: 8px;
+    transition: all 0.12s;
+    font-family: var(--font);
+    text-align: left;
+    width: 100%;
   }
-  #chat-send:disabled { opacity: 0.5; cursor: default; }
+  .guide-topic:hover { border-color: var(--hw-accent); background: var(--hw-light); }
+  .guide-topic-icon { font-size: 1.2rem; flex-shrink: 0; width: 28px; text-align: center; }
+  .guide-topic-text { flex: 1; }
+  .guide-topic-arrow { color: #AAA; font-size: 0.8rem; }
+  .guide-back {
+    background: none; border: none; color: #2E6DA4; font-size: 0.82rem;
+    font-weight: 600; cursor: pointer; padding: 0; margin-bottom: 10px;
+    font-family: var(--font);
+  }
+  .guide-back:hover { text-decoration: underline; }
+  .guide-detail-title {
+    font-size: 0.95rem; font-weight: 700; margin-bottom: 10px; color: #1A1A1A;
+  }
+  .guide-detail-section {
+    border-radius: 8px; padding: 10px 12px; margin-bottom: 10px;
+    font-size: 0.82rem; line-height: 1.55;
+  }
+  .guide-detail-section ul { padding-left: 16px; margin: 0; }
+  .guide-detail-section li { margin-bottom: 4px; }
+  .guide-detail-do { background: var(--ok-bg); border-left: 3px solid var(--ok-border); }
+  .guide-detail-dont { background: #FFEBEE; border-left: 3px solid var(--danger); }
+  .guide-detail-pro { background: var(--warning-bg); border-left: 3px solid var(--warning-border); }
+  .guide-detail-do strong { color: #2E7D32; }
+  .guide-detail-dont strong { color: var(--danger); }
+  .guide-detail-pro strong { color: #B8860B; }
   @media (max-width: 480px) {
-    #chat-panel { right: 8px; bottom: 72px; width: calc(100vw - 16px); }
-    #chat-btn { right: 16px; bottom: 16px; }
+    #guide-panel { right: 8px; bottom: 72px; width: calc(100vw - 16px); }
+    #guide-btn { right: 16px; bottom: 16px; }
   }
 
   /* ── Saves panel ── */
@@ -717,7 +689,7 @@
     body { background: #FFF; padding: 0; }
     #app-header, #progress-bar, #step-indicator, .btn-row, .mode-btn { display: none !important; }
     .sev-modal-overlay { display: none !important; }
-    #chat-btn, #chat-panel, #saves-btn, #saves-panel { display: none !important; }
+    #guide-btn, #guide-panel, #saves-btn, #saves-panel { display: none !important; }
     .card { box-shadow: none; margin: 0; border: none; }
     .guidance-card-body { display: block !important; }
     .result-panel-body { display: block !important; }
@@ -770,25 +742,17 @@
   </div>
 </div>
 
-<!-- Chat widget -->
-<button id="chat-btn" onclick="toggleChat()" style="display:none" aria-label="Ask about grants" title="Ask about grants">💬</button>
-<div id="chat-panel">
-  <div id="chat-header">
+<!-- Guided Q&A panel -->
+<button id="guide-btn" onclick="toggleGuide()" style="display:none">❓ Quick Answers</button>
+<div id="guide-panel">
+  <div id="guide-header">
     <div>
-      <div>Grant &amp; Assistance Assistant</div>
-      <div class="chat-sub">Fill out the questionnaire above for personalized answers</div>
+      <div id="guide-title">What do you need help with?</div>
+      <div class="guide-sub">Tap a topic for guidance — works offline</div>
     </div>
-    <div style="display:flex;gap:6px;align-items:center;">
-      <button id="chat-key-btn" onclick="showApiKeyPrompt()" title="Set API key">⚙</button>
-      <button id="chat-close" onclick="toggleChat()">✕</button>
-    </div>
+    <button id="guide-close" onclick="toggleGuide()">✕</button>
   </div>
-  <div id="chat-log"></div>
-  <div id="chat-input-row">
-    <textarea id="chat-input" placeholder="Ask about a grant, eligibility, how to apply…" rows="1"
-      onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendChat();}"></textarea>
-    <button id="chat-send" onclick="sendChat()">Send</button>
-  </div>
+  <div id="guide-body"></div>
 </div>
 
 <div id="app-header">
@@ -1179,7 +1143,7 @@ function toggle(id) {
 // ═══════════════════════════════════════════════
 
 function setChatVisible(visible) {
-  document.getElementById('chat-btn').style.display = visible ? '' : 'none';
+  document.getElementById('guide-btn').style.display = visible ? '' : 'none';
   document.getElementById('saves-btn').style.display = visible ? '' : 'none';
 }
 
@@ -1211,6 +1175,7 @@ function showModeSelect() {
 
 function startHomeowner() {
   state.mode = 'homeowner'; state.step = 0;
+  setChatVisible(true);
   badgeHtml('homeowner');
   showHwStep0();
 }
@@ -2416,19 +2381,9 @@ function usStates() {
   ];
 }
 
-// ── CHAT / RAG ────────────────────────────
-
-const GROQ_MODEL = 'llama-3.1-8b-instant';
-const LS_GROQ_KEY = 'floodapp_groq_key';
-// SECURITY: no API key is stored in source. The chat key is user-supplied and kept
-// only in the browser's localStorage (set via the ⚙ prompt). Do NOT hardcode a key here —
-// this file is served to every visitor. A backend proxy is the production-grade fix.
-function getGroqKey() { return localStorage.getItem(LS_GROQ_KEY) || ''; }
-function saveGroqKey(key) { localStorage.setItem(LS_GROQ_KEY, key.trim()); }
+// ── GUIDED Q&A PANEL ──────────────────────
 
 let knowledgeBase = null;
-const chatHistory = [];  // {role, content}
-let chatTipShown = false;
 
 const BM25_K1 = 1.5;
 const BM25_B  = 0.75;
@@ -2441,11 +2396,8 @@ async function loadKB() {
     if (resp.ok) {
       knowledgeBase = await resp.json();
       buildBM25Index();
-      appendChatNote(`📄 ${knowledgeBase.doc_count} document(s) loaded (${knowledgeBase.chunk_count} sections)`);
     }
-  } catch (_) {
-    appendChatNote('No grant documents loaded yet. Run build-kb.py to add them.');
-  }
+  } catch (_) {}
 }
 
 // ── COMPILED CITED GUIDANCE (content-bundle.json) ──
@@ -2545,221 +2497,237 @@ function searchKB(query, topK = 5) {
     .map(s => s.chunk);
 }
 
-function buildSystemPrompt(query) {
-  // Filter programs to the user's state when known
-  const stateProgs = state.hw.state
-    ? (STATE_PROGRAMS[state.hw.state] || STATE_PROGRAMS['_default'])
-    : Object.values(STATE_PROGRAMS).flat();
-  const builtIn = [...NATIONAL_PROGRAMS, ...stateProgs]
-    .map(p => `Program: ${p.name}\nDescription: ${p.desc}${p.note ? '\nNote: '+p.note : ''}`)
-    .join('\n\n');
+// ── GUIDE PANEL TOPICS ──
 
-  // Inject form answers so the assistant knows the user's specific situation
-  let userContext = '';
-  if (state.mode === 'homeowner' && (state.hw.state || state.hw.buildingType)) {
-    const hw = state.hw;
-    const lines = [];
-    if (hw.state)              lines.push(`Location: ${hw.state}`);
-    if (hw.buildingType)       lines.push(`Building type: ${hw.buildingType}`);
-    if (hw.materials.length)   lines.push(`Construction materials: ${hw.materials.join(', ')}`);
-    if (hw.age)                lines.push(`Building age: ${hw.age}`);
-    if (hw.designations.length) lines.push(`Historic designations: ${hw.designations.join(', ')}`);
-    const damaged = DAMAGE_CATEGORIES.filter(c => hw.damage[c.key] && hw.damage[c.key] !== 'none');
-    if (damaged.length) {
-      lines.push('Reported damage:');
-      damaged.forEach(c => lines.push(`  - ${c.label}: ${hw.damage[c.key]}`));
+const GUIDE_TOPICS = [
+  {
+    id: 'insurance', icon: '🛡️', label: 'Filing an insurance claim',
+    content: () => {
+      return `
+        <div class="guide-detail-section guide-detail-do">
+          <strong style="display:block;margin-bottom:4px;">✔ Do first</strong>
+          <ul>
+            <li>Photograph and video all damage <em>before</em> any emergency repairs</li>
+            <li>Keep every receipt for emergency work (tarps, board-ups) — insurers require them</li>
+            <li>Call your insurer promptly; state that the building is historically significant</li>
+            <li>Get your claim number and adjuster's direct contact information</li>
+            <li>Check your declarations page: do you have <strong>Replacement Cost (RCV)</strong> or <strong>Actual Cash Value (ACV)</strong>?</li>
+          </ul>
+        </div>
+        <div class="guide-detail-section guide-detail-dont">
+          <strong style="display:block;margin-bottom:4px;">⚠ Watch out for</strong>
+          <ul>
+            <li><strong>ACV policies</strong> can severely undervalue historic materials — original plaster, ornamental woodwork, and old-growth floors may be valued at a fraction of their replacement cost</li>
+            <li><strong>"Functional Replacement" proposals</strong> — insurers may propose cheaper modern substitutes (drywall instead of plaster, asphalt instead of slate). This can jeopardize your historic designation. You can negotiate for like-kind materials.</li>
+            <li><strong>Ordinance & Law coverage</strong> — repairs that bring the building up to current codes are typically not covered by standard policies. Check for this rider.</li>
+          </ul>
+        </div>
+        <div class="guide-detail-section guide-detail-pro">
+          <strong style="display:block;margin-bottom:4px;">💡 Tip</strong>
+          <p style="margin:0;">Contact your State Historic Preservation Office (SHPO) if the insurer resists like-kind materials — SHPOs can advocate for preservation-appropriate repairs.</p>
+        </div>
+        <p style="font-size:0.78rem;color:#888;margin-top:8px;">Source: NAIC Post-Disaster Claims Guide</p>`;
     }
-    if (hw.affectedAreas.length) lines.push(`Affected areas: ${hw.affectedAreas.join(', ')}`);
-    if (lines.length) userContext = '\n\nUser\'s building and damage information (tailor your answers to this):\n' + lines.join('\n');
-  } else if (state.mode === 'assessor') {
-    const as = state.as;
-    const lines = [];
-    if (as.buildingName)         lines.push(`Building: ${as.buildingName}`);
-    if (as.address)              lines.push(`Address: ${as.address}`);
-    if (as.age)                  lines.push(`Age: ${as.age}`);
-    if (as.foundation)           lines.push(`Foundation type: ${as.foundation}`);
-    if (as.roof)                 lines.push(`Roof type: ${as.roof}`);
-    if (as.wallFinish)           lines.push(`Wall finish: ${as.wallFinish}`);
-    if (as.historicStatus.length) lines.push(`Historic status: ${as.historicStatus.join(', ')}`);
-    const damaged = DAMAGE_CATEGORIES.filter(c => as.rapidDamage[c.key] && as.rapidDamage[c.key] !== 'none');
-    if (damaged.length) {
-      lines.push('Assessed damage:');
-      damaged.forEach(c => lines.push(`  - ${c.label}: ${as.rapidDamage[c.key]}`));
+  },
+  {
+    id: 'assistance', icon: '💰', label: 'Finding financial assistance',
+    content: () => {
+      const stateProgs = state.hw.state ? (STATE_PROGRAMS[state.hw.state] || []) : [];
+      const allProgs = [...NATIONAL_PROGRAMS, ...stateProgs];
+      if (!allProgs.length) return '<p style="font-size:0.85rem;color:#888;">Select your state in the assessment to see available programs.</p>';
+      return allProgs.map(p => {
+        const tagCls = p.tag === 'grant' ? 'tag-grant' : p.tag === 'loan' ? 'tag-loan' : p.tag === 'fema' ? 'tag-fema' : 'tag-local';
+        const tagLabel = p.tag === 'grant' ? 'Grant / Program' : p.tag === 'loan' ? 'Loan' : p.tag === 'fema' ? 'Federal' : 'State / Local';
+        return `<div style="border:1.5px solid #E0E0E0;border-radius:8px;padding:12px;margin-bottom:8px;">
+          <span class="tag ${tagCls}" style="display:inline-block;font-size:0.68rem;font-weight:700;padding:2px 7px;border-radius:3px;margin-bottom:6px;">${tagLabel}</span>
+          <div style="font-weight:700;font-size:0.85rem;margin-bottom:4px;">${p.name}</div>
+          <p style="font-size:0.8rem;color:#444;line-height:1.45;margin:0 0 6px;">${p.desc}</p>
+          ${p.note ? `<p style="font-size:0.76rem;color:#666;font-style:italic;margin:0 0 6px;">${p.note}</p>` : ''}
+          <a href="${p.url}" target="_blank" style="font-size:0.78rem;color:#2E6DA4;font-weight:600;">Learn more →</a>
+        </div>`;
+      }).join('');
     }
-    if (as.overallDamage) lines.push(`Overall damage level: ${as.overallDamage}`);
-    if (lines.length) userContext = '\n\nBuilding being assessed (tailor your answers to this):\n' + lines.join('\n');
+  },
+  {
+    id: 'drying', icon: '💨', label: 'How to dry out my building',
+    content: () => {
+      return `
+        <div class="guide-detail-section guide-detail-do">
+          <strong style="display:block;margin-bottom:4px;">✔ Do this</strong>
+          <ul>
+            <li>Open all windows and doors to maximize airflow</li>
+            <li>Use fans to move air — point them out windows to exhaust moisture</li>
+            <li>Remove ALL wet insulation from wall cavities — it holds water and promotes rot</li>
+            <li>Leave wall cavities open until framing is completely dry (below 20% moisture content)</li>
+            <li>Allow wood siding, floors, and trim to dry <em>slowly</em> and naturally — rapid drying causes warping and cracking</li>
+            <li>Tap-test plaster walls — a hollow sound means water got behind it, but it may still be salvageable</li>
+          </ul>
+        </div>
+        <div class="guide-detail-section guide-detail-dont">
+          <strong style="display:block;margin-bottom:4px;">✖ Do NOT do this</strong>
+          <ul>
+            <li>Do NOT paint, seal, or refinish any surface until moisture content is below 20% — it traps moisture and will fail</li>
+            <li>Do NOT apply vapor barriers to historic wood or masonry — they trap moisture and accelerate deterioration</li>
+            <li>Do NOT close up wall cavities before they are fully dry</li>
+            <li>Do NOT run HVAC systems until they've been inspected — they can spread mold through the building</li>
+          </ul>
+        </div>
+        <div class="guide-detail-section guide-detail-pro">
+          <strong style="display:block;margin-bottom:4px;">📏 When is it dry enough?</strong>
+          <p style="margin:0;">Use a moisture meter. Wood framing and finishes should be below 20% moisture content before you close up walls or apply any finish. This can take weeks to months depending on conditions.</p>
+        </div>`;
+    }
+  },
+  {
+    id: 'professionals', icon: '👷', label: 'When to call a professional',
+    content: () => {
+      return `
+        <p style="font-size:0.85rem;color:#555;margin-bottom:12px;">Some situations require professional help. Here's when to stop and call someone:</p>
+        <div class="guide-detail-section guide-detail-pro">
+          <strong style="display:block;margin-bottom:4px;">🔴 Call immediately</strong>
+          <ul>
+            <li><strong>Structural damage</strong> — cracking, settling, leaning walls, or heaving. Get a licensed structural engineer before re-occupying.</li>
+            <li><strong>Electrical</strong> — any system that was submerged must be inspected and recertified by a licensed electrician before restoring power. This is a life-safety issue.</li>
+            <li><strong>Gas smell</strong> — leave immediately, call your gas company from outside</li>
+            <li><strong>Extensive mold</strong> — areas larger than 10 sq ft, or if the building has asbestos or lead paint (common in historic buildings), hire a licensed remediation contractor</li>
+          </ul>
+        </div>
+        <div class="guide-detail-section guide-detail-pro">
+          <strong style="display:block;margin-bottom:4px;">🟡 Consult before acting</strong>
+          <ul>
+            <li><strong>Historic masonry</strong> — repointing must use lime-based mortar, not Portland cement. A preservation mason knows the difference.</li>
+            <li><strong>Chimney</strong> — do not use any heating appliance until a certified chimney inspector clears it</li>
+            <li><strong>Historic windows/doors</strong> — contact your SHPO before replacing. They can often be restored.</li>
+            <li><strong>Roof with historic materials</strong> (slate, clay tile, wood shingle) — contact SHPO before replacing with modern substitutes</li>
+          </ul>
+        </div>
+        <p style="font-size:0.82rem;color:#555;margin-top:10px;">Your <strong>State Historic Preservation Office (SHPO)</strong> is your best first call for any preservation question — they can connect you with qualified professionals and may know of additional assistance programs.</p>`;
+    }
+  },
+  {
+    id: 'donts', icon: '🚫', label: 'Common mistakes to avoid',
+    content: () => {
+      const allDonts = [];
+      DAMAGE_CATEGORIES.forEach(cat => {
+        const cb = contentBundle[cat.key];
+        const g = REPAIR_GUIDANCE[cat.key];
+        const label = (cb && cb.label) || (g && g.label) || cat.label;
+        const items = cb ? (cb.dont || []) : (g ? g.dont.map(d => ({text: d})) : []);
+        items.forEach(item => {
+          allDonts.push({ label, text: item.text, citations: item.citations });
+        });
+      });
+      if (!allDonts.length) return '<p style="color:#888;">No guidance loaded.</p>';
+      return `<p style="font-size:0.85rem;color:#555;margin-bottom:12px;">These are the most important things to <strong>avoid</strong> after a flood in a historic building:</p>` +
+        allDonts.map(d => {
+          const cites = (d.citations || []).map(c =>
+            `<span class="cite" title="${escAttr('"'+c.quote+'" — '+sourceLabel(c.source_file))}">📄</span>`
+          ).join('');
+          return `<div style="background:#FFEBEE;border-left:3px solid var(--danger);border-radius:6px;padding:8px 12px;margin-bottom:6px;font-size:0.82rem;line-height:1.5;">
+            <span style="font-size:0.7rem;font-weight:600;color:#888;text-transform:uppercase;">${d.label}</span><br>
+            ${d.text} ${cites}
+          </div>`;
+        }).join('');
+    }
+  },
+  {
+    id: 'repair', icon: '🔧', label: 'Repair guidance by category',
+    subtopics: () => {
+      return DAMAGE_CATEGORIES.map(cat => {
+        const cb = contentBundle[cat.key];
+        const g = REPAIR_GUIDANCE[cat.key];
+        if (!cb && !g) return null;
+        const icon = g ? g.icon : '🔧';
+        const label = (cb && cb.label) || (g && g.label) || cat.label;
+        return {
+          id: 'repair_' + cat.key,
+          icon,
+          label,
+          content: () => guidanceBodyHtml(cat.key)
+        };
+      }).filter(Boolean);
+    }
   }
+];
 
-  // Add KB chunks if available
-  const chunks = searchKB(query);
-  const kbContext = chunks.length
-    ? '\n\n---\nAdditional grant documents:\n\n' + chunks.map(c => `[${c.source}]\n${c.text}`).join('\n\n---\n\n')
-    : '';
+let guideHistory = [];
 
-  return `You are a helpful assistant for the Historic Flood Recovery Tool, which helps homeowners and preservation professionals navigate flood assistance programs and historic building repair guidance.
-
-Answer questions based on the following assistance programs and grant documents. Be concise and practical. If you don't know the answer from the provided information, say so clearly — do not make up program details.${userContext}
-
-Built-in assistance programs:
-
-${builtIn}${kbContext}`;
-}
-
-function toggleChat() {
-  const panel = document.getElementById('chat-panel');
+function toggleGuide() {
+  const panel = document.getElementById('guide-panel');
   const opening = !panel.classList.contains('open');
   panel.classList.toggle('open');
-  if (opening && !chatTipShown && !state.hw.state && !state.as.buildingName) {
-    chatTipShown = true;
-    appendChatNote('Tip: Fill out the questionnaire above first — your building type, location, and damage details help personalize these answers.');
+  if (opening) {
+    guideHistory = [];
+    showGuideTopics();
   }
 }
 
-function appendChatNote(text) {
-  const log = document.getElementById('chat-log');
-  const div = document.createElement('div');
-  div.className = 'chat-kb-note';
-  div.textContent = text;
-  log.appendChild(div);
+function showGuideTopics() {
+  const body = document.getElementById('guide-body');
+  document.getElementById('guide-title').textContent = 'What do you need help with?';
+  body.innerHTML = GUIDE_TOPICS.map(t =>
+    t.subtopics
+      ? `<button class="guide-topic" onclick="showGuideSubtopics('${t.id}')">
+           <span class="guide-topic-icon">${t.icon}</span>
+           <span class="guide-topic-text">${t.label}</span>
+           <span class="guide-topic-arrow">›</span>
+         </button>`
+      : `<button class="guide-topic" onclick="showGuideDetail('${t.id}')">
+           <span class="guide-topic-icon">${t.icon}</span>
+           <span class="guide-topic-text">${t.label}</span>
+           <span class="guide-topic-arrow">›</span>
+         </button>`
+  ).join('');
 }
 
-function appendMsg(role, text, extraClass) {
-  const log = document.getElementById('chat-log');
-  const div = document.createElement('div');
-  div.className = `chat-msg chat-${role}${extraClass ? ' ' + extraClass : ''}`;
-  div.textContent = text;
-  log.appendChild(div);
-  log.scrollTop = log.scrollHeight;
-  return div;
+function showGuideSubtopics(topicId) {
+  const topic = GUIDE_TOPICS.find(t => t.id === topicId);
+  if (!topic || !topic.subtopics) return;
+  guideHistory.push('root');
+  const subs = topic.subtopics();
+  const body = document.getElementById('guide-body');
+  document.getElementById('guide-title').textContent = topic.label;
+  body.innerHTML = `<button class="guide-back" onclick="guideBack()">← Back</button>` +
+    subs.map(s =>
+      `<button class="guide-topic" onclick="showGuideSubDetail('${topicId}','${s.id}')">
+         <span class="guide-topic-icon">${s.icon}</span>
+         <span class="guide-topic-text">${s.label}</span>
+         <span class="guide-topic-arrow">›</span>
+       </button>`
+    ).join('');
 }
 
-function appendOfflinePassages(chunks) {
-  const log = document.getElementById('chat-log');
-  const wrapper = document.createElement('div');
-  wrapper.className = 'chat-msg chat-assistant';
-  const note = document.createElement('em');
-  note.style.cssText = 'display:block;color:#888;margin-bottom:8px;font-size:0.85rem;';
-  note.textContent = 'Offline — showing relevant passages from loaded documents:';
-  wrapper.appendChild(note);
-  chunks.forEach((c, i) => {
-    if (i > 0) {
-      const hr = document.createElement('hr');
-      hr.style.cssText = 'border:none;border-top:1px solid #e0e0e0;margin:8px 0;';
-      wrapper.appendChild(hr);
-    }
-    const src = document.createElement('div');
-    src.style.cssText = 'font-size:0.72rem;font-weight:600;color:#2E6DA4;margin-bottom:3px;';
-    src.textContent = c.source;
-    wrapper.appendChild(src);
-    const text = document.createElement('div');
-    text.style.cssText = 'white-space:pre-wrap;font-size:0.85rem;';
-    text.textContent = c.text;
-    wrapper.appendChild(text);
-  });
-  log.appendChild(wrapper);
-  log.scrollTop = log.scrollHeight;
+function showGuideDetail(topicId) {
+  const topic = GUIDE_TOPICS.find(t => t.id === topicId);
+  if (!topic) return;
+  guideHistory.push('root');
+  const body = document.getElementById('guide-body');
+  document.getElementById('guide-title').textContent = topic.label;
+  body.innerHTML = `<button class="guide-back" onclick="guideBack()">← Back</button>` +
+    topic.content();
+  body.scrollTop = 0;
 }
 
-function showApiKeyPrompt() {
-  const log = document.getElementById('chat-log');
-  const existing = document.getElementById('chat-key-prompt');
-  if (existing) { existing.querySelector('input').focus(); return; }
-
-  const wrap = document.createElement('div');
-  wrap.id = 'chat-key-prompt';
-  wrap.className = 'chat-key-prompt';
-  wrap.innerHTML = `
-    <p><strong>Enter your Groq API key</strong> to enable AI-powered answers.<br>
-    Get a free key at <a href="https://console.groq.com" target="_blank" rel="noopener">console.groq.com</a> — takes about 30 seconds. Your key is saved only in this browser.</p>
-    <div class="key-row">
-      <input type="password" id="groq-key-input" placeholder="gsk_…" autocomplete="off" spellcheck="false" onkeydown="if(event.key==='Enter')submitApiKey()">
-      <button onclick="submitApiKey()">Save &amp; Continue</button>
-    </div>`;
-  log.appendChild(wrap);
-  log.scrollTop = log.scrollHeight;
-  wrap.querySelector('input').focus();
+function showGuideSubDetail(topicId, subId) {
+  const topic = GUIDE_TOPICS.find(t => t.id === topicId);
+  if (!topic || !topic.subtopics) return;
+  const sub = topic.subtopics().find(s => s.id === subId);
+  if (!sub) return;
+  guideHistory.push(topicId);
+  const body = document.getElementById('guide-body');
+  document.getElementById('guide-title').textContent = sub.label;
+  body.innerHTML = `<button class="guide-back" onclick="guideBack()">← Back</button>` +
+    sub.content();
+  body.scrollTop = 0;
 }
 
-function submitApiKey() {
-  const input = document.getElementById('groq-key-input');
-  const key = input ? input.value.trim() : '';
-  if (!key.startsWith('gsk_')) {
-    input.style.borderColor = '#c0392b';
-    input.focus();
-    return;
+function guideBack() {
+  const prev = guideHistory.pop();
+  if (!prev || prev === 'root') {
+    showGuideTopics();
+  } else {
+    showGuideSubtopics(prev);
   }
-  saveGroqKey(key);
-  const prompt = document.getElementById('chat-key-prompt');
-  if (prompt) prompt.remove();
-  appendChatNote('API key saved. You can update it anytime with the ⚙ button.');
-  document.getElementById('chat-input').focus();
-}
-
-async function sendChat() {
-  const input = document.getElementById('chat-input');
-  const send  = document.getElementById('chat-send');
-  const query = input.value.trim();
-  if (!query) return;
-
-  input.value = '';
-  send.disabled = true;
-  appendMsg('user', query);
-
-  // Offline-first: passage retrieval needs no API key — this is the core post-flood use case.
-  if (!navigator.onLine) {
-    const chunks = searchKB(query);
-    if (chunks.length) {
-      appendOfflinePassages(chunks);
-    } else {
-      appendMsg('assistant', 'Offline — no matching passages found in loaded documents.');
-    }
-    send.disabled = false;
-    input.focus();
-    return;
-  }
-
-  if (!getGroqKey()) {
-    showApiKeyPrompt();
-    send.disabled = false;
-    return;
-  }
-
-  const typing = appendMsg('assistant', 'Thinking…', 'typing-msg');
-  chatHistory.push({ role: 'user', content: query });
-
-  const messages = [
-    { role: 'system', content: buildSystemPrompt(query) },
-    ...chatHistory.slice(-8)  // keep last 4 exchanges in context
-  ];
-
-  try {
-    const resp = await fetch('https://api.groq.com/openai/v1/chat/completions', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${getGroqKey()}`
-      },
-      body: JSON.stringify({ model: GROQ_MODEL, messages, max_tokens: 600, temperature: 0.3 })
-    });
-
-    if (!resp.ok) {
-      const err = await resp.json().catch(() => ({}));
-      throw new Error(err.error?.message || `HTTP ${resp.status}`);
-    }
-
-    const data = await resp.json();
-    const answer = data.choices?.[0]?.message?.content || 'No response received.';
-
-    typing.remove();
-    appendMsg('assistant', answer);
-    chatHistory.push({ role: 'assistant', content: answer });
-  } catch (e) {
-    typing.remove();
-    appendMsg('assistant', `Error: ${e.message}. Try updating your API key using the ⚙ button above.`);
-  }
-
-  send.disabled = false;
-  input.focus();
 }
 
 // ── SAVES ─────────────────────────────────
