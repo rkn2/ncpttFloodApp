@@ -689,7 +689,7 @@
     body { background: #FFF; padding: 0; }
     #app-header, #progress-bar, #step-indicator, .btn-row, .mode-btn { display: none !important; }
     .sev-modal-overlay { display: none !important; }
-    #guide-btn, #guide-panel, #saves-btn, #saves-panel { display: none !important; }
+    #guide-btn, #guide-panel, #saves-btn, #saves-panel, #sync-badge { display: none !important; }
     .card { box-shadow: none; margin: 0; border: none; }
     .guidance-card-body { display: block !important; }
     .result-panel-body { display: block !important; }
@@ -757,8 +757,8 @@
 
 <div id="app-header">
   <div>
-    <h1>Historic Flood Recovery Tool</h1>
-    <div class="sub">National Park Service &bull; Preservation Assistance</div>
+    <h1 id="app-title">Historic Flood Recovery Tool</h1>
+    <div class="sub" id="app-subtitle">National Park Service &bull; Preservation Assistance</div>
   </div>
   <span id="mode-badge-header" class="mode-badge hidden"></span>
   <div id="lang-switcher" role="group" aria-label="Language">
@@ -786,8 +786,8 @@ const STATE_PROGRAMS = {
     { name: "NC Emergency Management", tag: "local", desc: "State-level disaster assistance coordination, including Individual Assistance programs in federally declared disaster areas.", url: "https://www.ncdps.gov/emergency-management", apply: "NC Emergency Management" },
   ],
   PR: [
-    { name: "Puerto Rico State Historic Preservation Office (SHPO)", tag: "grant", desc: "PR SHPO has an active NPS capacity-building grant and can provide assessment support, technical guidance, and connection to preservation programs for historic properties.", url: "https://www.icp.pr.gov", apply: "Contact PR SHPO / ICP" },
-    { name: "PR Emergency Management Bureau (NMEAD)", tag: "local", desc: "Coordinates federal disaster assistance programs in Puerto Rico, including FEMA IA registration and state-level supplemental programs.", url: "https://www.estado.pr.gov/en/puerto-rico-emergency-management", apply: "NMEAD / FEMA Puerto Rico" },
+    { name: "Puerto Rico State Historic Preservation Office (SHPO)", name_es: "Oficina Estatal de Preservación Histórica de Puerto Rico (SHPO)", tag: "grant", desc: "PR SHPO has an active NPS capacity-building grant and can provide assessment support, technical guidance, and connection to preservation programs for historic properties.", desc_es: "La SHPO de PR tiene una subvención activa de desarrollo de capacidad del NPS y puede proporcionar apoyo de evaluación, orientación técnica y conexión con programas de preservación para propiedades históricas.", url: "https://www.icp.pr.gov", apply: "Contact PR SHPO / ICP" },
+    { name: "PR Emergency Management Bureau (NMEAD)", name_es: "Negociado de Manejo de Emergencias y Administración de Desastres (NMEAD)", tag: "local", desc: "Coordinates federal disaster assistance programs in Puerto Rico, including FEMA IA registration and state-level supplemental programs.", desc_es: "Coordina programas federales de asistencia por desastre en Puerto Rico, incluyendo el registro de FEMA IA y programas suplementarios a nivel estatal.", url: "https://www.estado.pr.gov/en/puerto-rico-emergency-management", apply: "NMEAD / FEMA Puerto Rico" },
   ],
   _default: []
 };
@@ -795,25 +795,34 @@ const STATE_PROGRAMS = {
 const NATIONAL_PROGRAMS = [
   {
     name: "FEMA Individual Assistance (IA)",
+    name_es: "Asistencia Individual de FEMA (IA)",
     tag: "fema",
     desc: "Federal disaster assistance for homeowners and renters in federally declared disaster areas. Covers temporary housing, home repair, and other disaster-related expenses. This is NOT a grant for historic preservation — repairs may need to meet basic habitability standards.",
+    desc_es: "Asistencia federal por desastre para propietarios e inquilinos en áreas declaradas como zona de desastre federal. Cubre vivienda temporal, reparación del hogar y otros gastos relacionados con el desastre. NO es una subvención para preservación histórica — las reparaciones pueden necesitar cumplir con estándares básicos de habitabilidad.",
     note: "Historic property owners: notify FEMA that your building is historically significant. FEMA must consider historic character in repair requirements.",
+    note_es: "Propietarios de propiedades históricas: notifique a FEMA que su edificio es históricamente significativo. FEMA debe considerar el carácter histórico en los requisitos de reparación.",
     url: "https://www.disasterassistance.gov",
     apply: "Register at DisasterAssistance.gov or call 1-800-621-3362"
   },
   {
     name: "SBA Disaster Loans — Home & Personal Property",
+    name_es: "Préstamos por Desastre SBA — Hogar y Propiedad Personal",
     tag: "loan",
     desc: "Low-interest federal loans (up to $500,000 for real property) for homeowners to repair or replace disaster-damaged property. Must be in a declared disaster area. This is a loan, NOT a grant — repayment required.",
+    desc_es: "Préstamos federales de bajo interés (hasta $500,000 para propiedad real) para propietarios para reparar o reemplazar propiedad dañada por desastre. Debe estar en un área declarada de desastre. Es un préstamo, NO una subvención — se requiere reembolso.",
     note: "SBA loan approval is often required before FEMA can provide certain types of additional assistance.",
+    note_es: "La aprobación del préstamo SBA frecuentemente se requiere antes de que FEMA pueda proporcionar ciertos tipos de asistencia adicional.",
     url: "https://disasterloanassistance.sba.gov",
     apply: "Apply at SBA Disaster Loan Assistance portal"
   },
   {
     name: "NPS / SHPO Historic Preservation Programs",
+    name_es: "Programas de Preservación Histórica NPS / SHPO",
     tag: "grant",
     desc: "National Park Service preservation grants (via state SHPOs) and Section 106 review processes protect historic properties in federal disaster response. Formally listed properties have additional protections and may qualify for specific technical assistance.",
+    desc_es: "Subvenciones de preservación del Servicio de Parques Nacionales (a través de SHPOs estatales) y procesos de revisión de la Sección 106 protegen propiedades históricas en la respuesta federal a desastres. Las propiedades formalmente inscritas tienen protecciones adicionales y pueden calificar para asistencia técnica específica.",
     note: "Contact your State Historic Preservation Office early — they can advocate for preservation-sensitive repair approaches with FEMA.",
+    note_es: "Contacte a su Oficina Estatal de Preservación Histórica temprano — pueden abogar por enfoques de reparación sensibles a la preservación con FEMA.",
     url: "https://www.nps.gov/subjects/historicpreservation/grants.htm",
     apply: "Contact your state SHPO (see state-specific programs above)"
   }
@@ -972,15 +981,15 @@ const REPAIR_GUIDANCE = {
 };
 
 const DAMAGE_CATEGORIES = [
-  { key: "structural", label: "Structural / Foundation" },
-  { key: "roof", label: "Roof" },
-  { key: "siding", label: "Exterior Walls / Siding" },
-  { key: "windows", label: "Windows and Doors" },
-  { key: "chimney", label: "Chimney" },
-  { key: "electrical", label: "Electrical / Mechanical / HVAC" },
-  { key: "insulation", label: "Insulation" },
-  { key: "interior", label: "Interior Finishes" },
-  { key: "mold", label: "Mold / Contamination" }
+  { key: "structural", label: "Structural / Foundation", label_es: "Estructural / Cimientos" },
+  { key: "roof", label: "Roof", label_es: "Techo" },
+  { key: "siding", label: "Exterior Walls / Siding", label_es: "Paredes Exteriores / Revestimiento" },
+  { key: "windows", label: "Windows and Doors", label_es: "Ventanas y Puertas" },
+  { key: "chimney", label: "Chimney", label_es: "Chimenea" },
+  { key: "electrical", label: "Electrical / Mechanical / HVAC", label_es: "Eléctrico / Mecánico / HVAC" },
+  { key: "insulation", label: "Insulation", label_es: "Aislamiento" },
+  { key: "interior", label: "Interior Finishes", label_es: "Acabados Interiores" },
+  { key: "mold", label: "Mold / Contamination", label_es: "Moho / Contaminación" }
 ];
 
 const FULL_DAMAGE_EXTERIOR = [
@@ -1043,35 +1052,283 @@ let state = {
 // ═══════════════════════════════════════════════
 
 // ═══════════════════════════════════════════════
-// i18n (scaffold) — externalized UI strings + language switcher.
-// Fully translates the entry/welcome screen (self-contained, no half-translated view).
-// Extend by moving more inline strings into I18N[...] and wrapping them in t('key').
-// t() falls back to English for any missing key, so a partial es table never shows a blank.
+// i18n — complete homeowner-path translation (EN + ES).
+// t(key) looks up a named key; falls back to English, then returns the key itself.
+// tF(obj, field) picks obj[field+'_es'] when LANG=es, else obj[field].
 // ═══════════════════════════════════════════════
 const I18N = {
   en: {
+    // ── Welcome / mode select ──
     welcome_title: "Welcome",
     welcome_desc: "This tool helps owners of historic buildings respond to flood damage — both by identifying assistance programs and providing preservation-sensitive repair guidance. Select who is using the tool today.",
     mode_ho_title: "Homeowner / Property Owner",
     mode_ho_desc: "I own or occupy a historic building that was damaged by flooding and I need guidance on what assistance I may qualify for and how to repair my building appropriately.",
     mode_as_title: "Field Assessor",
     mode_as_desc: "I am a trained assessor (SHPO staff, NPS, emergency responder, volunteer) conducting building-by-building damage documentation in the field.",
+    // ── Header / chrome ──
+    app_title: "Historic Flood Recovery Tool",
+    app_subtitle: "National Park Service • Preservation Assistance",
+    badge_homeowner: "Homeowner",
+    badge_assessor: "Assessor",
+    btn_back: "← Back",
+    btn_show: "▼ Show",
+    btn_hide: "▲ Hide",
+    // ── Step labels ──
+    step_safety: "Safety",
+    step_building: "Building",
+    step_walkthrough: "Walkthrough",
+    step_results: "Results",
+    // ── Safety (step 0) ──
+    safety_title: "Before You Enter",
+    safety_desc: "Your safety comes first. Please confirm these before going inside a flood-damaged building.",
+    safety_power: "Electricity is OFF at the breaker or meter — do not enter with active power and standing water",
+    safety_gas: "Gas is turned off, and I do not smell gas",
+    safety_structure: 'The building has NOT been posted "Unsafe" or "Do Not Enter" by officials',
+    safety_water: "I am NOT wading through standing water to access the building",
+    safety_gear: "Protective gear:",
+    safety_gear_desc: "At minimum, wear rubber boots, heavy gloves, and an N95 mask or respirator. Floodwater carries sewage, chemicals, and mold spores.",
+    safety_confirm: "I confirm — continue →",
+    safety_incomplete: "You have not confirmed all safety items. If any of these conditions are not met, do NOT enter the building — call your local emergency services. Continue anyway?",
+    // ── Building info (step 1) ──
+    building_title: "About Your Building",
+    building_desc: "A few quick details so we can find the right assistance programs and tailor the guidance.",
+    building_address_label: "Building Address",
+    building_address_hint: "(helps you find this entry later)",
+    building_address_ph: "e.g. 123 Main St, Montpelier, VT",
+    building_state_label: "State or Territory",
+    building_state_select: "— Select —",
+    building_material_label: "Primary Construction Material",
+    building_check_all: "(check all that apply)",
+    mat_wood: "Wood frame",
+    mat_masonry: "Masonry (brick / stone)",
+    mat_concrete: "Concrete",
+    mat_mixed: "Mixed / not sure",
+    building_desig_label: "Is this building historically designated?",
+    desig_nr: "Listed on the National Register of Historic Places",
+    desig_local: "Local historic landmark",
+    desig_district: "Contributing structure in a historic district",
+    desig_unsure: "Not sure, but it may be historically significant",
+    building_next: "Next: Walk me through the damage →",
+    building_state_required: "Please select your state or territory.",
+    // ── Walkthrough (step 2) ──
+    walk_q_of: "Question {n} of {total}",
+    walk_next: "Next →",
+    // ── Results (step 3) ──
+    results_title: "Your Recovery Guidance",
+    results_desc: "Based on your building's location and the damage you described. Expand each section for details.",
+    results_listed: "Your building is listed on the National Register of Historic Places. This provides additional protections under Section 106 of the National Historic Preservation Act when federal funds are involved (including FEMA assistance). Notify FEMA and your SHPO early in the process.",
+    results_unlisted: "Tip: If your building is not yet formally designated, consider contacting your State Historic Preservation Office (SHPO). Designation can provide additional protections and access to preservation-specific programs.",
+    results_assist: "Assistance Programs",
+    results_insurance: "Insurance Claims",
+    results_repair: "Repair Guidance",
+    results_no_damage: "No damage categories were selected. Go back and rate the areas that were affected.",
+    btn_print: "🖨 Print / Save",
+    btn_start_over: "Start Over",
+    tag_grant: "Grant / Program",
+    tag_loan: "Loan",
+    tag_fema: "Federal Assistance",
+    tag_local: "State / Local",
+    apply_learn: "Apply / Learn More →",
+    // ── Insurance ──
+    ins_intro: "File your claim promptly and tell your insurer the building is historically significant. A few things that matter especially for historic properties:",
+    ins_do_title: "✔ Do first",
+    ins_do_1: "Photograph and video all damage <em>before</em> any emergency repairs",
+    ins_do_2: "Keep every receipt for emergency work (tarps, board-ups) — insurers require them for reimbursement",
+    ins_do_3: "Call your insurer promptly; state that the building is historically significant",
+    ins_do_4: "Get your claim number and adjuster’s direct contact information",
+    ins_do_5: 'Check your declarations page: do you have <strong>Replacement Cost (RCV)</strong> or <strong>Actual Cash Value (ACV)</strong>?',
+    ins_acv_title: "⚠ ACV policies can severely undervalue historic materials",
+    ins_acv_desc: "ACV deducts depreciation — original plaster, ornamental woodwork, and old-growth floors may be valued at a small fraction of their replacement cost. RCV covers the full cost to repair or replace with like-kind materials. Know which you have before the adjuster arrives.",
+    ins_func_title: '⚠ Watch for "Functional Replacement" proposals',
+    ins_func_desc: "Insurers may propose cheaper modern substitutes: drywall instead of plaster, asphalt shingles instead of tile or slate. This conflicts with Secretary of Interior Standards and can jeopardize your historic designation. You can negotiate for like-kind materials — contact your SHPO if the insurer resists.",
+    ins_ord_title: "📋 Ordinance & Law coverage:",
+    ins_ord_desc: "Repairs that require bringing the building up to current codes (common after significant flood damage) are typically not covered by standard homeowners policies. Check your declarations page for this rider.",
+    ins_source: "📄 NAIC Post-Disaster Claims Guide →",
+    // ── Guidance rendering ──
+    guidance_do: "✔ Do This",
+    guidance_dont: "✖ Do NOT Do This",
+    guidance_pro: "⚠ Call a Professional",
+    guidance_sources: "Every recommendation above is sourced from authoritative preservation and disaster-recovery documents (hover 📄 for the exact quote). Sources:",
+    // ── Severity modal ──
+    sev_title: "What do the damage levels mean?",
+    sev_none: "None",
+    sev_none_desc: "No visible damage to this part of the building. It looks and works normally.",
+    sev_minor: "Minor",
+    sev_minor_desc: "Cosmetic damage only — staining, peeling paint, surface dirt. The structure and function are still intact.",
+    sev_moderate: "Moderate",
+    sev_moderate_desc: "Damage affects how the building looks or works, but it’s not about to collapse. Professional inspection is recommended.",
+    sev_severe: "Severe",
+    sev_severe_desc: "Major loss of material, structural compromise, or immediate safety concern. Do not use this part of the building until a professional has assessed it.",
+    sev_gotit: "Got it",
+    // ── Saves panel ──
+    saves_title: "Saved Assessments",
+    saves_ph: "Name this assessment…",
+    saves_btn: "Save",
+    saves_empty: "No saved assessments yet.<br>Enter a name above and click Save.",
+    saves_load: "Load",
+    saves_delete: "Delete",
+    saves_export: "📥 Export JSON",
+    saves_share: "🔗 Copy link",
+    saves_copied: "Link copied!",
+    // ── Guide panel ──
+    guide_title: "What do you need help with?",
+    guide_subtitle: "Tap a topic for guidance — works offline",
+    guide_back: "← All topics",
+    guide_insurance: "Filing an insurance claim",
+    guide_assistance: "Finding financial assistance",
+    guide_drying: "How to dry out my building",
+    guide_professionals: "When to call a professional",
+    guide_donts: "Common mistakes to avoid",
+    guide_repair: "Repair guidance by category",
+    guide_no_progs: "Select your state in the assessment to see available programs.",
+    guide_btn_label: "Quick Answers",
+    // ── Sync ──
+    sync_queued: "Queued for sync",
+    sync_pending: "{n} assessment(s) pending sync",
+    sync_none: "All synced",
   },
   es: {
+    // ── Welcome / mode select ──
     welcome_title: "Bienvenido",
     welcome_desc: "Esta herramienta ayuda a los propietarios de edificios históricos a responder a los daños por inundación, identificando programas de asistencia y ofreciendo orientación de reparación sensible a la preservación. Seleccione quién usa la herramienta hoy.",
     mode_ho_title: "Propietario / Ocupante",
     mode_ho_desc: "Soy dueño u ocupo un edificio histórico dañado por una inundación y necesito orientación sobre a qué asistencia puedo calificar y cómo reparar mi edificio de manera apropiada.",
     mode_as_title: "Evaluador de campo",
     mode_as_desc: "Soy un evaluador capacitado (personal de SHPO, NPS, personal de emergencia, voluntario) que realiza documentación de daños edificio por edificio en el campo.",
+    // ── Header / chrome ──
+    app_title: "Herramienta de Recuperación ante Inundaciones Históricas",
+    app_subtitle: "Servicio de Parques Nacionales • Asistencia de Preservación",
+    badge_homeowner: "Propietario",
+    badge_assessor: "Evaluador",
+    btn_back: "← Atrás",
+    btn_show: "▼ Mostrar",
+    btn_hide: "▲ Ocultar",
+    // ── Step labels ──
+    step_safety: "Seguridad",
+    step_building: "Edificio",
+    step_walkthrough: "Recorrido",
+    step_results: "Resultados",
+    // ── Safety (step 0) ──
+    safety_title: "Antes de Entrar",
+    safety_desc: "Su seguridad es lo primero. Por favor confirme lo siguiente antes de entrar a un edificio dañado por inundación.",
+    safety_power: "La electricidad está APAGADA en el interruptor principal — no entre con electricidad activa y agua estancada",
+    safety_gas: "El gas está cerrado y no huelo a gas",
+    safety_structure: "El edificio NO ha sido declarado “Inseguro” o “No Entrar” por las autoridades",
+    safety_water: "NO estoy caminando por agua estancada para acceder al edificio",
+    safety_gear: "Equipo de protección:",
+    safety_gear_desc: "Como mínimo, use botas de goma, guantes resistentes y una mascarilla N95 o respirador. El agua de inundación contiene aguas residuales, químicos y esporas de moho.",
+    safety_confirm: "Confirmo — continuar →",
+    safety_incomplete: "No ha confirmado todos los puntos de seguridad. Si alguna de estas condiciones no se cumple, NO entre al edificio — llame a los servicios de emergencia locales. ¿Continuar de todos modos?",
+    // ── Building info (step 1) ──
+    building_title: "Sobre Su Edificio",
+    building_desc: "Algunos detalles rápidos para encontrar los programas de asistencia correctos y adaptar la orientación.",
+    building_address_label: "Dirección del Edificio",
+    building_address_hint: "(le ayuda a encontrar esta entrada después)",
+    building_address_ph: "ej. 123 Calle Principal, San Juan, PR",
+    building_state_label: "Estado o Territorio",
+    building_state_select: "— Seleccione —",
+    building_material_label: "Material de Construcción Principal",
+    building_check_all: "(marque todos los que apliquen)",
+    mat_wood: "Estructura de madera",
+    mat_masonry: "Mampostería (ladrillo / piedra)",
+    mat_concrete: "Concreto",
+    mat_mixed: "Mixto / no estoy seguro",
+    building_desig_label: "¿Este edificio tiene designación histórica?",
+    desig_nr: "Inscrito en el Registro Nacional de Lugares Históricos",
+    desig_local: "Monumento histórico local",
+    desig_district: "Estructura contribuyente en un distrito histórico",
+    desig_unsure: "No estoy seguro, pero puede tener importancia histórica",
+    building_next: "Siguiente: Guíame por los daños →",
+    building_state_required: "Por favor seleccione su estado o territorio.",
+    // ── Walkthrough (step 2) ──
+    walk_q_of: "Pregunta {n} de {total}",
+    walk_next: "Siguiente →",
+    // ── Results (step 3) ──
+    results_title: "Su Guía de Recuperación",
+    results_desc: "Basado en la ubicación de su edificio y los daños que describió. Expanda cada sección para más detalles.",
+    results_listed: "Su edificio está inscrito en el Registro Nacional de Lugares Históricos. Esto provee protecciones adicionales bajo la Sección 106 de la Ley Nacional de Preservación Histórica cuando se involucran fondos federales (incluyendo asistencia de FEMA). Notifique a FEMA y a su SHPO temprano en el proceso.",
+    results_unlisted: "Consejo: Si su edificio aún no tiene designación formal, considere contactar a su Oficina Estatal de Preservación Histórica (SHPO). La designación puede proveer protecciones adicionales y acceso a programas específicos de preservación.",
+    results_assist: "Programas de Asistencia",
+    results_insurance: "Reclamaciones de Seguro",
+    results_repair: "Guía de Reparación",
+    results_no_damage: "No se seleccionaron categorías de daño. Regrese y evalúe las áreas afectadas.",
+    btn_print: "🖨 Imprimir / Guardar",
+    btn_start_over: "Comenzar de Nuevo",
+    tag_grant: "Subvención / Programa",
+    tag_loan: "Préstamo",
+    tag_fema: "Asistencia Federal",
+    tag_local: "Estatal / Local",
+    apply_learn: "Solicitar / Más información →",
+    // ── Insurance ──
+    ins_intro: "Presente su reclamo rápidamente e informe a su asegurador que el edificio es históricamente significativo. Algunos puntos importantes para propiedades históricas:",
+    ins_do_title: "✔ Haga esto primero",
+    ins_do_1: "Fotografe y grabe en video todos los daños <em>antes</em> de cualquier reparación de emergencia",
+    ins_do_2: "Guarde todos los recibos de trabajos de emergencia (lonas, aseguramiento) — las aseguradoras los requieren para reembolso",
+    ins_do_3: "Llame a su asegurador rápidamente; indique que el edificio es históricamente significativo",
+    ins_do_4: "Obtenga su número de reclamo y la información de contacto directo del ajustador",
+    ins_do_5: '¿Tiene <strong>Costo de Reemplazo (RCV)</strong> o <strong>Valor Real en Efectivo (ACV)</strong>? Revise su página de declaraciones.',
+    ins_acv_title: "⚠ Las pólizas ACV pueden subvalorar gravemente los materiales históricos",
+    ins_acv_desc: "ACV deduce depreciación — el yeso original, la carpintería ornamental y los pisos de madera antigua pueden ser valorados en una fracción pequeña de su costo de reemplazo. RCV cubre el costo total para reparar o reemplazar con materiales equivalentes. Sepa cuál tiene antes de que llegue el ajustador.",
+    ins_func_title: "⚠ Cuidado con propuestas de “Reemplazo Funcional”",
+    ins_func_desc: "Las aseguradoras pueden proponer sustitutos modernos más baratos: paneles de yeso en lugar de yeso tradicional, tejas de asfalto en lugar de pizarra o teja de barro. Esto entra en conflicto con las Normas del Secretario del Interior y puede poner en riesgo su designación histórica. Puede negociar materiales equivalentes — contacte a su SHPO si la aseguradora se resiste.",
+    ins_ord_title: "📋 Cobertura de Ordenanza y Ley:",
+    ins_ord_desc: "Las reparaciones que requieren actualizar el edificio a los códigos actuales (común después de daños significativos por inundación) típicamente no están cubiertas por pólizas estándar. Revise su página de declaraciones para este endoso.",
+    ins_source: "📄 Guía NAIC de Reclamaciones Post-Desastre →",
+    // ── Guidance rendering ──
+    guidance_do: "✔ Haga Esto",
+    guidance_dont: "✖ NO Haga Esto",
+    guidance_pro: "⚠ Llame a un Profesional",
+    guidance_sources: "Cada recomendación anterior proviene de documentos autorizados de preservación y recuperación ante desastres (pase el cursor sobre 📄 para la cita exacta). Fuentes:",
+    // ── Severity modal ──
+    sev_title: "¿Qué significan los niveles de daño?",
+    sev_none: "Ninguno",
+    sev_none_desc: "No hay daño visible en esta parte del edificio. Se ve y funciona normalmente.",
+    sev_minor: "Menor",
+    sev_minor_desc: "Solo daño cosmético — manchas, pintura descascarada, suciedad superficial. La estructura y función permanecen intactas.",
+    sev_moderate: "Moderado",
+    sev_moderate_desc: "El daño afecta cómo se ve o funciona el edificio, pero no está a punto de colapsar. Se recomienda inspección profesional.",
+    sev_severe: "Grave",
+    sev_severe_desc: "Pérdida mayor de material, compromiso estructural o preocupación de seguridad inmediata. No use esta parte del edificio hasta que un profesional lo haya evaluado.",
+    sev_gotit: "Entendido",
+    // ── Saves panel ──
+    saves_title: "Evaluaciones Guardadas",
+    saves_ph: "Nombre esta evaluación…",
+    saves_btn: "Guardar",
+    saves_empty: "Aún no hay evaluaciones guardadas.<br>Ingrese un nombre arriba y haga clic en Guardar.",
+    saves_load: "Cargar",
+    saves_delete: "Eliminar",
+    saves_export: "📥 Exportar JSON",
+    saves_share: "🔗 Copiar enlace",
+    saves_copied: "¡Enlace copiado!",
+    // ── Guide panel ──
+    guide_title: "¿En qué necesita ayuda?",
+    guide_subtitle: "Toque un tema para obtener orientación — funciona sin conexión",
+    guide_back: "← Todos los temas",
+    guide_insurance: "Cómo presentar un reclamo de seguro",
+    guide_assistance: "Encontrar asistencia financiera",
+    guide_drying: "Cómo secar mi edificio",
+    guide_professionals: "Cuándo llamar a un profesional",
+    guide_donts: "Errores comunes a evitar",
+    guide_repair: "Guía de reparación por categoría",
+    guide_no_progs: "Seleccione su estado en la evaluación para ver los programas disponibles.",
+    guide_btn_label: "Respuestas Rápidas",
+    // ── Sync ──
+    sync_queued: "En cola para sincronizar",
+    sync_pending: "{n} evaluación(es) pendiente(s) de sincronizar",
+    sync_none: "Todo sincronizado",
   },
 };
 let LANG = (typeof localStorage !== 'undefined' && localStorage.getItem('floodapp_lang')) || 'en';
 function t(key) { return (I18N[LANG] && I18N[LANG][key]) || I18N.en[key] || key; }
-function setLang(l) {
+function tF(obj, field) {
+  if (LANG !== 'en' && obj[field + '_' + LANG]) return obj[field + '_' + LANG];
+  return obj[field];
+}
+async function setLang(l) {
   LANG = l;
   try { localStorage.setItem('floodapp_lang', l); } catch (_) {}
   document.documentElement.lang = l;
+  await loadContentBundle();
   syncLangUI();
   renderCurrent();
 }
@@ -1079,6 +1336,39 @@ function syncLangUI() {
   const en = document.getElementById('lang-en'), es = document.getElementById('lang-es');
   if (en) en.classList.toggle('lang-active', LANG === 'en');
   if (es) es.classList.toggle('lang-active', LANG === 'es');
+  const titleEl = document.getElementById('app-title');
+  if (titleEl) titleEl.textContent = t('app_title');
+  const subEl = document.getElementById('app-subtitle');
+  if (subEl) subEl.innerHTML = t('app_subtitle');
+  const sevModal = document.querySelector('.sev-modal');
+  if (sevModal) {
+    sevModal.querySelector('h3').textContent = t('sev_title');
+    const rows = sevModal.querySelectorAll('.sev-modal-row');
+    const keys = ['none','minor','moderate','severe'];
+    rows.forEach((row, i) => {
+      row.querySelector('.sev-modal-badge').textContent = t('sev_' + keys[i]);
+      row.querySelector('.sev-modal-desc').textContent = t('sev_' + keys[i] + '_desc');
+    });
+    sevModal.querySelector('.sev-modal-close').textContent = t('sev_gotit');
+  }
+  const guideTitle = document.getElementById('guide-title');
+  if (guideTitle) guideTitle.textContent = t('guide_title');
+  const guideSub = document.querySelector('.guide-sub');
+  if (guideSub) guideSub.textContent = t('guide_subtitle');
+  const savesHeader = document.getElementById('saves-header');
+  if (savesHeader) savesHeader.firstChild.textContent = '💾 ' + t('saves_title') + ' ';
+  const savesInput = document.getElementById('saves-name-input');
+  if (savesInput) savesInput.placeholder = t('saves_ph');
+  const saveBtn = document.querySelector('#saves-name-row button');
+  if (saveBtn) saveBtn.textContent = t('saves_btn');
+  const exportBtn = document.querySelector('#saves-export-row button:first-child');
+  if (exportBtn) exportBtn.textContent = t('saves_export');
+  const shareBtn = document.getElementById('saves-share-btn');
+  if (shareBtn) shareBtn.textContent = t('saves_share');
+  const savesFloatBtn = document.getElementById('saves-btn');
+  if (savesFloatBtn) savesFloatBtn.innerHTML = '💾 ' + t('saves_title');
+  const guideFloatBtn = document.getElementById('guide-btn');
+  if (guideFloatBtn) guideFloatBtn.innerHTML = '❓ ' + t('guide_btn_label');
 }
 // Re-render whatever screen is currently shown (used when the language changes).
 function renderCurrent() {
@@ -1126,7 +1416,7 @@ function badgeHtml(mode) {
   if (!mode) { el.classList.add('hidden'); return; }
   el.classList.remove('hidden');
   el.className = 'mode-badge ' + mode;
-  el.textContent = mode === 'homeowner' ? 'Homeowner' : 'Assessor';
+  el.textContent = mode === 'homeowner' ? t('badge_homeowner') : t('badge_assessor');
 }
 
 function toggle(id) {
@@ -1135,7 +1425,7 @@ function toggle(id) {
   if (!el) return;
   const open = el.style.display !== 'none' && el.style.display !== '';
   el.style.display = open ? 'none' : 'block';
-  if (btn) btn.textContent = open ? '▼ Show' : '▲ Hide';
+  if (btn) btn.textContent = open ? t('btn_show') : t('btn_hide');
 }
 
 // ═══════════════════════════════════════════════
@@ -1180,7 +1470,7 @@ function startHomeowner() {
   showHwStep0();
 }
 
-const HW_STEPS = ['Safety', 'Building', 'Walkthrough', 'Results'];
+function hwSteps() { return [t('step_safety'), t('step_building'), t('step_walkthrough'), t('step_results')]; }
 
 // ── Guided walkthrough questions ──
 // Each question is one screen. The user picks an answer; based on what they pick,
@@ -1189,91 +1479,107 @@ const WALKTHROUGH_QUESTIONS = [
   {
     id: 'water_level',
     question: 'How high did the water get inside your building?',
+    question_es: '¿Qué tan alto llegó el agua dentro de su edificio?',
     desc: 'Select the highest level the floodwater reached. This helps us determine which parts of your building may be affected.',
+    desc_es: 'Seleccione el nivel más alto que alcanzó el agua. Esto nos ayuda a determinar qué partes de su edificio pueden estar afectadas.',
     options: [
-      { label: 'Water did not enter the building', value: 'none', icon: '✅' },
-      { label: 'Below the floor (crawl space / basement only)', value: 'below_floor', icon: '🔻' },
-      { label: 'Ankle to knee height on the first floor', value: 'ankle_knee', icon: '🌊' },
-      { label: 'Above knee height on the first floor', value: 'above_knee', icon: '🌊🌊' },
-      { label: 'Reached the upper floors or higher', value: 'upper', icon: '🌊🌊🌊' },
+      { label: 'Water did not enter the building', label_es: 'El agua no entró al edificio', value: 'none', icon: '✅' },
+      { label: 'Below the floor (crawl space / basement only)', label_es: 'Debajo del piso (espacio de arrastre / sótano solamente)', value: 'below_floor', icon: '🔻' },
+      { label: 'Ankle to knee height on the first floor', label_es: 'Altura del tobillo a la rodilla en el primer piso', value: 'ankle_knee', icon: '🌊' },
+      { label: 'Above knee height on the first floor', label_es: 'Por encima de la rodilla en el primer piso', value: 'above_knee', icon: '🌊🌊' },
+      { label: 'Reached the upper floors or higher', label_es: 'Alcanzó los pisos superiores o más arriba', value: 'upper', icon: '🌊🌊🌊' },
     ]
   },
   {
     id: 'exterior_damage',
     question: 'Do you see damage to the outside of the building?',
+    question_es: '¿Ve daños en el exterior del edificio?',
     desc: 'Look at the exterior walls, siding, and any visible cracks or shifting.',
+    desc_es: 'Observe las paredes exteriores, el revestimiento y cualquier grieta o desplazamiento visible.',
     options: [
-      { label: 'No visible exterior damage', value: 'none', icon: '✅' },
-      { label: 'Staining, peeling paint, or surface dirt only', value: 'cosmetic', icon: '🎨' },
-      { label: 'Cracks in walls, missing siding, or damaged trim', value: 'moderate', icon: '⚠️' },
-      { label: 'Walls leaning, bowing, or large cracks visible', value: 'severe', icon: '🚨' },
+      { label: 'No visible exterior damage', label_es: 'No hay daño exterior visible', value: 'none', icon: '✅' },
+      { label: 'Staining, peeling paint, or surface dirt only', label_es: 'Solo manchas, pintura descascarada o suciedad superficial', value: 'cosmetic', icon: '🎨' },
+      { label: 'Cracks in walls, missing siding, or damaged trim', label_es: 'Grietas en paredes, revestimiento faltante o molduras dañadas', value: 'moderate', icon: '⚠️' },
+      { label: 'Walls leaning, bowing, or large cracks visible', label_es: 'Paredes inclinadas, combadas o grietas grandes visibles', value: 'severe', icon: '🚨' },
     ]
   },
   {
     id: 'foundation_visible',
     question: 'Can you see the foundation or basement walls?',
+    question_es: '¿Puede ver los cimientos o las paredes del sótano?',
     desc: 'If you can see them, look for cracks, shifting, or erosion around the base of the building.',
+    desc_es: 'Si puede verlos, busque grietas, desplazamientos o erosión alrededor de la base del edificio.',
     options: [
-      { label: 'Foundation looks normal — no visible cracks or shifting', value: 'ok', icon: '✅' },
-      { label: 'Minor cracks or some erosion around the base', value: 'minor', icon: '⚠️' },
-      { label: 'Large cracks, walls leaning, or the building seems to have shifted', value: 'severe', icon: '🚨' },
-      { label: "I can't see the foundation or I'm not sure", value: 'unknown', icon: '❓' },
+      { label: 'Foundation looks normal — no visible cracks or shifting', label_es: 'Los cimientos se ven normales — sin grietas ni desplazamiento visible', value: 'ok', icon: '✅' },
+      { label: 'Minor cracks or some erosion around the base', label_es: 'Grietas menores o algo de erosión alrededor de la base', value: 'minor', icon: '⚠️' },
+      { label: 'Large cracks, walls leaning, or the building seems to have shifted', label_es: 'Grietas grandes, paredes inclinadas o el edificio parece haberse movido', value: 'severe', icon: '🚨' },
+      { label: "I can't see the foundation or I'm not sure", label_es: 'No puedo ver los cimientos o no estoy seguro', value: 'unknown', icon: '❓' },
     ]
   },
   {
     id: 'roof_damage',
     question: 'Is there any damage to the roof?',
+    question_es: '¿Hay algún daño en el techo?',
     desc: 'Look for missing shingles or tiles, sagging, or water stains on upper ceilings.',
+    desc_es: 'Busque tejas faltantes, hundimiento o manchas de agua en los techos superiores.',
     options: [
-      { label: 'Roof looks intact from outside', value: 'none', icon: '✅' },
-      { label: 'A few missing shingles or tiles, minor leaks', value: 'minor', icon: '⚠️' },
-      { label: 'Significant damage — large areas missing, sagging, or holes', value: 'severe', icon: '🚨' },
-      { label: "I can't tell from the ground", value: 'unknown', icon: '❓' },
+      { label: 'Roof looks intact from outside', label_es: 'El techo se ve intacto desde afuera', value: 'none', icon: '✅' },
+      { label: 'A few missing shingles or tiles, minor leaks', label_es: 'Algunas tejas faltantes, filtraciones menores', value: 'minor', icon: '⚠️' },
+      { label: 'Significant damage — large areas missing, sagging, or holes', label_es: 'Daño significativo — áreas grandes faltantes, hundimiento o agujeros', value: 'severe', icon: '🚨' },
+      { label: "I can't tell from the ground", label_es: 'No puedo determinar desde el suelo', value: 'unknown', icon: '❓' },
     ]
   },
   {
     id: 'windows_doors',
     question: 'What about windows and doors?',
+    question_es: '¿Qué hay de las ventanas y puertas?',
     desc: 'Check if they open and close, look for swelling, broken glass, or warped frames.',
+    desc_es: 'Verifique si abren y cierran, busque hinchazón, vidrios rotos o marcos deformados.',
     options: [
-      { label: 'Windows and doors seem fine', value: 'none', icon: '✅' },
-      { label: 'Some are stuck, swollen, or have peeling paint', value: 'minor', icon: '⚠️' },
-      { label: 'Broken, badly warped, or missing', value: 'severe', icon: '🚨' },
+      { label: 'Windows and doors seem fine', label_es: 'Las ventanas y puertas parecen estar bien', value: 'none', icon: '✅' },
+      { label: 'Some are stuck, swollen, or have peeling paint', label_es: 'Algunas están atascadas, hinchadas o con pintura descascarada', value: 'minor', icon: '⚠️' },
+      { label: 'Broken, badly warped, or missing', label_es: 'Rotas, muy deformadas o faltantes', value: 'severe', icon: '🚨' },
     ]
   },
   {
     id: 'interior_condition',
     question: 'What does the inside look like?',
+    question_es: '¿Cómo se ve el interior?',
     desc: 'Look at walls, ceilings, and floors on any level that was flooded.',
+    desc_es: 'Observe paredes, techos y pisos en cualquier nivel que fue inundado.',
     options: [
-      { label: 'Mostly dry, just some watermarks or staining', value: 'minor', icon: '💧' },
-      { label: 'Walls or ceilings are damp, plaster is crumbling or bubbling', value: 'moderate', icon: '⚠️' },
-      { label: 'Standing water, severe damage to walls/floors/ceilings', value: 'severe', icon: '🚨' },
-      { label: 'Not flooded inside / I haven\'t been inside yet', value: 'none', icon: '✅' },
+      { label: 'Mostly dry, just some watermarks or staining', label_es: 'Mayormente seco, solo algunas marcas de agua o manchas', value: 'minor', icon: '💧' },
+      { label: 'Walls or ceilings are damp, plaster is crumbling or bubbling', label_es: 'Paredes o techos húmedos, yeso desmoronándose o con burbujas', value: 'moderate', icon: '⚠️' },
+      { label: 'Standing water, severe damage to walls/floors/ceilings', label_es: 'Agua estancada, daño severo en paredes/pisos/techos', value: 'severe', icon: '🚨' },
+      { label: 'Not flooded inside / I haven\'t been inside yet', label_es: 'No se inundó adentro / Aún no he entrado', value: 'none', icon: '✅' },
     ],
     showIf: (answers) => answers.water_level !== 'none'
   },
   {
     id: 'mold_visible',
     question: 'Do you see or smell mold?',
+    question_es: '¿Ve o huele moho?',
     desc: 'Mold can appear as dark spots, fuzzy growth, or a musty smell — it can start within 24–48 hours after flooding.',
+    desc_es: 'El moho puede aparecer como manchas oscuras, crecimiento difuso o un olor a humedad — puede comenzar entre 24 y 48 horas después de la inundación.',
     options: [
-      { label: 'No mold visible, no musty smell', value: 'none', icon: '✅' },
-      { label: 'Some musty smell or small patches of discoloration', value: 'minor', icon: '⚠️' },
-      { label: 'Visible mold growth on walls, ceilings, or belongings', value: 'moderate', icon: '🦠' },
-      { label: 'Extensive mold — large areas, strong smell', value: 'severe', icon: '🚨' },
+      { label: 'No mold visible, no musty smell', label_es: 'No hay moho visible, no hay olor a humedad', value: 'none', icon: '✅' },
+      { label: 'Some musty smell or small patches of discoloration', label_es: 'Algo de olor a humedad o pequeñas áreas de decoloración', value: 'minor', icon: '⚠️' },
+      { label: 'Visible mold growth on walls, ceilings, or belongings', label_es: 'Crecimiento de moho visible en paredes, techos o pertenencias', value: 'moderate', icon: '🦠' },
+      { label: 'Extensive mold — large areas, strong smell', label_es: 'Moho extenso — áreas grandes, olor fuerte', value: 'severe', icon: '🚨' },
     ],
     showIf: (answers) => answers.water_level !== 'none'
   },
   {
     id: 'chimney',
     question: 'Does your building have a masonry chimney?',
+    question_es: '¿Su edificio tiene una chimenea de mampostería?',
     desc: 'Brick or stone chimneys are especially vulnerable after flooding — the mortar can be weakened by water.',
+    desc_es: 'Las chimeneas de ladrillo o piedra son especialmente vulnerables después de una inundación — el mortero puede debilitarse con el agua.',
     options: [
-      { label: 'No chimney, or it\'s a metal flue', value: 'na', icon: '➖' },
-      { label: 'Chimney looks fine from outside', value: 'none', icon: '✅' },
-      { label: 'Mortar looks crumbly or there are new cracks', value: 'minor', icon: '⚠️' },
-      { label: 'Chimney is leaning, has large cracks, or pieces have fallen', value: 'severe', icon: '🚨' },
+      { label: 'No chimney, or it\'s a metal flue', label_es: 'Sin chimenea, o es un conducto de metal', value: 'na', icon: '➖' },
+      { label: 'Chimney looks fine from outside', label_es: 'La chimenea se ve bien desde afuera', value: 'none', icon: '✅' },
+      { label: 'Mortar looks crumbly or there are new cracks', label_es: 'El mortero se ve desmoronado o hay grietas nuevas', value: 'minor', icon: '⚠️' },
+      { label: 'Chimney is leaning, has large cracks, or pieces have fallen', label_es: 'La chimenea está inclinada, tiene grietas grandes o se han caído piezas', value: 'severe', icon: '🚨' },
     ]
   },
 ];
@@ -1332,40 +1638,40 @@ function walkthruToDamage(answers) {
 function showHwStep0() {
   state.step = 0;
   updateProgress(5, false);
-  renderStepIndicator(HW_STEPS, 0, false);
+  renderStepIndicator(hwSteps(), 0, false);
   const safetyChecked = state.hw.safetyChecked || {};
   screens().innerHTML = card(`
-    <h2 style="color:var(--danger);">Before You Enter</h2>
-    <p class="section-desc">Your safety comes first. Please confirm these before going inside a flood-damaged building.</p>
+    <h2 style="color:var(--danger);">${t('safety_title')}</h2>
+    <p class="section-desc">${t('safety_desc')}</p>
 
     <div style="background:#FFEBEE;border:2px solid var(--danger);border-radius:8px;padding:16px;margin-bottom:16px;">
       <div class="check-group" style="gap:14px;">
         <label class="check-item" style="font-size:0.9rem;font-weight:600;">
           <input type="checkbox" name="safety" value="power" ${safetyChecked.power?'checked':''}>
-          Electricity is OFF at the breaker or meter — do not enter with active power and standing water
+          ${t('safety_power')}
         </label>
         <label class="check-item" style="font-size:0.9rem;font-weight:600;">
           <input type="checkbox" name="safety" value="gas" ${safetyChecked.gas?'checked':''}>
-          Gas is turned off, and I do not smell gas
+          ${t('safety_gas')}
         </label>
         <label class="check-item" style="font-size:0.9rem;font-weight:600;">
           <input type="checkbox" name="safety" value="structure" ${safetyChecked.structure?'checked':''}>
-          The building has NOT been posted "Unsafe" or "Do Not Enter" by officials
+          ${t('safety_structure')}
         </label>
         <label class="check-item" style="font-size:0.9rem;font-weight:600;">
           <input type="checkbox" name="safety" value="water" ${safetyChecked.water?'checked':''}>
-          I am NOT wading through standing water to access the building
+          ${t('safety_water')}
         </label>
       </div>
     </div>
 
     <div class="warn-box">
-      <strong>Protective gear:</strong> At minimum, wear rubber boots, heavy gloves, and an N95 mask or respirator. Floodwater carries sewage, chemicals, and mold spores.
+      <strong>${t('safety_gear')}</strong> ${t('safety_gear_desc')}
     </div>
 
     <div class="btn-row">
-      <button class="btn btn-secondary" onclick="showModeSelect()">← Back</button>
-      <button class="btn btn-primary" onclick="saveHwSafety()">I confirm — continue →</button>
+      <button class="btn btn-secondary" onclick="showModeSelect()">${t('btn_back')}</button>
+      <button class="btn btn-primary" onclick="saveHwSafety()">${t('safety_confirm')}</button>
     </div>
   `);
 }
@@ -1375,7 +1681,7 @@ function saveHwSafety() {
   state.hw.safetyChecked = {};
   checks.forEach(c => state.hw.safetyChecked[c] = true);
   if (checks.length < 4) {
-    if (!confirm('You have not confirmed all safety items. If any of these conditions are not met, do NOT enter the building — call your local emergency services. Continue anyway?')) return;
+    if (!confirm(t('safety_incomplete'))) return;
   }
   showHwStep1();
 }
@@ -1385,40 +1691,44 @@ function saveHwSafety() {
 function showHwStep1() {
   state.step = 1;
   updateProgress(20, false);
-  renderStepIndicator(HW_STEPS, 1, false);
+  renderStepIndicator(hwSteps(), 1, false);
+  const matKeys = ['mat_wood','mat_masonry','mat_concrete','mat_mixed'];
+  const matVals = ['Wood frame','Masonry (brick / stone)','Concrete','Mixed / not sure'];
+  const desigKeys = ['desig_nr','desig_local','desig_district','desig_unsure'];
+  const desigVals = ['Listed on the National Register of Historic Places','Local historic landmark','Contributing structure in a historic district','Not sure, but it may be historically significant'];
   screens().innerHTML = card(`
-    <h2>About Your Building</h2>
-    <p class="section-desc">A few quick details so we can find the right assistance programs and tailor the guidance.</p>
+    <h2>${t('building_title')}</h2>
+    <p class="section-desc">${t('building_desc')}</p>
     <div class="field-group">
-      <label class="field-label">Building Address <span>(helps you find this entry later)</span></label>
-      <input type="text" id="hw-address" value="${state.hw.address}" placeholder="e.g. 123 Main St, Montpelier, VT">
+      <label class="field-label">${t('building_address_label')} <span>${t('building_address_hint')}</span></label>
+      <input type="text" id="hw-address" value="${state.hw.address}" placeholder="${t('building_address_ph')}">
     </div>
     <div class="field-group">
-      <label class="field-label">State or Territory</label>
+      <label class="field-label">${t('building_state_label')}</label>
       <select id="hw-state">
-        <option value="">— Select —</option>
+        <option value="">${t('building_state_select')}</option>
         ${usStates().map(s => `<option value="${s.v}" ${state.hw.state===s.v?'selected':''}>${s.l}</option>`).join('')}
       </select>
     </div>
     <div class="field-group">
-      <label class="field-label">Primary Construction Material <span>(check all that apply)</span></label>
+      <label class="field-label">${t('building_material_label')} <span>${t('building_check_all')}</span></label>
       <div class="check-group inline">
-        ${['Wood frame','Masonry (brick / stone)','Concrete','Mixed / not sure'].map(v =>
-          `<label class="check-item"><input type="checkbox" name="hw-mat" value="${v}" ${state.hw.materials.includes(v)?'checked':''}> ${v}</label>`
+        ${matKeys.map((k, i) =>
+          `<label class="check-item"><input type="checkbox" name="hw-mat" value="${matVals[i]}" ${state.hw.materials.includes(matVals[i])?'checked':''}> ${t(k)}</label>`
         ).join('')}
       </div>
     </div>
     <div class="field-group">
-      <label class="field-label">Is this building historically designated? <span>(check all that apply)</span></label>
+      <label class="field-label">${t('building_desig_label')} <span>${t('building_check_all')}</span></label>
       <div class="check-group">
-        ${['Listed on the National Register of Historic Places','Local historic landmark','Contributing structure in a historic district','Not sure, but it may be historically significant'].map(v =>
-          `<label class="check-item"><input type="checkbox" name="hw-desig" value="${v}" ${state.hw.designations.includes(v)?'checked':''}> ${v}</label>`
+        ${desigKeys.map((k, i) =>
+          `<label class="check-item"><input type="checkbox" name="hw-desig" value="${desigVals[i]}" ${state.hw.designations.includes(desigVals[i])?'checked':''}> ${t(k)}</label>`
         ).join('')}
       </div>
     </div>
     <div class="btn-row">
-      <button class="btn btn-secondary" onclick="showHwStep0()">← Back</button>
-      <button class="btn btn-primary" onclick="saveHwStep1()">Next: Walk me through the damage →</button>
+      <button class="btn btn-secondary" onclick="showHwStep0()">${t('btn_back')}</button>
+      <button class="btn btn-primary" onclick="saveHwStep1()">${t('building_next')}</button>
     </div>
   `);
 }
@@ -1428,7 +1738,7 @@ function saveHwStep1() {
   state.hw.state = document.getElementById('hw-state').value;
   state.hw.materials = [...document.querySelectorAll('input[name="hw-mat"]:checked')].map(i=>i.value);
   state.hw.designations = [...document.querySelectorAll('input[name="hw-desig"]:checked')].map(i=>i.value);
-  if (!state.hw.state) { alert('Please select your state or territory.'); return; }
+  if (!state.hw.state) { alert(t('building_state_required')); return; }
   state.hw.walkAnswers = state.hw.walkAnswers || {};
   state.hw.walkIdx = 0;
   showWalkQuestion();
@@ -1458,28 +1768,29 @@ function showWalkQuestion() {
   const totalQ = WALKTHROUGH_QUESTIONS.length;
   const pct = 30 + Math.round((state.hw.walkIdx / totalQ) * 50);
   updateProgress(pct, false);
-  renderStepIndicator(HW_STEPS, 2, false);
+  renderStepIndicator(hwSteps(), 2, false);
 
   const cur = answers[q.id] || '';
 
+  const qOfLabel = t('walk_q_of').replace('{n}', qNum).replace('{total}', totalQ);
   screens().innerHTML = card(`
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">
-      <h2>${q.question}</h2>
-      <span style="font-size:0.75rem;color:#888;white-space:nowrap;margin-left:12px;">Question ${qNum} of ${totalQ}</span>
+      <h2>${tF(q, 'question')}</h2>
+      <span style="font-size:0.75rem;color:#888;white-space:nowrap;margin-left:12px;">${qOfLabel}</span>
     </div>
-    <p class="section-desc">${q.desc}</p>
+    <p class="section-desc">${tF(q, 'desc')}</p>
     <div style="display:flex;flex-direction:column;gap:8px;margin-top:8px;">
       ${q.options.map(opt => {
         const sel = cur === opt.value;
         return `<button class="walk-option ${sel ? 'walk-selected' : ''}" onclick="pickWalkOption('${q.id}','${opt.value}')">
           <span class="walk-icon">${opt.icon}</span>
-          <span>${opt.label}</span>
+          <span>${tF(opt, 'label')}</span>
         </button>`;
       }).join('')}
     </div>
     <div class="btn-row" style="margin-top:20px;">
-      <button class="btn btn-secondary" onclick="prevWalkQuestion()">← Back</button>
-      ${cur ? `<button class="btn btn-primary" onclick="nextWalkQuestion()">Next →</button>` : ''}
+      <button class="btn btn-secondary" onclick="prevWalkQuestion()">${t('btn_back')}</button>
+      ${cur ? `<button class="btn btn-primary" onclick="nextWalkQuestion()">${t('walk_next')}</button>` : ''}
     </div>
   `);
 }
@@ -1537,40 +1848,41 @@ function showHwResults() {
   state.step = 3;
   autoSave();
   updateProgress(100, false);
-  renderStepIndicator(HW_STEPS, 3, false);
+  renderStepIndicator(hwSteps(), 3, false);
 
   // Assistance programs
   const stateProgs = STATE_PROGRAMS[state.hw.state] || STATE_PROGRAMS['_default'];
   const allProgs = [...NATIONAL_PROGRAMS, ...stateProgs];
   const assistHtml = allProgs.map((p,i) => {
     const tagCls = p.tag === 'grant' ? 'tag-grant' : p.tag === 'loan' ? 'tag-loan' : p.tag === 'fema' ? 'tag-fema' : 'tag-local';
-    const tagLabel = p.tag === 'grant' ? 'Grant / Program' : p.tag === 'loan' ? 'Loan' : p.tag === 'fema' ? 'Federal Assistance' : 'State / Local';
+    const tagLabel = p.tag === 'grant' ? t('tag_grant') : p.tag === 'loan' ? t('tag_loan') : p.tag === 'fema' ? t('tag_fema') : t('tag_local');
     return `<div class="assistance-card">
       <span class="tag ${tagCls}">${tagLabel}</span>
-      <h4>${p.name}</h4>
-      <p>${p.desc}</p>
-      ${p.note ? `<p style="color:#666;font-style:italic;font-size:0.79rem;">${p.note}</p>` : ''}
-      <a href="${p.url}" target="_blank">Apply / Learn More →</a>
+      <h4>${tF(p, 'name')}</h4>
+      <p>${tF(p, 'desc')}</p>
+      ${p.note ? `<p style="color:#666;font-style:italic;font-size:0.79rem;">${tF(p, 'note')}</p>` : ''}
+      <a href="${p.url}" target="_blank">${t('apply_learn')}</a>
     </div>`;
   }).join('');
 
   // Repair guidance — only for categories with a rating
   const damaged = DAMAGE_CATEGORIES.filter(c => state.hw.damage[c.key] && state.hw.damage[c.key] !== 'none');
+  const sevLabels = { severe: t('sev_severe'), moderate: t('sev_moderate'), minor: t('sev_minor') };
   const guidanceHtml = damaged.length === 0
-    ? `<p style="font-size:0.85rem;color:#888;">No damage categories were selected. Go back and rate the areas that were affected.</p>`
+    ? `<p style="font-size:0.85rem;color:#888;">${t('results_no_damage')}</p>`
     : damaged.map(cat => {
         const g = REPAIR_GUIDANCE[cat.key];
         const cb = contentBundle[cat.key];
         if (!g && !cb) return '';
         const icon = g ? g.icon : '🔧';
-        const label = g ? g.label : (cb ? cb.label : cat.label);
+        const label = cb ? tF(cb, 'label') : (g ? g.label : tF(cat, 'label'));
         const sev = state.hw.damage[cat.key];
         const sevColor = sev === 'severe' ? '#B71C1C' : sev === 'moderate' ? '#E65100' : '#2E7D32';
         return `<div class="guidance-card">
           <div class="guidance-card-header" onclick="toggleGuidance('g-${cat.key}')">
             ${icon} ${label}
-            <span style="margin-left:8px;font-size:0.72rem;font-weight:600;color:${sevColor};text-transform:uppercase;">${sev}</span>
-            <span class="toggle" id="g-${cat.key}-toggle">▼ Show</span>
+            <span style="margin-left:8px;font-size:0.72rem;font-weight:600;color:${sevColor};text-transform:uppercase;">${sevLabels[sev] || sev}</span>
+            <span class="toggle" id="g-${cat.key}-toggle">${t('btn_show')}</span>
           </div>
           <div class="guidance-card-body" id="g-${cat.key}">
             ${guidanceBodyHtml(cat.key)}
@@ -1579,47 +1891,47 @@ function showHwResults() {
       }).join('');
 
   const insuranceHtml = `
-    <p style="font-size:0.85rem;color:#555;margin-bottom:12px;">File your claim promptly and tell your insurer the building is historically significant. A few things that matter especially for historic properties:</p>
+    <p style="font-size:0.85rem;color:#555;margin-bottom:12px;">${t('ins_intro')}</p>
     <div class="guidance-do" style="margin-bottom:10px;">
-      <strong>✔ Do first</strong>
+      <strong>${t('ins_do_title')}</strong>
       <ul>
-        <li>Photograph and video all damage <em>before</em> any emergency repairs</li>
-        <li>Keep every receipt for emergency work (tarps, board-ups) — insurers require them for reimbursement</li>
-        <li>Call your insurer promptly; state that the building is historically significant</li>
-        <li>Get your claim number and adjuster's direct contact information</li>
-        <li>Check your declarations page: do you have <strong>Replacement Cost (RCV)</strong> or <strong>Actual Cash Value (ACV)</strong>?</li>
+        <li>${t('ins_do_1')}</li>
+        <li>${t('ins_do_2')}</li>
+        <li>${t('ins_do_3')}</li>
+        <li>${t('ins_do_4')}</li>
+        <li>${t('ins_do_5')}</li>
       </ul>
     </div>
     <div class="warn-box" style="margin-bottom:10px;">
-      <strong>⚠ ACV policies can severely undervalue historic materials</strong><br>
-      ACV deducts depreciation — original plaster, ornamental woodwork, and old-growth floors may be valued at a small fraction of their replacement cost. RCV covers the full cost to repair or replace with like-kind materials. Know which you have before the adjuster arrives.
+      <strong>${t('ins_acv_title')}</strong><br>
+      ${t('ins_acv_desc')}
     </div>
     <div class="warn-box" style="margin-bottom:10px;">
-      <strong>⚠ Watch for "Functional Replacement" proposals</strong><br>
-      Insurers may propose cheaper modern substitutes: drywall instead of plaster, asphalt shingles instead of tile or slate. This conflicts with Secretary of Interior Standards and can jeopardize your historic designation. You can negotiate for like-kind materials — contact your SHPO if the insurer resists.
+      <strong>${t('ins_func_title')}</strong><br>
+      ${t('ins_func_desc')}
     </div>
     <div class="soi-note" style="margin-bottom:10px;">
-      📋 <strong>Ordinance &amp; Law coverage:</strong> Repairs that require bringing the building up to current codes (common after significant flood damage) are typically not covered by standard homeowners policies. Check your declarations page for this rider.
+      <strong>${t('ins_ord_title')}</strong> ${t('ins_ord_desc')}
     </div>
     <p style="font-size:0.8rem;margin-top:12px;text-align:right;">
-      <a href="https://content.naic.org/sites/default/files/publication-post-disaster-claims-guide.pdf" target="_blank">📄 NAIC Post-Disaster Claims Guide →</a>
+      <a href="https://content.naic.org/sites/default/files/publication-post-disaster-claims-guide.pdf" target="_blank">${t('ins_source')}</a>
     </p>`;
 
   const isListed = state.hw.designations.includes('Listed on the National Register of Historic Places');
   const listedNote = isListed
-    ? `<div class="info-box">Your building is listed on the National Register of Historic Places. This provides additional protections under Section 106 of the National Historic Preservation Act when federal funds are involved (including FEMA assistance). Notify FEMA and your SHPO early in the process.</div>`
-    : `<div class="warn-box">Tip: If your building is not yet formally designated, consider contacting your State Historic Preservation Office (SHPO). Designation can provide additional protections and access to preservation-specific programs.</div>`;
+    ? `<div class="info-box">${t('results_listed')}</div>`
+    : `<div class="warn-box">${t('results_unlisted')}</div>`;
 
   screens().innerHTML = `
     ${card(`
-      <h2>Your Recovery Guidance</h2>
-      <p class="section-desc">Based on your building's location and the damage you described. Expand each section for details.</p>
+      <h2>${t('results_title')}</h2>
+      <p class="section-desc">${t('results_desc')}</p>
       ${listedNote}
 
       <div class="result-panel" style="border:1.5px solid var(--hw-border);">
         <div class="result-panel-header" style="background:var(--hw-light);" onclick="togglePanel('panel-assist','toggle-assist')">
-          💰 Assistance Programs
-          <span class="toggle" id="toggle-assist">▼ Show</span>
+          💰 ${t('results_assist')}
+          <span class="toggle" id="toggle-assist">${t('btn_show')}</span>
         </div>
         <div class="result-panel-body" id="panel-assist" style="display:none;">
           ${assistHtml}
@@ -1628,8 +1940,8 @@ function showHwResults() {
 
       <div class="result-panel" style="border:1.5px solid var(--hw-border);margin-top:12px;">
         <div class="result-panel-header" style="background:var(--hw-light);" onclick="togglePanel('panel-insurance','toggle-insurance')">
-          🛡️ Insurance Claims
-          <span class="toggle" id="toggle-insurance">▼ Show</span>
+          🛡️ ${t('results_insurance')}
+          <span class="toggle" id="toggle-insurance">${t('btn_show')}</span>
         </div>
         <div class="result-panel-body" id="panel-insurance" style="display:none;padding:16px;">
           ${insuranceHtml}
@@ -1638,8 +1950,8 @@ function showHwResults() {
 
       <div class="result-panel" style="border:1.5px solid var(--hw-border);margin-top:12px;">
         <div class="result-panel-header" style="background:var(--hw-light);" onclick="togglePanel('panel-repair','toggle-repair')">
-          🔧 Repair Guidance
-          <span class="toggle" id="toggle-repair">▼ Show</span>
+          🔧 ${t('results_repair')}
+          <span class="toggle" id="toggle-repair">${t('btn_show')}</span>
         </div>
         <div class="result-panel-body" id="panel-repair" style="display:none;">
           ${guidanceHtml}
@@ -1647,9 +1959,9 @@ function showHwResults() {
       </div>
 
       <div class="btn-row">
-        <button class="btn btn-secondary" onclick="state.hw.walkIdx = WALKTHROUGH_QUESTIONS.length - 1; showWalkQuestion()">← Back</button>
-        <button class="btn btn-print" onclick="window.print()">🖨 Print / Save</button>
-        <button class="btn btn-primary" onclick="showModeSelect()">Start Over</button>
+        <button class="btn btn-secondary" onclick="state.hw.walkIdx = WALKTHROUGH_QUESTIONS.length - 1; showWalkQuestion()">${t('btn_back')}</button>
+        <button class="btn btn-print" onclick="window.print()">${t('btn_print')}</button>
+        <button class="btn btn-primary" onclick="showModeSelect()">${t('btn_start_over')}</button>
       </div>
     `)}
   `;
@@ -1667,7 +1979,7 @@ function togglePanel(bodyId, toggleId) {
   if (!body) return;
   const open = body.style.display !== 'none';
   body.style.display = open ? 'none' : 'block';
-  if (btn) btn.textContent = open ? '▼ Show' : '▲ Hide';
+  if (btn) btn.textContent = open ? t('btn_show') : t('btn_hide');
 }
 
 function toggleGuidance(id) {
@@ -1675,7 +1987,7 @@ function toggleGuidance(id) {
   const btn = document.getElementById(id + '-toggle');
   if (!body) return;
   body.classList.toggle('open');
-  if (btn) btn.textContent = body.classList.contains('open') ? '▲ Hide' : '▼ Show';
+  if (btn) btn.textContent = body.classList.contains('open') ? t('btn_hide') : t('btn_show');
 }
 
 // ── ASSESSOR ─────────────────────────────────
@@ -2014,6 +2326,7 @@ function saveRapidStep3() {
 
 function showRapidResult() {
   state.step = 4;
+  autoQueueIfAssessor();
   updateProgress(100, true);
   renderStepIndicator(RAPID_STEPS, 4, true);
   const s = state.as;
@@ -2287,6 +2600,7 @@ function saveFullForm() {
 }
 
 function showFullResult() {
+  autoQueueIfAssessor();
   updateProgress(100, true);
   renderStepIndicator(['Full Assessment', 'Review & Submit'], 1, true);
   const s = state.as;
@@ -2407,9 +2721,11 @@ async function loadKB() {
 let contentBundle = {};
 async function loadContentBundle() {
   try {
-    const resp = await fetch('content-bundle.json');
+    const file = LANG === 'es' ? 'content-bundle.es.json' : 'content-bundle.json';
+    const resp = await fetch(file);
     if (resp.ok) {
       const data = await resp.json();
+      contentBundle = {};
       (data.guidance || []).forEach(r => { contentBundle[r.id] = r; });
     }
   } catch (_) { /* fall back to built-in REPAIR_GUIDANCE */ }
@@ -2437,28 +2753,27 @@ function guidanceBodyHtml(catKey) {
       .flatMap(it => (it.citations||[]).map(c => sourceLabel(c.source_file))))];
     return `
       <div class="guidance-do">
-        <strong>✔ Do This</strong>
+        <strong>${t('guidance_do')}</strong>
         <ul>${(cb.do||[]).map(citedItemHtml).join('')}</ul>
       </div>
       <div class="guidance-dont">
-        <strong>✖ Do NOT Do This</strong>
+        <strong>${t('guidance_dont')}</strong>
         <ul>${(cb.dont||[]).map(citedItemHtml).join('')}</ul>
       </div>
-      <div class="soi-note">📚 Every recommendation above is sourced from authoritative preservation
-        and disaster-recovery documents (hover 📄 for the exact quote). Sources: ${srcs.join('; ')}.</div>`;
+      <div class="soi-note">📚 ${t('guidance_sources')} ${srcs.join('; ')}.</div>`;
   }
   const g = REPAIR_GUIDANCE[catKey];
   if (!g) return '';
   return `
     <div class="guidance-do">
-      <strong>✔ Do This</strong>
+      <strong>${t('guidance_do')}</strong>
       <ul>${g.do.map(d=>`<li>${d}</li>`).join('')}</ul>
     </div>
     <div class="guidance-dont">
-      <strong>✖ Do NOT Do This</strong>
+      <strong>${t('guidance_dont')}</strong>
       <ul>${g.dont.map(d=>`<li>${d}</li>`).join('')}</ul>
     </div>
-    ${g.pro ? `<div class="guidance-pro"><strong>⚠ Call a Professional</strong><p>${g.pro}</p></div>` : ''}
+    ${g.pro ? `<div class="guidance-pro"><strong>${t('guidance_pro')}</strong><p>${g.pro}</p></div>` : ''}
     ${g.soi ? `<div class="soi-note">📜 ${g.soi}</div>` : ''}`;
 }
 
@@ -2534,15 +2849,15 @@ const GUIDE_TOPICS = [
     content: () => {
       const stateProgs = state.hw.state ? (STATE_PROGRAMS[state.hw.state] || []) : [];
       const allProgs = [...NATIONAL_PROGRAMS, ...stateProgs];
-      if (!allProgs.length) return '<p style="font-size:0.85rem;color:#888;">Select your state in the assessment to see available programs.</p>';
+      if (!allProgs.length) return `<p style="font-size:0.85rem;color:#888;">${t('guide_no_progs')}</p>`;
       return allProgs.map(p => {
         const tagCls = p.tag === 'grant' ? 'tag-grant' : p.tag === 'loan' ? 'tag-loan' : p.tag === 'fema' ? 'tag-fema' : 'tag-local';
-        const tagLabel = p.tag === 'grant' ? 'Grant / Program' : p.tag === 'loan' ? 'Loan' : p.tag === 'fema' ? 'Federal' : 'State / Local';
+        const tagLabel = p.tag === 'grant' ? t('tag_grant') : p.tag === 'loan' ? t('tag_loan') : p.tag === 'fema' ? t('tag_fema') : t('tag_local');
         return `<div style="border:1.5px solid #E0E0E0;border-radius:8px;padding:12px;margin-bottom:8px;">
           <span class="tag ${tagCls}" style="display:inline-block;font-size:0.68rem;font-weight:700;padding:2px 7px;border-radius:3px;margin-bottom:6px;">${tagLabel}</span>
-          <div style="font-weight:700;font-size:0.85rem;margin-bottom:4px;">${p.name}</div>
-          <p style="font-size:0.8rem;color:#444;line-height:1.45;margin:0 0 6px;">${p.desc}</p>
-          ${p.note ? `<p style="font-size:0.76rem;color:#666;font-style:italic;margin:0 0 6px;">${p.note}</p>` : ''}
+          <div style="font-weight:700;font-size:0.85rem;margin-bottom:4px;">${tF(p, 'name')}</div>
+          <p style="font-size:0.8rem;color:#444;line-height:1.45;margin:0 0 6px;">${tF(p, 'desc')}</p>
+          ${p.note ? `<p style="font-size:0.76rem;color:#666;font-style:italic;margin:0 0 6px;">${tF(p, 'note')}</p>` : ''}
           <a href="${p.url}" target="_blank" style="font-size:0.78rem;color:#2E6DA4;font-weight:600;">Learn more →</a>
         </div>`;
       }).join('');
@@ -2611,7 +2926,7 @@ const GUIDE_TOPICS = [
       DAMAGE_CATEGORIES.forEach(cat => {
         const cb = contentBundle[cat.key];
         const g = REPAIR_GUIDANCE[cat.key];
-        const label = (cb && cb.label) || (g && g.label) || cat.label;
+        const label = cb ? tF(cb, 'label') : (g ? g.label : tF(cat, 'label'));
         const items = cb ? (cb.dont || []) : (g ? g.dont.map(d => ({text: d})) : []);
         items.forEach(item => {
           allDonts.push({ label, text: item.text, citations: item.citations });
@@ -2638,11 +2953,11 @@ const GUIDE_TOPICS = [
         const g = REPAIR_GUIDANCE[cat.key];
         if (!cb && !g) return null;
         const icon = g ? g.icon : '🔧';
-        const label = (cb && cb.label) || (g && g.label) || cat.label;
+        const catLabel = cb ? tF(cb, 'label') : (g ? g.label : tF(cat, 'label'));
         return {
           id: 'repair_' + cat.key,
           icon,
-          label,
+          label: catLabel,
           content: () => guidanceBodyHtml(cat.key)
         };
       }).filter(Boolean);
@@ -2662,61 +2977,66 @@ function toggleGuide() {
   }
 }
 
+function guideLabel(topic) {
+  const key = 'guide_' + topic.id;
+  const fromI18n = (I18N[LANG] && I18N[LANG][key]);
+  return fromI18n || topic.label;
+}
 function showGuideTopics() {
   const body = document.getElementById('guide-body');
-  document.getElementById('guide-title').textContent = 'What do you need help with?';
-  body.innerHTML = GUIDE_TOPICS.map(t =>
-    t.subtopics
-      ? `<button class="guide-topic" onclick="showGuideSubtopics('${t.id}')">
-           <span class="guide-topic-icon">${t.icon}</span>
-           <span class="guide-topic-text">${t.label}</span>
+  document.getElementById('guide-title').textContent = t('guide_title');
+  body.innerHTML = GUIDE_TOPICS.map(tp =>
+    tp.subtopics
+      ? `<button class="guide-topic" onclick="showGuideSubtopics('${tp.id}')">
+           <span class="guide-topic-icon">${tp.icon}</span>
+           <span class="guide-topic-text">${guideLabel(tp)}</span>
            <span class="guide-topic-arrow">›</span>
          </button>`
-      : `<button class="guide-topic" onclick="showGuideDetail('${t.id}')">
-           <span class="guide-topic-icon">${t.icon}</span>
-           <span class="guide-topic-text">${t.label}</span>
+      : `<button class="guide-topic" onclick="showGuideDetail('${tp.id}')">
+           <span class="guide-topic-icon">${tp.icon}</span>
+           <span class="guide-topic-text">${guideLabel(tp)}</span>
            <span class="guide-topic-arrow">›</span>
          </button>`
   ).join('');
 }
 
 function showGuideSubtopics(topicId) {
-  const topic = GUIDE_TOPICS.find(t => t.id === topicId);
+  const topic = GUIDE_TOPICS.find(tp => tp.id === topicId);
   if (!topic || !topic.subtopics) return;
   guideHistory.push('root');
   const subs = topic.subtopics();
   const body = document.getElementById('guide-body');
-  document.getElementById('guide-title').textContent = topic.label;
-  body.innerHTML = `<button class="guide-back" onclick="guideBack()">← Back</button>` +
+  document.getElementById('guide-title').textContent = guideLabel(topic);
+  body.innerHTML = `<button class="guide-back" onclick="guideBack()">${t('guide_back')}</button>` +
     subs.map(s =>
       `<button class="guide-topic" onclick="showGuideSubDetail('${topicId}','${s.id}')">
          <span class="guide-topic-icon">${s.icon}</span>
-         <span class="guide-topic-text">${s.label}</span>
+         <span class="guide-topic-text">${tF(s, 'label')}</span>
          <span class="guide-topic-arrow">›</span>
        </button>`
     ).join('');
 }
 
 function showGuideDetail(topicId) {
-  const topic = GUIDE_TOPICS.find(t => t.id === topicId);
+  const topic = GUIDE_TOPICS.find(tp => tp.id === topicId);
   if (!topic) return;
   guideHistory.push('root');
   const body = document.getElementById('guide-body');
-  document.getElementById('guide-title').textContent = topic.label;
-  body.innerHTML = `<button class="guide-back" onclick="guideBack()">← Back</button>` +
+  document.getElementById('guide-title').textContent = guideLabel(topic);
+  body.innerHTML = `<button class="guide-back" onclick="guideBack()">${t('guide_back')}</button>` +
     topic.content();
   body.scrollTop = 0;
 }
 
 function showGuideSubDetail(topicId, subId) {
-  const topic = GUIDE_TOPICS.find(t => t.id === topicId);
+  const topic = GUIDE_TOPICS.find(tp => tp.id === topicId);
   if (!topic || !topic.subtopics) return;
   const sub = topic.subtopics().find(s => s.id === subId);
   if (!sub) return;
   guideHistory.push(topicId);
   const body = document.getElementById('guide-body');
-  document.getElementById('guide-title').textContent = sub.label;
-  body.innerHTML = `<button class="guide-back" onclick="guideBack()">← Back</button>` +
+  document.getElementById('guide-title').textContent = tF(sub, 'label');
+  body.innerHTML = `<button class="guide-back" onclick="guideBack()">${t('guide_back')}</button>` +
     sub.content();
   body.scrollTop = 0;
 }
@@ -2809,18 +3129,19 @@ function renderSavesPanel() {
   const list = document.getElementById('saves-list');
   if (!list) return;
   if (!saves.length) {
-    list.innerHTML = '<p style="font-size:0.78rem;color:#888;text-align:center;padding:8px 0;">No saved assessments yet.<br>Enter a name above and click Save.</p>';
+    list.innerHTML = `<p style="font-size:0.78rem;color:#888;text-align:center;padding:8px 0;">${t('saves_empty')}</p>`;
     return;
   }
   list.innerHTML = saves.map(s => {
     const dt = new Date(s.savedAt);
-    const label = dt.toLocaleDateString('en-US', { month:'short', day:'numeric' }) + ' ' + dt.toLocaleTimeString('en-US', { hour:'numeric', minute:'2-digit' });
+    const loc = LANG === 'es' ? 'es' : 'en-US';
+    const label = dt.toLocaleDateString(loc, { month:'short', day:'numeric' }) + ' ' + dt.toLocaleTimeString(loc, { hour:'numeric', minute:'2-digit' });
     return `<div class="save-item">
       <div class="save-item-name">${s.name}</div>
       <div class="save-item-meta">${label}</div>
       <div class="save-item-actions">
-        <button onclick="loadAssessment('${s.id}')">Load</button>
-        <button onclick="deleteAssessment('${s.id}')" style="color:#B71C1C;">Delete</button>
+        <button onclick="loadAssessment('${s.id}')">${t('saves_load')}</button>
+        <button onclick="deleteAssessment('${s.id}')" style="color:#B71C1C;">${t('saves_delete')}</button>
       </div>
     </div>`;
   }).join('');
@@ -2841,7 +3162,7 @@ function copyShareLink() {
     const url = location.origin + location.pathname + '#share=' + encoded;
     navigator.clipboard.writeText(url).then(() => {
       const btn = document.getElementById('saves-share-btn');
-      if (btn) { btn.textContent = '✓ Copied!'; setTimeout(() => { btn.textContent = '🔗 Copy link'; }, 2000); }
+      if (btn) { btn.textContent = '✓ ' + t('saves_copied'); setTimeout(() => { btn.textContent = t('saves_share'); }, 2000); }
     }).catch(() => prompt('Copy this link:', url));
   } catch { alert('Nothing to share yet — fill out the form first.'); }
 }
@@ -2856,6 +3177,115 @@ function checkShareHash() {
   } catch { return false; }
 }
 
+// ── SHPO SYNC CLIENT ──────────────────────
+// Offline-first assessment sync queue. Completed assessments are queued in localStorage.
+// When connectivity returns, the queue drains to the SHPO backend (endpoint not yet stood up).
+// Submission is never blocking — the field user always succeeds locally.
+const LS_SYNC_KEY = 'floodapp_sync_queue';
+
+function getSyncQueue() {
+  try { return JSON.parse(localStorage.getItem(LS_SYNC_KEY) || '[]'); } catch { return []; }
+}
+
+function queueForSync(assessmentData, name) {
+  const queue = getSyncQueue();
+  const stableKey = (assessmentData.as?.address || assessmentData.as?.buildingName || assessmentData.hw?.address || '').trim();
+  if (stableKey) {
+    const existing = queue.findIndex(e => e.stableKey === stableKey && e.status === 'pending');
+    if (existing >= 0) {
+      queue[existing].data = assessmentData;
+      queue[existing].queuedAt = new Date().toISOString();
+      queue[existing].name = name || queue[existing].name;
+      try { localStorage.setItem(LS_SYNC_KEY, JSON.stringify(queue)); } catch (_) {}
+      updateSyncBadge();
+      return;
+    }
+  }
+  queue.push({
+    id: Date.now().toString(36) + Math.random().toString(36).slice(2, 6),
+    stableKey: stableKey,
+    queuedAt: new Date().toISOString(),
+    name: name || assessmentData.as?.buildingName || assessmentData.hw?.address || 'assessment',
+    status: 'pending',
+    data: assessmentData
+  });
+  try { localStorage.setItem(LS_SYNC_KEY, JSON.stringify(queue)); } catch (_) {}
+  updateSyncBadge();
+}
+
+function updateSyncBadge() {
+  let badge = document.getElementById('sync-badge');
+  if (!badge) {
+    badge = document.createElement('div');
+    badge.id = 'sync-badge';
+    badge.style.cssText = 'position:fixed;bottom:60px;right:16px;background:#2E6DA4;color:#fff;font-size:0.72rem;font-weight:600;padding:4px 10px;border-radius:12px;z-index:1000;cursor:pointer;display:none;';
+    badge.onclick = showSyncPanel;
+    document.body.appendChild(badge);
+  }
+  const pending = getSyncQueue().filter(e => e.status === 'pending');
+  if (pending.length > 0) {
+    badge.textContent = t('sync_pending').replace('{n}', pending.length);
+    badge.style.display = '';
+  } else {
+    badge.style.display = 'none';
+  }
+}
+
+function deleteSyncEntry(id) {
+  const queue = getSyncQueue().filter(e => e.id !== id);
+  try { localStorage.setItem(LS_SYNC_KEY, JSON.stringify(queue)); } catch (_) {}
+  updateSyncBadge();
+  document.querySelector('[data-sync-panel]')?.remove();
+  if (queue.length) showSyncPanel();
+}
+
+function showSyncPanel() {
+  document.querySelector('[data-sync-panel]')?.remove();
+  const queue = getSyncQueue();
+  let html = `<div data-sync-panel style="position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.4);z-index:2000;display:flex;align-items:center;justify-content:center;" onclick="if(event.target===this)this.remove()">
+    <div style="background:#fff;border-radius:12px;padding:20px;max-width:400px;width:90%;max-height:70vh;overflow-y:auto;" onclick="event.stopPropagation()">
+      <h3 style="margin-bottom:12px;">SHPO Sync</h3>`;
+  if (!queue.length) {
+    html += `<p style="color:#888;font-size:0.85rem;">${t('sync_none')}</p>`;
+  } else {
+    queue.forEach(e => {
+      const statusColor = e.status === 'pending' ? '#E65100' : '#2E7D32';
+      const statusLabel = e.status === 'pending' ? t('sync_queued') : t('sync_none');
+      const dt = new Date(e.queuedAt);
+      const loc = LANG === 'es' ? 'es' : 'en-US';
+      html += `<div style="border:1px solid #E0E0E0;border-radius:8px;padding:10px;margin-bottom:8px;display:flex;justify-content:space-between;align-items:center;">
+        <div>
+          <div style="font-weight:600;font-size:0.85rem;">${escAttr(e.name)}</div>
+          <div style="font-size:0.75rem;color:#888;">${dt.toLocaleDateString(loc, {month:'short',day:'numeric'})} ${dt.toLocaleTimeString(loc, {hour:'numeric',minute:'2-digit'})}</div>
+          <span style="font-size:0.7rem;font-weight:600;color:${statusColor};text-transform:uppercase;">${statusLabel}</span>
+        </div>
+        <button onclick="deleteSyncEntry('${escAttr(e.id)}')" style="background:none;border:none;color:#B71C1C;font-size:0.78rem;cursor:pointer;">${t('saves_delete')}</button>
+      </div>`;
+    });
+  }
+  html += `<button onclick="this.closest('[data-sync-panel]').remove()" style="margin-top:8px;background:#2E6DA4;color:#fff;border:none;border-radius:8px;padding:8px 16px;font-size:0.85rem;cursor:pointer;width:100%;">OK</button>
+    </div></div>`;
+  document.body.insertAdjacentHTML('beforeend', html);
+}
+
+function attemptSync() {
+  const queue = getSyncQueue();
+  const pending = queue.filter(e => e.status === 'pending');
+  if (!pending.length || !navigator.onLine) return;
+  // Backend endpoint not yet configured — mark as pending.
+  // When the SHPO backend is stood up, this will POST each entry and mark as 'synced'.
+  updateSyncBadge();
+}
+
+window.addEventListener('online', attemptSync);
+
+// Auto-queue completed assessments (assessor mode only — homeowner mode is for personal use)
+function autoQueueIfAssessor() {
+  if (state.mode === 'assessor' && (state.as.overallDamage || state.as.finalPosting)) {
+    queueForSync(currentStateData(), state.as.buildingName || state.as.address);
+  }
+}
+
 // ── INIT ──────────────────────────────────
 // Register the service worker for offline use (core requirement: no cell after a flood).
 // Silently no-ops in dev if sw.js isn't served alongside the app.
@@ -2868,6 +3298,7 @@ loadKB();
 loadContentBundle();
 document.documentElement.lang = LANG;
 syncLangUI();
+updateSyncBadge();
 if (checkShareHash()) {
   state.hw.safetyChecked = state.hw.safetyChecked || {};
   state.hw.walkAnswers = state.hw.walkAnswers || {};

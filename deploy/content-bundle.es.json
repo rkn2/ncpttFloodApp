@@ -1,0 +1,869 @@
+{
+  "schema_version": "1.0",
+  "built_at": "2026-07-09",
+  "lang": "es",
+  "generator": "pipeline/ (extract->retrieve->synthesize->verify_citations->directive_lint->entailment audit)",
+  "provenance_note": "Traducción al español del content-bundle.json original en inglés. Cada recomendación do/dont conserva sus citas originales en inglés, verificadas mecánicamente contra los documentos fuente. Esta traducción es orientación consultiva de preservación y no sustituye una evaluación profesional. Requiere revisión por SHPO/ICP antes de publicarse como guía oficial.",
+  "verification": {
+    "citations_verified": 85,
+    "citations_total": 85,
+    "items": 76,
+    "entailment_audited": false,
+    "entailment_dropped": [
+      "chimney: foundation-wall quote over-applied to chimney"
+    ],
+    "citation_dropped": [
+      "chimney: nps quote not verbatim in source (garbled OCR region)"
+    ],
+    "relevance_gate": "applied (inland-flood scope)",
+    "relevance_removed": [
+      "roof: 5/9 items wind/hail off-scope; corpus lacks flood roof guidance -> human authoring; app falls back to built-in"
+    ],
+    "entailment_note": "Spanish text has NOT been entailment-audited against English source quotes. Citations are carried from the verified English bundle. SHPO/ICP review required before publishing as authoritative guidance."
+  },
+  "categories": [
+    "siding",
+    "windows",
+    "chimney",
+    "insulation",
+    "interior",
+    "structural",
+    "electrical",
+    "mold",
+    "roof"
+  ],
+  "guidance": [
+    {
+      "id": "siding",
+      "label": "Paredes exteriores / Revestimiento",
+      "audience": [
+        "homeowner"
+      ],
+      "summary": "El daño por inundación en paredes exteriores y revestimiento de madera generalmente no es grave si se permite que la madera se seque después. El verdadero peligro proviene de la humedad que queda atrapada y no puede evaporarse, como en cavidades de paredes, detrás del aislamiento o debajo de acabados de pintura impermeables.",
+      "do": [
+        {
+          "text": "Deje que el revestimiento y la estructura de madera saturados por la inundación se sequen en su lugar, en vez de asumir que necesitan reemplazo, ya que un evento de inundación único generalmente causa poco daño duradero si la madera puede secarse.",
+          "citations": [
+            {
+              "source_file": "nthp-treatment-flood-damaged-historic-buildings.pdf",
+              "quote": "Damage from a one-time event, such as a flood, is usually negligible if the wood is allowed to air dry."
+            }
+          ]
+        },
+        {
+          "text": "Retire el aislamiento de las áreas del solero de la pared para que el agua atrapada pueda evaporarse y la estructura de madera pueda secarse.",
+          "citations": [
+            {
+              "source_file": "nthp-treatment-flood-damaged-historic-buildings.pdf",
+              "quote": "Remove insulation at sill and allow wood to dry."
+            }
+          ]
+        },
+        {
+          "text": "Limpie todo el lodo o sedimento que quede dentro de las cavidades de las paredes, independientemente de si se retira o no el aislamiento.",
+          "citations": [
+            {
+              "source_file": "nthp-treatment-flood-damaged-historic-buildings.pdf",
+              "quote": "Any mud or silt that remains in the cavity should be removed regardless of the insulation’s condition."
+            }
+          ]
+        },
+        {
+          "text": "Evalúe el aislamiento, como las mantas de fibra de vidrio, caso por caso en lugar de descartarlo automáticamente, ya que no todos los tipos necesitan retirarse.",
+          "citations": [
+            {
+              "source_file": "nthp-treatment-flood-damaged-historic-buildings.pdf",
+              "quote": "Other types of insulation, such as fiberglass battens, must be evaluated on a case-by-case basis."
+            }
+          ]
+        },
+        {
+          "text": "Esté atento a la humedad que queda atrapada dentro de las paredes detrás de acabados o en cavidades, ya que esa humedad atrapada, no la inundación en sí, es lo que causa daño duradero a la madera.",
+          "citations": [
+            {
+              "source_file": "historic-england-flooding-and-historic-buildings.pdf",
+              "quote": "Problems occur when moisture is trapped in the wood and cannot escape."
+            }
+          ]
+        }
+      ],
+      "dont": [
+        {
+          "text": "No deje aislamiento saturado dentro de las cavidades de las paredes, ya que retiene agua que puede mantener la madera, mampostería y acero destructivamente húmedos.",
+          "citations": [
+            {
+              "source_file": "nthp-treatment-flood-damaged-historic-buildings.pdf",
+              "quote": "Saturated insulation holds water which, if left in place, can perpetuate high moisture conditions destructive to wood, masonry, and steel."
+            }
+          ]
+        },
+        {
+          "text": "No selle paredes húmedas detrás de acabados impermeables como pintura de esmalte al óleo, ni las deje encerradas en cavidades y debajo de pisos, sin dejarlas secar primero.",
+          "citations": [
+            {
+              "source_file": "historic-england-flooding-and-historic-buildings.pdf",
+              "quote": "This can happen in wall cavities, in sill plates under floors, behind panelling and under impermeable finishes such as oil-based gloss paint."
+            }
+          ]
+        },
+        {
+          "text": "No deje aislamiento de fibra de vidrio en su lugar si está bloqueando el flujo de aire a través de la cavidad de la pared y retrasando el proceso de secado.",
+          "citations": [
+            {
+              "source_file": "nthp-treatment-flood-damaged-historic-buildings.pdf",
+              "quote": "if they impede the flow of air in a wall cavity, and thus the drying-out process, it may be necessary to remove them."
+            }
+          ]
+        },
+        {
+          "text": "No permita que los niveles de humedad de la madera permanezcan elevados indefinidamente; un contenido de humedad superior a aproximadamente el 28 por ciento crea condiciones donde las esporas de pudrición seca podrían germinar.",
+          "citations": [
+            {
+              "source_file": "historic-england-flooding-and-historic-buildings.pdf",
+              "quote": "If the moisture content exceeds 28 per cent then dry rot spores could germinate."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "windows",
+      "label": "Ventanas y puertas",
+      "audience": [
+        "homeowner"
+      ],
+      "summary": "Las ventanas y puertas históricas dañadas por inundación a menudo pueden salvarse en lugar de reemplazarse si se manejan con cuidado durante el secado y la limpieza. Las molduras de madera originales y las puertas de paneles tienden a sobrevivir la inundación mejor de lo esperado y generalmente vuelven a su forma original una vez completamente secas.",
+      "do": [
+        {
+          "text": "Conserve las molduras de madera originales alrededor de zócalos, techos, puertas y ventanas, ya que generalmente sobreviven una inundación y deben volver a su forma original una vez secas.",
+          "citations": [
+            {
+              "source_file": "nthp-treatment-flood-damaged-historic-buildings.pdf",
+              "quote": "Wood trim around baseboards, ceilings, doors, and windows is likely to survive a flood"
+            },
+            {
+              "source_file": "treatment of flood damaged hist buildings.pdf",
+              "quote": "After drying, it should return to its original form and should be retained."
+            }
+          ]
+        },
+        {
+          "text": "Reconozca que las puertas de madera en edificios históricos son típicamente puertas de paneles que contribuyen al carácter del edificio, y considere esto al decidir entre reparación y reemplazo.",
+          "citations": [
+            {
+              "source_file": "nthp-treatment-flood-damaged-historic-buildings.pdf",
+              "quote": "Wooden doors in older and historic buildings are likely to be panel doors that add to the character of the building."
+            }
+          ]
+        },
+        {
+          "text": "Si una puerta no se puede salvar y debe reemplazarse, replique el diseño original de puerta de paneles en lugar de instalar un reemplazo genérico.",
+          "citations": [
+            {
+              "source_file": "treatment of flood damaged hist buildings.pdf",
+              "quote": "If you need to replace any doors, consider replicating original panel doors."
+            }
+          ]
+        },
+        {
+          "text": "Cuando una ventana histórica grande se extienda por debajo del nivel de riesgo de inundación establecido, use refuerzo estructural diseñado en la abertura en lugar de removerla o eliminarla.",
+          "citations": [
+            {
+              "source_file": "nps-flood-adaptation-guidelines-2021.pdf",
+              "quote": "the structural reinforcing required at large window openings that extend below the established flood risk level."
+            }
+          ]
+        },
+        {
+          "text": "Considere contraventanas exteriores removibles sobre marcos históricos, y para vitrales use solo unidades con ventilación, para que la cavidad entre la contraventana y la ventana histórica pueda ventilarse periódicamente.",
+          "citations": [
+            {
+              "source_file": "nps-preservation-brief-39-moisture-control.pdf",
+              "quote": "removable exterior storm windows, but allow operation of windows for periodic ventilation of cavity between exterior storm and historic sash."
+            },
+            {
+              "source_file": "nps-preservation-brief-39-moisture-control.pdf",
+              "quote": "For stained glass windows using protective glazing, use only ventilated storms to avoid condensation as well as heat build-up."
+            }
+          ]
+        }
+      ],
+      "dont": [
+        {
+          "text": "No intente reparar o cepillar puertas afectadas por la inundación hasta que estén completamente secas.",
+          "citations": [
+            {
+              "source_file": "nthp-treatment-flood-damaged-historic-buildings.pdf",
+              "quote": "Be sure that the doors are completely dry before attempting to repair or plane them."
+            }
+          ]
+        },
+        {
+          "text": "No cuente con que las puertas huecas sobrevivan una inundación; sus separadores internos son generalmente de cartón, que se disuelve en el agua, así que planifique su reemplazo.",
+          "citations": [
+            {
+              "source_file": "treatment of flood damaged hist buildings.pdf",
+              "quote": "Hollow core doors will likely need to be replaced because their internal spacers are usually made of cardboard which dissolves in water."
+            }
+          ]
+        },
+        {
+          "text": "No aplique selladores a la madera mientras esté secándose y siendo tratada contra moho después de una inundación.",
+          "citations": [
+            {
+              "source_file": "nthp-treatment-flood-damaged-historic-buildings.pdf",
+              "quote": "Other fungicides may also help inhibit mold regrowth during drying. Do not apply sealants to wood."
+            }
+          ]
+        },
+        {
+          "text": "No opte automáticamente por bloquear permanente o temporalmente aberturas de ventanas históricas grandes que se extienden por debajo del nivel de riesgo de inundación; se han utilizado alternativas de acristalamiento reforzado en su lugar.",
+          "citations": [
+            {
+              "source_file": "nps-flood-adaptation-guidelines-2021.pdf",
+              "quote": "Rather than blocking these windows, either permanently or temporarily, the owner elected to use aquarium glass in the lower sash."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "chimney",
+      "label": "Chimenea",
+      "audience": [
+        "homeowner"
+      ],
+      "summary": "Las chimeneas de mampostería históricas son especialmente vulnerables después de una inundación porque el mortero de cal puede ser erosionado o arrastrado por el agua, y cualquier metal empotrado es propenso a oxidarse una vez mojado. Después de que el agua retroceda y los materiales se sequen, inspeccione las juntas de mortero, el metal empotrado y el estado general antes de decidir qué reparar.",
+      "do": [
+        {
+          "text": "Después de que retroceda el agua de inundación y los materiales se sequen, revise las juntas de mortero cerca de los dinteles en busca de grietas o pérdida de mortero, y rejunte de inmediato para evitar que el agua entre y cause más oxidación del metal empotrado.",
+          "citations": [
+            {
+              "source_file": "treatment of flood damaged hist buildings.pdf",
+              "quote": "check the mortar joints near the lintels to see that the mortar has not cracked or fallen out"
+            },
+            {
+              "source_file": "treatment of flood damaged hist buildings.pdf",
+              "quote": "If it has, repoint the area immediately to make sure that water cannot enter to create further rusting."
+            }
+          ]
+        },
+        {
+          "text": "Antes de rejuntar sobre metal empotrado, raspe cualquier escama de óxido suelta, e inspeccione periódicamente el metal a base de hierro empotrado en la mampostería, reparando cualquier grieta que se desarrolle alrededor.",
+          "citations": [
+            {
+              "source_file": "treatment of flood damaged hist buildings.pdf",
+              "quote": "Before repointing, scrape the metal to remove any loose rust scale."
+            },
+            {
+              "source_file": "treatment of flood damaged hist buildings.pdf",
+              "quote": "If other iron-based metals are imbedded in masonry or concrete, inspect them periodically and repair cracks in the surrounding materials if they occur."
+            }
+          ]
+        },
+        {
+          "text": "Retire el mortero de cal deteriorado rastrillando las juntas a mano, un método cuidadoso que evita dañar la mampostería histórica circundante.",
+          "citations": [
+            {
+              "source_file": "secretary for interior.pdf",
+              "quote": "Removing deteriorated lime mortar carefully by hand raking the joints to avoid damaging"
+            }
+          ]
+        },
+        {
+          "text": "Como parte del mantenimiento rutinario, retire la eflorescencia (depósitos de sal) de la mampostería de la chimenea usando cepillos de cerdas no metálicas.",
+          "citations": [
+            {
+              "source_file": "nps-preservation-brief-39-moisture-control.pdf",
+              "quote": "remove efflorescence from masonry with non-metallic bristle brushes"
+            }
+          ]
+        }
+      ],
+      "dont": [
+        {
+          "text": "No retire mortero sano y no deteriorado de la chimenea ni rejunte toda la estructura solo para que se vea uniforme.",
+          "citations": [
+            {
+              "source_file": "nps-flood-adaptation-guidelines-2021.pdf",
+              "quote": "Removing non-deteriorated mortar from sound features by repointing the mortar joints"
+            }
+          ]
+        },
+        {
+          "text": "No rejunte la mampostería histórica dañada por inundación de la chimenea con mortero impermeable y altamente cementoso, ya que retiene la humedad en la mampostería por más tiempo y puede causar que las sales cristalicen dentro del material histórico.",
+          "citations": [
+            {
+              "source_file": "historic-england-flooding-and-historic-buildings.pdf",
+              "quote": "Impermeable, heavily cement-based mortar will exacerbate deterioration during a flood because it holds the moisture in the masonry for longer and causes salts to crystallise within the historic materials."
+            }
+          ]
+        },
+        {
+          "text": "No deje la mampostería de la chimenea empapada por la inundación mojada ante condiciones de congelación, ya que el desconchamiento del ladrillo o piedra blandos típicamente ocurre cuando las temperaturas bajan del punto de congelación mientras la humedad aún está atrapada en las paredes.",
+          "citations": [
+            {
+              "source_file": "historic-england-flooding-and-historic-buildings.pdf",
+              "quote": "The spalling of soft brick or stonework usually occurs on building exteriors when the temperature drops below freezing while moisture is still trapped within walls."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "insulation",
+      "label": "Aislamiento",
+      "audience": [
+        "homeowner"
+      ],
+      "summary": "El aislamiento que se moja durante una inundación tiende a permanecer mojado mucho tiempo después de que las superficies visibles se ven secas, lo cual puede ocultar el crecimiento de moho y deterioro dentro de las cavidades de paredes históricas. Retirar el aislamiento fibroso saturado y cualquier lodo o sedimento atrapado, y luego abrir la cavidad para ventilar, ayuda a que las paredes se sequen. No todo tipo de material necesita retirarse.",
+      "do": [
+        {
+          "text": "Retire todo el aislamiento fibroso mojado, incluso si el panel de yeso o el revestimiento de la pared parece estar seco.",
+          "citations": [
+            {
+              "source_file": "nthp-treatment-flood-damaged-historic-buildings.pdf",
+              "quote": "Remove all wet fibrous insulation—even if wallboard appears to be dry."
+            }
+          ]
+        },
+        {
+          "text": "Retire los materiales porosos con moho y empáquelos en bolsas para reducir la propagación de esporas de moho.",
+          "citations": [
+            {
+              "source_file": "nthp-treatment-flood-damaged-historic-buildings.pdf",
+              "quote": "Porous moldy or sewage-contaminated materials should be removed, put in plastic bags if possible, and thrown away."
+            }
+          ]
+        },
+        {
+          "text": "Retire todo el lodo o sedimento que quede en la cavidad de la pared, independientemente del estado del aislamiento.",
+          "citations": [
+            {
+              "source_file": "nthp-treatment-flood-damaged-historic-buildings.pdf",
+              "quote": "Any mud or silt that remains in the cavity should be removed regardless of the insulation’s condition."
+            }
+          ]
+        },
+        {
+          "text": "Abra huecos en el yeso o panel de yeso para retirar el aislamiento de las paredes, y deje los huecos abiertos para ventilar la cavidad.",
+          "citations": [
+            {
+              "source_file": "nthp-treatment-flood-damaged-historic-buildings.pdf",
+              "quote": "Cut holes in plaster or wallboard and remove wall insulation. Leave holes open to ventilate wall cavities."
+            }
+          ]
+        },
+        {
+          "text": "Evalúe el aislamiento de mantas de fibra de vidrio caso por caso en lugar de asumir que debe descartarse, ya que las fibras de vidrio en sí no absorben agua, aunque podrían necesitar retirarse si impiden la capacidad de la pared para secarse.",
+          "citations": [
+            {
+              "source_file": "nthp-treatment-flood-damaged-historic-buildings.pdf",
+              "quote": "Other types of insulation, such as fiberglass battens, must be evaluated on a case-by-case basis."
+            },
+            {
+              "source_file": "nthp-treatment-flood-damaged-historic-buildings.pdf",
+              "quote": "Glass fibers, in themselves, are not water absorbent, but if they impede the flow of air in a wall cavity, and thus the drying-out process, it may be necessary to remove them."
+            }
+          ]
+        },
+        {
+          "text": "Conserve las paredes de yeso, revestimiento de madera o panel de yeso sin papel que estén secas, en buen estado y sin aislamiento detrás, limpiándolas y desinfectándolas en lugar de retirarlas.",
+          "citations": [
+            {
+              "source_file": "nthp-treatment-flood-damaged-historic-buildings.pdf",
+              "quote": "Plaster, wood paneling, and non-paper faced gypsum board walls that are dry, in good condition, and have no insulation in the wall can be cleaned and sanitized to salvage them."
+            }
+          ]
+        }
+      ],
+      "dont": [
+        {
+          "text": "No asuma que un panel de yeso que se ve seco significa que el aislamiento detrás también está seco, ya que el aislamiento mojado permanece mojado demasiado tiempo y puede criar moho oculto y hongos de pudrición dentro de las paredes.",
+          "citations": [
+            {
+              "source_file": "nthp-treatment-flood-damaged-historic-buildings.pdf",
+              "quote": "Wet insulation will stay wet far too long, leading to the growth of hidden unhealthy mold and decay fungi inside the walls."
+            }
+          ]
+        },
+        {
+          "text": "No deje aislamiento mojado empacado contra madera, mampostería o sujetadores de acero, ya que retiene humedad, mantiene el interior de la pared mojado, crea condiciones para la pudrición y oxida los clavos de acero.",
+          "citations": [
+            {
+              "source_file": "nthp-treatment-flood-damaged-historic-buildings.pdf",
+              "quote": "Wet insulation holds moisture keeping inside of the wall wet and creating conditions for rotting."
+            },
+            {
+              "source_file": "nthp-treatment-flood-damaged-historic-buildings.pdf",
+              "quote": "Wet insulation packed between joists of sill plate keeps wood saturated and rusts steel nails."
+            }
+          ]
+        },
+        {
+          "text": "No deje materiales porosos con mucho moho en su lugar esperando salvarlos; es mejor retirarlos, especialmente con crecimiento de moho intenso o prolongado.",
+          "citations": [
+            {
+              "source_file": "nthp-treatment-flood-damaged-historic-buildings.pdf",
+              "quote": "It’s best to remove all moldly porous materials, especially if there is heavy or long-term mold growth"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "interior",
+      "label": "Acabados interiores",
+      "audience": [
+        "homeowner"
+      ],
+      "summary": "Los acabados interiores históricos dañados por inundación, como yeso, papel tapiz y pisos, a menudo pueden salvarse, pero cada material necesita secarse completamente antes de decidir si reparar, conservar o reemplazar. Cuando un acabado verdaderamente no se puede salvar, guarde muestras documentadas para que el material histórico quede preservado para el registro.",
+      "do": [
+        {
+          "text": "Reconozca que el papel tapiz antiguo e histórico a menudo puede salvarse después de una inundación, aunque decidir si conservarlo o retirarlo es una decisión difícil.",
+          "citations": [
+            {
+              "source_file": "nthp-treatment-flood-damaged-historic-buildings.pdf",
+              "quote": "In many cases, older and historic wallpaper may be saved after a flood, but the decision to retain or remove it is a difficult one."
+            }
+          ]
+        },
+        {
+          "text": "Antes de retirar papel tapiz dañado, tome muestras de varios lugares diferentes, incluyendo el techo, para tener un registro documentado del patrón y material.",
+          "citations": [
+            {
+              "source_file": "nthp-treatment-flood-damaged-historic-buildings.pdf",
+              "quote": "take samples from several different locations including the ceiling"
+            }
+          ]
+        },
+        {
+          "text": "Guarde las muestras de papel tapiz que retire en una parte seca de la casa hasta que puedan preservarse adecuadamente.",
+          "citations": [
+            {
+              "source_file": "nthp-treatment-flood-damaged-historic-buildings.pdf",
+              "quote": "store temporarily in a dry part of the house until the paper can be permanently preserved"
+            }
+          ]
+        },
+        {
+          "text": "Inspeccione las paredes y techos de yeso en busca de claves de yeso rotas, ya que las tablillas de madera hinchadas por la humedad son una causa conocida de este tipo de falla.",
+          "citations": [
+            {
+              "source_file": "nthp-treatment-flood-damaged-historic-buildings.pdf",
+              "quote": "Moisture causes wood lath to expand and deform, causing plaster keys to break off."
+            }
+          ]
+        },
+        {
+          "text": "Deje que el yeso se seque completamente y luego inspecciónelo antes de decidir si necesita reemplazarse.",
+          "citations": [
+            {
+              "source_file": "treatment of flood damaged hist buildings.pdf",
+              "quote": "the best way to determine whether plaster must be replaced is to let it dry and then inspect it"
+            }
+          ]
+        },
+        {
+          "text": "Para pisos laminados históricamente significativos como linóleo, déjelos secar y verifique que estén nivelados y aún adheridos antes de decidir dejarlos en su lugar.",
+          "citations": [
+            {
+              "source_file": "nthp-treatment-flood-damaged-historic-buildings.pdf",
+              "quote": "Once dry, if the floor is level and the flooring adheres, you may leave it in place."
+            }
+          ]
+        }
+      ],
+      "dont": [
+        {
+          "text": "No se pare directamente debajo de un área de yeso que esté sondeando para drenar, ya que el yeso puede desprenderse y caer.",
+          "citations": [
+            {
+              "source_file": "treatment of flood damaged hist buildings.pdf",
+              "quote": "Do not stand directly under the area being prodded in case the plaster loosens and falls."
+            }
+          ]
+        },
+        {
+          "text": "No juzgue si el yeso está en buen estado solo por la condición de su superficie.",
+          "citations": [
+            {
+              "source_file": "treatment of flood damaged hist buildings.pdf",
+              "quote": "The surface condition of plaster may not tell you whether it is sound."
+            }
+          ]
+        },
+        {
+          "text": "No deseche pisos históricos que no puedan reinstalarse sin antes guardar muestras de ellos.",
+          "citations": [
+            {
+              "source_file": "nthp-treatment-flood-damaged-historic-buildings.pdf",
+              "quote": "If it is impossible to re-lay the floor, make sure to save samples of the historic flooring."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "structural",
+      "label": "Estructura / Cimientos",
+      "audience": [
+        "homeowner"
+      ],
+      "summary": "El daño por inundación a los cimientos es una de las situaciones más peligrosas que puede enfrentar un propietario. El agua ejerce una tremenda presión hidrostática sobre las paredes de los cimientos, y bombear un sótano inundado demasiado pronto puede causar que las paredes colapsen hacia adentro. Inspeccione las juntas de mortero de mampostería en busca de erosión, reemplace el suelo erosionado alrededor de los cimientos, y siempre consulte a un ingeniero estructural antes de hacer reparaciones.",
+      "do": [
+        {
+          "text": "Tenga en cuenta que bombear agua de un sótano inundado puede ser peligroso — el agua interior puede estar equilibrando la presión hidrostática del agua subterránea exterior, y retirarla demasiado rápido puede causar el colapso de las paredes de los cimientos.",
+          "citations": [
+            {
+              "source_file": "nthp-treatment-flood-damaged-historic-buildings.pdf",
+              "quote": "pumping water from your basement can be dangerous. This water may be providing the necessary pressure to balance the hydrostatic pressure of the groundwater"
+            }
+          ]
+        },
+        {
+          "text": "Deje el agua en un sótano inundado hasta que el nivel freático baje y el agua retroceda por sí sola, en lugar de bombearla mientras los niveles de agua subterránea exterior aún están altos.",
+          "citations": [
+            {
+              "source_file": "nthp-treatment-flood-damaged-historic-buildings.pdf",
+              "quote": "It is advisable to leave the water in place until the groundwater table sinks and the water recedes by itself"
+            }
+          ]
+        },
+        {
+          "text": "Inspeccione el mortero de las paredes de cimientos de mampostería de piedra para verificar si ha sido arrastrado de las juntas, lo cual puede hacer que la pared sea inestable.",
+          "citations": [
+            {
+              "source_file": "nthp-treatment-flood-damaged-historic-buildings.pdf",
+              "quote": "Inspect the mortar of stone masonry foundation walls to ensure that it has not leeched from the joints and made the wall unstable"
+            }
+          ]
+        },
+        {
+          "text": "Reemplace el suelo erosionado alrededor de las paredes de cimientos y restaure el drenaje positivo alejándolo del edificio para prevenir daño continuo por agua.",
+          "citations": [
+            {
+              "source_file": "nthp-treatment-flood-damaged-historic-buildings.pdf",
+              "quote": "Eroded soil at foundation wall leads to continuing water damage"
+            },
+            {
+              "source_file": "nthp-treatment-flood-damaged-historic-buildings.pdf",
+              "quote": "Fill with soil to provide positive drainage away from building"
+            }
+          ]
+        },
+        {
+          "text": "Al rejuntar cimientos de arenisca o piedra blanda, use un mortero rico en cal (al menos dos partes de cal hidratada por una parte de cemento Portland blanco y nueve partes de arena — ASTM Tipo O) para que el mortero sea más blando que la piedra circundante.",
+          "citations": [
+            {
+              "source_file": "nthp-treatment-flood-damaged-historic-buildings.pdf",
+              "quote": "new mortar should contain at least two parts hydrated lime to each part of white Portland cement and nine parts sand"
+            }
+          ]
+        },
+        {
+          "text": "Inspeccione las paredes de cimientos de mampostería de ladrillo y bloques de concreto en busca de mortero faltante y repárelas, especialmente si hay razón para sospechar problemas estructurales causados por la inundación.",
+          "citations": [
+            {
+              "source_file": "nthp-treatment-flood-damaged-historic-buildings.pdf",
+              "quote": "they should be inspected for missing mortar and repaired in the same manner as aboveground walls, unless there is reason to suspect a more serious structural problem created by the flooding"
+            }
+          ]
+        }
+      ],
+      "dont": [
+        {
+          "text": "No bombee un sótano inundado si el agua subterránea exterior aún está alta — las paredes de los cimientos podrían ser empujadas hacia adentro y colapsar por presión hidrostática desbalanceada.",
+          "citations": [
+            {
+              "source_file": "nthp-treatment-flood-damaged-historic-buildings.pdf",
+              "quote": "If the groundwater level is higher than your basement floor and you pump the water from your basement, the foundation walls could be pushed inward and collapse"
+            }
+          ]
+        },
+        {
+          "text": "No subestime la presión que el agua ejerce sobre paredes y losas de piso bajo nivel — incluso el agua estancada en un sótano puede estar previniendo una falla estructural.",
+          "citations": [
+            {
+              "source_file": "nthp-treatment-flood-damaged-historic-buildings.pdf",
+              "quote": "Water can exert tremendous pressure on foundation walls and floor slabs"
+            }
+          ]
+        }
+      ],
+      "call_a_pro": "Consulte a un ingeniero estructural licenciado antes de hacer cualquier reparación en cimientos o estructura. Si las paredes están agrietadas, asentándose o mostrando señales de movimiento, obtenga una evaluación profesional antes de volver a ocupar el edificio."
+    },
+    {
+      "id": "electrical",
+      "label": "Eléctrico / Mecánico / HVAC",
+      "audience": [
+        "homeowner"
+      ],
+      "summary": "Los sistemas eléctricos, mecánicos y de HVAC dañados por inundación representan riesgos inmediatos para la seguridad de la vida. Se debe confirmar que toda la electricidad esté apagada antes de entrar, y cualquier cableado sumergido debe ser inspeccionado profesionalmente antes de restaurar la energía. Al planificar reparaciones, reubique las utilidades por encima del nivel de riesgo de inundación establecido para protegerlas en eventos futuros.",
+      "do": [
+        {
+          "text": "Asegúrese de que toda la electricidad esté apagada antes de entrar a un edificio dañado por inundación, y haga que un electricista licenciado inspeccione cualquier cableado eléctrico que haya sido sumergido antes de restaurar la energía.",
+          "citations": [
+            {
+              "source_file": "nthp-treatment-flood-damaged-historic-buildings.pdf",
+              "quote": "Make sure that all of your electricity is turned off. If any electrical wiring was submerged, have it inspected before turning the power back on"
+            }
+          ]
+        },
+        {
+          "text": "Manténgase alejado de líneas eléctricas caídas y cables eléctricos en y alrededor del área de inundación.",
+          "citations": [
+            {
+              "source_file": "nthp-treatment-flood-damaged-historic-buildings.pdf",
+              "quote": "Stay away from power lines and electrical wires"
+            }
+          ]
+        },
+        {
+          "text": "Si usa generadores o parrillas de carbón durante la limpieza, asegúrese de que estén adecuadamente ventilados para prevenir envenenamiento por monóxido de carbono.",
+          "citations": [
+            {
+              "source_file": "nthp-treatment-flood-damaged-historic-buildings.pdf",
+              "quote": "Carbon monoxide exhaust kills. If you use electrical generators or charcoal grills, make sure that they are properly vented"
+            }
+          ]
+        },
+        {
+          "text": "Eleve o reubique las utilidades y sistemas mecánicos por encima del nivel de riesgo de inundación establecido, colocándolos en espacios utilitarios o no significativos del edificio que sean poco probables de inundarse.",
+          "citations": [
+            {
+              "source_file": "nps-flood-adaptation-guidelines-2021.pdf",
+              "quote": "Any part of these systems that is in flood-vulnerable locations should be elevated or relocated above the established flood risk level"
+            },
+            {
+              "source_file": "nps-flood-adaptation-guidelines-2021.pdf",
+              "quote": "Utilities and mechanical systems should be relocated to utilitarian or insignificant spaces in historic buildings that are unlikely to flood"
+            }
+          ]
+        },
+        {
+          "text": "Considere instalar un interruptor eléctrico de desconexión bien por encima del nivel de riesgo de inundación, separado del panel de servicios principal, para poder cortar la energía a las áreas propensas a inundación rápidamente.",
+          "citations": [
+            {
+              "source_file": "nps-flood-adaptation-guidelines-2021.pdf",
+              "quote": "Installing an electrical disconnect well above the established flood risk level in an easy to access location. This should be separate from the utility panel"
+            }
+          ]
+        },
+        {
+          "text": "Al planificar cualquier proyecto que involucre sistemas mecánicos, eléctricos, de plomería o de supresión de incendios, considere la vida útil de los distintos componentes del sistema para planificar mejoras estratégicamente.",
+          "citations": [
+            {
+              "source_file": "nps-flood-adaptation-guidelines-2021.pdf",
+              "quote": "When planning a project involving mechanical, electrical, plumbing, or fire suppression systems, it is helpful to be aware of the service life of the various features of the systems involved"
+            }
+          ]
+        }
+      ],
+      "dont": [
+        {
+          "text": "No dañe ni destruya excesivamente las características interiores o exteriores históricas al acceder a las cavidades de las paredes para el recableado — planifique el trabajo eléctrico para minimizar el impacto en el carácter histórico.",
+          "citations": [
+            {
+              "source_file": "nps-flood-adaptation-guidelines-2021.pdf",
+              "quote": "Damaging or destroying historic interior or exterior features, finishes, or materials to an excessive degree in order to access wall cavities for re-wiring"
+            }
+          ]
+        }
+      ],
+      "call_a_pro": "Todos los sistemas eléctricos, mecánicos y de HVAC sumergidos deben ser completamente inspeccionados y recertificados por profesionales licenciados antes de su uso. Este es un asunto de seguridad de la vida — no intente reparaciones eléctricas por su cuenta."
+    },
+    {
+      "id": "mold",
+      "label": "Moho / Contaminación",
+      "audience": [
+        "homeowner"
+      ],
+      "summary": "El moho puede comenzar a crecer en materiales que permanecen mojados más de dos o tres días después de una inundación. Cuanto más tiempo crece, mayor es el riesgo para la salud y más difícil es controlarlo. La limpieza rápida, el equipo de protección adecuado y el aislamiento cuidadoso de las áreas afectadas son esenciales. Para infestaciones grandes, contrate a un contratista de remediación de moho licenciado.",
+      "do": [
+        {
+          "text": "Comience la limpieza tan pronto como sea seguro regresar — el moho crece rápidamente en materiales que permanecen mojados, y cuanto más tiempo crece, mayor es el riesgo para la salud y más difícil es controlarlo.",
+          "citations": [
+            {
+              "source_file": "nthp-treatment-flood-damaged-historic-buildings.pdf",
+              "quote": "grow on materials that stay wet longer than two or three days. The longer it grows, the greater the health hazard and the harder it is to control"
+            }
+          ]
+        },
+        {
+          "text": "Use guantes, gafas protectoras y un respirador con clasificación N-95 o superior al trabajar en áreas afectadas por moho, ya que las personas se exponen principalmente al respirar esporas y por contacto con la piel.",
+          "citations": [
+            {
+              "source_file": "nthp-treatment-flood-damaged-historic-buildings.pdf",
+              "quote": "People are mainly exposed to mold by breathing spores and skin contact. Wear gloves, goggles, and a respirator rated N-95 or higher"
+            }
+          ]
+        },
+        {
+          "text": "Aísle las áreas con moho del resto de la casa antes de perturbar las colonias de moho, y ventile hacia el exterior — no encienda el sistema central de aire durante la limpieza.",
+          "citations": [
+            {
+              "source_file": "nthp-treatment-flood-damaged-historic-buildings.pdf",
+              "quote": "seal off the moldy areas from the rest of the house. Open windows, and don't run the central air system"
+            }
+          ]
+        },
+        {
+          "text": "Cubra las rejillas de aire con plástico adherido con cinta y cuelgue plástico en las escaleras para aislar las áreas limpias. Si hay electricidad, ponga un ventilador en una ventana para expulsar el aire con moho al exterior.",
+          "citations": [
+            {
+              "source_file": "nthp-treatment-flood-damaged-historic-buildings.pdf",
+              "quote": "Tape plastic over air grilles, and drape plastic in the stairwell if the second story is dry and clean. If power is on, put a fan in a window to blow out and exhaust mold-filled air to the outdoors"
+            }
+          ]
+        },
+        {
+          "text": "Retire todos los materiales porosos, con moho o contaminados con aguas residuales — empáquelos en bolsas de plástico antes de retirarlos para reducir la liberación y propagación de esporas.",
+          "citations": [
+            {
+              "source_file": "nthp-treatment-flood-damaged-historic-buildings.pdf",
+              "quote": "Porous moldy or sewage-contaminated materials should be removed, put in plastic bags if possible, and thrown away"
+            }
+          ]
+        },
+        {
+          "text": "Retire todo el aislamiento fibroso mojado de las paredes, incluso si el panel de yeso parece seco — el aislamiento mojado permanece mojado demasiado tiempo y genera moho oculto y hongos de pudrición.",
+          "citations": [
+            {
+              "source_file": "nthp-treatment-flood-damaged-historic-buildings.pdf",
+              "quote": "Remove all wet fibrous insulation—even if wallboard appears to be dry. Wet insulation will stay wet far too long, leading to the growth of hidden unhealthy mold and decay fungi inside the walls"
+            }
+          ]
+        },
+        {
+          "text": "Limpie el moho de superficies no porosas (plástico duro, concreto, vidrio, metal, madera sólida) — la limpieza debe remover el moho, no solo matarlo, porque las esporas muertas aún pueden causar problemas de salud.",
+          "citations": [
+            {
+              "source_file": "nthp-treatment-flood-damaged-historic-buildings.pdf",
+              "quote": "Surface mold can be effectively cleaned from non-porous materials such as hard plastic, concrete, glass, and metal. Solid wood can also be cleaned"
+            },
+            {
+              "source_file": "nthp-treatment-flood-damaged-historic-buildings.pdf",
+              "quote": "Cleaning should remove, not just kill, the mold, because dead spores can still cause health problems"
+            }
+          ]
+        },
+        {
+          "text": "Tome fotografías para fines de seguro antes de limpiar — no espere a que el ajustador de reclamaciones vea el sitio antes de retirar los materiales mojados y con moho.",
+          "citations": [
+            {
+              "source_file": "nthp-treatment-flood-damaged-historic-buildings.pdf",
+              "quote": "Take photographs for insurance purposes before cleaning up. Do not wait for the claims adjuster to see the site before removing wet and moldy materials"
+            }
+          ]
+        }
+      ],
+      "dont": [
+        {
+          "text": "No perturbe las colonias de moho sin primero aislar el área — perturbarlas puede causar una liberación masiva de esporas en el aire.",
+          "citations": [
+            {
+              "source_file": "nthp-treatment-flood-damaged-historic-buildings.pdf",
+              "quote": "Disturbing mold colonies during cleanup can cause a huge release of spores into the air, so seal off the moldy areas from the rest of the house"
+            }
+          ]
+        },
+        {
+          "text": "Retire inmediatamente todas las alfombras, tapicería, telas y colchones inundados — deséchelos o hágalos limpiar y secar profesionalmente de inmediato fuera del hogar.",
+          "citations": [
+            {
+              "source_file": "nthp-treatment-flood-damaged-historic-buildings.pdf",
+              "quote": "Remove all flooded carpeting, upholstery, fabrics, and mattresses right away"
+            }
+          ]
+        },
+        {
+          "text": "No ignore los riesgos de exposición al moho — el moho puede desencadenar reacciones alérgicas, ataques de asma y puede reducir la resistencia a enfermedades, especialmente en niños, personas mayores y personas con salud débil.",
+          "citations": [
+            {
+              "source_file": "nthp-treatment-flood-damaged-historic-buildings.pdf",
+              "quote": "Mold can trigger allergic reactions and asthma attacks, may lower resistance to illness, or have other effects"
+            }
+          ]
+        }
+      ],
+      "call_a_pro": "Para colonización severa de moho (mayor de 10 pies cuadrados), o si el edificio puede contener asbesto o pintura con plomo (común en edificios históricos), contrate a un contratista de remediación de moho licenciado con entrenamiento y equipo especializados."
+    },
+    {
+      "id": "roof",
+      "label": "Techo",
+      "audience": [
+        "homeowner"
+      ],
+      "summary": "Después de una inundación, inspeccione el techo en busca de daños por agua, materiales dañados o faltantes, y tapajuntas comprometidas. Documente todo el daño con fotografías antes de comenzar cualquier trabajo. Los materiales históricos de techado deben repararse en lugar de reemplazarse cuando sea posible, y un techo bien mantenido sufrirá menos daño en eventos futuros.",
+      "do": [
+        {
+          "text": "Inspeccione el techo al menos anualmente y después de cualquier inundación o tormenta — reemplace tejas, pizarras o baldosas faltantes o dañadas y repare tapajuntas de inmediato.",
+          "citations": [
+            {
+              "source_file": "nps-preservation-brief-39-moisture-control.pdf",
+              "quote": "inspect roofing at least once a year, preferably spring; replace missing or damaged roofing shingles, slates, or tiles; repair flashing; repair or replace cracked downspouts"
+            }
+          ]
+        },
+        {
+          "text": "Inspeccione y limpie las canaletas regularmente para mantener el drenaje funcional y evitar que el agua se acumule en la estructura del techo.",
+          "citations": [
+            {
+              "source_file": "nps-preservation-brief-39-moisture-control.pdf",
+              "quote": "Make weather-tight and operational; inspect and clean gutters as necessary depending on number of nearby trees, but at least twice a year"
+            }
+          ]
+        },
+        {
+          "text": "Documente todo el daño con fotografías antes de comenzar cualquier limpieza o reparación — esto es esencial para fines de seguro y para registrar las características importantes del edificio histórico.",
+          "citations": [
+            {
+              "source_file": "nthp-treatment-flood-damaged-historic-buildings.pdf",
+              "quote": "Before you begin to clean up your historic property, it is important to carefully document any damage to the structure. This is essential not only for insurance purposes, but also to record important historic building features"
+            }
+          ]
+        },
+        {
+          "text": "Permita que las estructuras de madera del techo saturadas por la inundación se sequen naturalmente — un evento de inundación único no debería causar daño serio siempre y cuando se permita que la madera se seque después.",
+          "citations": [
+            {
+              "source_file": "historic-england-flooding-and-historic-buildings.pdf",
+              "quote": "A one-off event such as a flood should not cause serious damage as long as the wood is allowed to dry afterwards"
+            }
+          ]
+        },
+        {
+          "text": "Si el techo necesita reemplazo, aproveche la oportunidad para incorporar materiales resistentes a tormentas, asegurar la cubierta del techo y reforzar las conexiones entre el techo y la estructura del edificio.",
+          "citations": [
+            {
+              "source_file": "louisiana-resilient-heritage-homeowner-guide.pdf",
+              "quote": "The best time to upgrade a roof is when it needs replacement. Use this opportunity to incorporate new storm-resistant materials, secure the roof decking, and strengthen the connections"
+            }
+          ]
+        }
+      ],
+      "dont": [
+        {
+          "text": "No cierre un ensamblaje de techo mojado — la humedad atrapada en la madera puede causar pudrición si el contenido de humedad excede el 28 por ciento, especialmente en cavidades de paredes, soleros y detrás de acabados impermeables.",
+          "citations": [
+            {
+              "source_file": "historic-england-flooding-and-historic-buildings.pdf",
+              "quote": "Problems occur when moisture is trapped in the wood and cannot escape. This can happen in wall cavities, in sill plates under floors, behind panelling and under impermeable finishes such as oil-based gloss paint"
+            }
+          ]
+        },
+        {
+          "text": "No omita abrir la estructura si es necesario para verificar fuentes ocultas de humedad, evaluar el estado de los materiales y permitir que la humedad atrapada se evapore.",
+          "citations": [
+            {
+              "source_file": "historic-england-flooding-and-historic-buildings.pdf",
+              "quote": "It may be necessary to open up the structure of the building to check for sources of moisture, to check on the condition of the fabric, and to allow trapped moisture to evaporate from masonry and timber"
+            }
+          ]
+        }
+      ],
+      "call_a_pro": "Si su techo tiene materiales históricos (pizarra, teja de barro, teja de madera), contacte a su Oficina Estatal de Preservación Histórica (SHPO) antes de reemplazar — se requieren materiales y técnicas compatibles para propiedades históricas."
+    }
+  ]
+}
