@@ -63,7 +63,8 @@ function appendRapid(ss, payload, as) {
   const headers = [
     'Submitted', 'Synced From', 'Inspector', 'Date', 'Area/Event',
     'Building Name', 'Address', 'GPS',
-    'Stories', 'Footprint', 'Units', 'Age', 'Foundation', 'Roof', 'Wall Finish',
+    'Stories', 'Footprint', 'Units', 'Age', 'Construction Type', 'Occupancy',
+    'Foundation', 'Roof Shape', 'Roof Covering', 'Wall Finish',
     'Historic Status',
     'Water Nature', 'Water Depth', 'Sediment', 'Erosion',
     'Structural', 'Roof Dmg', 'Siding', 'Windows', 'Chimney',
@@ -78,7 +79,8 @@ function appendRapid(ss, payload, as) {
     payload.name || '',
     as.inspector, as.date, as.area,
     as.buildingName, as.address, (as.gps || []).filter(Boolean).join('; '),
-    as.stories, as.footprint, as.units, as.age, as.foundation, as.roof, as.wallFinish,
+    as.stories, as.footprint, as.units, as.age, as.constructionType, as.occupancy,
+    as.foundation, as.roof, as.roofCovering, as.wallFinish,
     (as.historicStatus || []).join(', '),
     (as.waterNature || []).join(', '), (as.waterDepth || []).join(', '), as.sediment, as.erosion,
     rd.structural || '', rd.roof || '', rd.siding || '', rd.windows || '', rd.chimney || '',
@@ -91,6 +93,8 @@ function appendRapid(ss, payload, as) {
 function appendFull(ss, payload, as) {
   const headers = [
     'Submitted', 'Synced From', 'Inspector', 'Building Name', 'Address', 'GPS',
+    'Stories', 'Age', 'Construction Type', 'Occupancy', 'Foundation', 'Roof Shape', 'Roof Covering', 'Wall Finish',
+    'Water Nature', 'Water Depth', 'Sediment', 'Erosion',
     'Arch Style', 'Hazards',
     'Significance: Older', 'Significance: Craftsman', 'Significance: Style',
     'Significance: Setting', 'Significance: Rare', 'Significance: Persons',
@@ -125,6 +129,8 @@ function appendFull(ss, payload, as) {
     payload.queuedAt || new Date().toISOString(),
     payload.name || '',
     as.inspector, as.buildingName, as.address, (as.gps || []).filter(Boolean).join('; '),
+    as.stories, as.age, as.constructionType, as.occupancy, as.foundation, as.roof, as.roofCovering, as.wallFinish,
+    (as.waterNature || []).join(', '), (as.waterDepth || []).join(', '), as.sediment, as.erosion,
     as.archStyle, (as.hazards || []).join(', '),
     as.sigOlder, as.sigCraftsman, as.sigStyle,
     as.sigSetting, as.sigRare, as.sigPersons,

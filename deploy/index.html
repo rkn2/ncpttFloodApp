@@ -1030,7 +1030,8 @@ let state = {
     submode: null, // 'rapid' | 'full'
     // rapid fields
     inspector: "", date: "", area: "", buildingName: "", address: "",
-    stories: "", footprint: "", units: "", age: "", foundation: "", roof: "", wallFinish: "",
+    stories: "", footprint: "", units: "", age: "", foundation: "", roof: "", roofCovering: "", wallFinish: "",
+    constructionType: "", occupancy: "",
     historicStatus: [],
     waterNature: [], waterDepth: [], sediment: "", erosion: "",
     rapidDamage: {}, // { structural: 'minor'|'moderate'|'severe', ... }
@@ -2244,19 +2245,44 @@ function showRapidStep0() {
         </select>
       </div>
       <div class="field-group">
-        <label class="field-label">Roof Type</label>
+        <label class="field-label">Roof Shape</label>
         <select id="as-roof">
           <option value="">—</option>
           ${['Gable','Hip','Gambrel','Flat','Shed','Mansard','Unknown'].map(v=>`<option ${s.roof===v?'selected':''} value="${v}">${v}</option>`).join('')}
         </select>
       </div>
     </div>
-    <div class="field-group">
-      <label class="field-label">Wall Finish / Siding</label>
-      <select id="as-wallfinish">
-        <option value="">—</option>
-        ${['Wood clapboard','Wood shingle','Brick','Stone','Stucco','Metal','Concrete block','Unknown'].map(v=>`<option ${s.wallFinish===v?'selected':''} value="${v}">${v}</option>`).join('')}
-      </select>
+    <div class="two-col">
+      <div class="field-group">
+        <label class="field-label">Roof Covering</label>
+        <select id="as-roofcover">
+          <option value="">—</option>
+          ${['Slate','Clay tile','Wood shingle','Metal (standing seam)','Metal (other)','Asphalt shingle','Built-up / membrane','Asbestos','Unknown'].map(v=>`<option ${s.roofCovering===v?'selected':''} value="${v}">${v}</option>`).join('')}
+        </select>
+      </div>
+      <div class="field-group">
+        <label class="field-label">Type of Construction</label>
+        <select id="as-construction">
+          <option value="">—</option>
+          ${['Wood frame','Steel frame','Concrete','Masonry bearing wall','Stone','Manufactured / mobile','Unknown'].map(v=>`<option ${s.constructionType===v?'selected':''} value="${v}">${v}</option>`).join('')}
+        </select>
+      </div>
+    </div>
+    <div class="two-col">
+      <div class="field-group">
+        <label class="field-label">Primary Occupancy</label>
+        <select id="as-occupancy">
+          <option value="">—</option>
+          ${['Dwelling (single family)','Dwelling (multi-family)','Commercial','Museum / gallery','School / education','Religious','Government','Vacant','Other'].map(v=>`<option ${s.occupancy===v?'selected':''} value="${v}">${v}</option>`).join('')}
+        </select>
+      </div>
+      <div class="field-group">
+        <label class="field-label">Wall Finish / Siding</label>
+        <select id="as-wallfinish">
+          <option value="">—</option>
+          ${['Wood clapboard','Wood shingle','Brick','Stone','Stucco','Metal','Concrete block','Unknown'].map(v=>`<option ${s.wallFinish===v?'selected':''} value="${v}">${v}</option>`).join('')}
+        </select>
+      </div>
     </div>
     <div class="field-group">
       <label class="field-label">Historic Status <span>(check all that apply)</span></label>
@@ -2286,6 +2312,9 @@ function saveRapidStep0() {
   s.age = document.getElementById('as-age').value;
   s.foundation = document.getElementById('as-foundation').value;
   s.roof = document.getElementById('as-roof').value;
+  s.roofCovering = document.getElementById('as-roofcover').value;
+  s.constructionType = document.getElementById('as-construction').value;
+  s.occupancy = document.getElementById('as-occupancy').value;
   s.wallFinish = document.getElementById('as-wallfinish').value;
   s.historicStatus = [...document.querySelectorAll('input[name="as-hist"]:checked')].map(i=>i.value);
   if (!s.address) { alert('Please enter a building address.'); return; }
@@ -2486,8 +2515,11 @@ function showRapidResult() {
       <tr><td>Area</td><td>${s.area || '—'}</td></tr>
       <tr><td>Building</td><td>${s.buildingName ? s.buildingName + ' — ' : ''}${s.address}</td></tr>
       <tr><td>Stories / Units</td><td>${s.stories || '—'} stories / ${s.units || '—'} units</td></tr>
-      <tr><td>Age / Type</td><td>${s.age || '—'}</td></tr>
+      <tr><td>Age</td><td>${s.age || '—'}</td></tr>
+      <tr><td>Construction</td><td>${s.constructionType || '—'}</td></tr>
+      <tr><td>Occupancy</td><td>${s.occupancy || '—'}</td></tr>
       <tr><td>Foundation</td><td>${s.foundation || '—'}</td></tr>
+      <tr><td>Roof</td><td>${[s.roof, s.roofCovering].filter(Boolean).join(' / ') || '—'}</td></tr>
       <tr><td>Wall Finish</td><td>${s.wallFinish || '—'}</td></tr>
       <tr><td>Historic Status</td><td>${s.historicStatus.join(', ') || 'Not recorded'}</td></tr>
       <tr><td>Water Type</td><td>${s.waterNature.join(', ') || '—'}</td></tr>
@@ -2590,6 +2622,104 @@ function showFullForm() {
     <div class="field-group">
       <label class="field-label">GPS <span style="font-weight:400;font-size:0.75rem;">(auto-filled from location, or enter manually)</span></label>
       <input type="text" id="f-gps-0" value="${s.gps[0]||''}" placeholder="e.g. 44.2601, -72.5754">
+    </div>
+
+    <div class="form-section-title">Building Description</div>
+    <div class="two-col">
+      <div class="field-group">
+        <label class="field-label">Stories</label>
+        <select id="f-stories">
+          <option value="">—</option>
+          ${['1','1.5','2','2.5','3','3+'].map(v=>`<option ${s.stories===v?'selected':''} value="${v}">${v}</option>`).join('')}
+        </select>
+      </div>
+      <div class="field-group">
+        <label class="field-label">Approx. Age</label>
+        <select id="f-age">
+          <option value="">—</option>
+          ${['Pre-1870','1870–1940','1940–1970','Post-1970','Unknown'].map(v=>`<option ${s.age===v?'selected':''} value="${v}">${v}</option>`).join('')}
+        </select>
+      </div>
+    </div>
+    <div class="two-col">
+      <div class="field-group">
+        <label class="field-label">Type of Construction</label>
+        <select id="f-construction">
+          <option value="">—</option>
+          ${['Wood frame','Steel frame','Concrete','Masonry bearing wall','Stone','Manufactured / mobile','Unknown'].map(v=>`<option ${s.constructionType===v?'selected':''} value="${v}">${v}</option>`).join('')}
+        </select>
+      </div>
+      <div class="field-group">
+        <label class="field-label">Primary Occupancy</label>
+        <select id="f-occupancy">
+          <option value="">—</option>
+          ${['Dwelling (single family)','Dwelling (multi-family)','Commercial','Museum / gallery','School / education','Religious','Government','Vacant','Other'].map(v=>`<option ${s.occupancy===v?'selected':''} value="${v}">${v}</option>`).join('')}
+        </select>
+      </div>
+    </div>
+    <div class="two-col">
+      <div class="field-group">
+        <label class="field-label">Foundation Type</label>
+        <select id="f-foundation">
+          <option value="">—</option>
+          ${['Stone / rubble','Brick','Poured concrete','Concrete block','Crawl space','Slab','Unknown'].map(v=>`<option ${s.foundation===v?'selected':''} value="${v}">${v}</option>`).join('')}
+        </select>
+      </div>
+      <div class="field-group">
+        <label class="field-label">Wall Finish / Siding</label>
+        <select id="f-wallfinish">
+          <option value="">—</option>
+          ${['Wood clapboard','Wood shingle','Brick','Stone','Stucco','Metal','Concrete block','Unknown'].map(v=>`<option ${s.wallFinish===v?'selected':''} value="${v}">${v}</option>`).join('')}
+        </select>
+      </div>
+    </div>
+    <div class="two-col">
+      <div class="field-group">
+        <label class="field-label">Roof Shape</label>
+        <select id="f-roof">
+          <option value="">—</option>
+          ${['Gable','Hip','Gambrel','Flat','Shed','Mansard','Unknown'].map(v=>`<option ${s.roof===v?'selected':''} value="${v}">${v}</option>`).join('')}
+        </select>
+      </div>
+      <div class="field-group">
+        <label class="field-label">Roof Covering</label>
+        <select id="f-roofcover">
+          <option value="">—</option>
+          ${['Slate','Clay tile','Wood shingle','Metal (standing seam)','Metal (other)','Asphalt shingle','Built-up / membrane','Asbestos','Unknown'].map(v=>`<option ${s.roofCovering===v?'selected':''} value="${v}">${v}</option>`).join('')}
+        </select>
+      </div>
+    </div>
+
+    <div class="form-section-title">Flood Data</div>
+    <div class="field-group">
+      <label class="field-label">Nature of Water <span>(check all that apply)</span></label>
+      <div class="check-group inline">
+        ${['Standing','Flowing / moving','Seepage / groundwater','Combined sewage'].map(v=>
+          `<label class="check-item"><input type="checkbox" name="f-water" value="${v}" ${(s.waterNature||[]).includes(v)?'checked':''}> ${v}</label>`
+        ).join('')}
+      </div>
+    </div>
+    <div class="field-group">
+      <label class="field-label">Maximum Water Depth / Location <span>(check all that apply)</span></label>
+      <div class="check-group">
+        ${['Basement / crawl space only','First floor (< 1 ft)','First floor (1–4 ft)','First floor (> 4 ft)','Second floor or above'].map(v=>
+          `<label class="check-item"><input type="checkbox" name="f-depth" value="${v}" ${(s.waterDepth||[]).includes(v)?'checked':''}> ${v}</label>`
+        ).join('')}
+      </div>
+    </div>
+    <div class="two-col">
+      <div class="field-group">
+        <label class="field-label">Sediment Deposit?</label>
+        <div class="radio-group inline">
+          ${['On site','In structure','Both','None','Unknown'].map(v=>`<label class="radio-item"><input type="radio" name="f-sed" value="${v}" ${s.sediment===v?'checked':''}> ${v}</label>`).join('')}
+        </div>
+      </div>
+      <div class="field-group">
+        <label class="field-label">Erosion Present?</label>
+        <div class="radio-group inline">
+          ${['Yes','No','Unknown'].map(v=>`<label class="radio-item"><input type="radio" name="f-ero" value="${v}" ${s.erosion===v?'checked':''}> ${v}</label>`).join('')}
+        </div>
+      </div>
     </div>
 
     <div class="form-section-title">Potential Hazards</div>
@@ -2722,6 +2852,18 @@ function saveFullForm() {
   s.buildingName = document.getElementById('f-bname').value || s.buildingName;
   s.address = document.getElementById('f-addr').value || s.address;
   s.gps = [document.getElementById('f-gps-0')?.value || ''];
+  s.stories = document.getElementById('f-stories').value || s.stories;
+  s.age = document.getElementById('f-age').value || s.age;
+  s.constructionType = document.getElementById('f-construction').value || s.constructionType;
+  s.occupancy = document.getElementById('f-occupancy').value || s.occupancy;
+  s.foundation = document.getElementById('f-foundation').value || s.foundation;
+  s.wallFinish = document.getElementById('f-wallfinish').value || s.wallFinish;
+  s.roof = document.getElementById('f-roof').value || s.roof;
+  s.roofCovering = document.getElementById('f-roofcover').value || s.roofCovering;
+  s.waterNature = [...document.querySelectorAll('input[name="f-water"]:checked')].map(i=>i.value);
+  s.waterDepth = [...document.querySelectorAll('input[name="f-depth"]:checked')].map(i=>i.value);
+  s.sediment = document.querySelector('input[name="f-sed"]:checked')?.value || s.sediment;
+  s.erosion = document.querySelector('input[name="f-ero"]:checked')?.value || s.erosion;
   s.hazards = [...document.querySelectorAll('input[name="f-haz"]:checked')].map(i=>i.value);
   s.archStyle = document.getElementById('f-arch').value;
   s.contentsType = [...document.querySelectorAll('input[name="f-ctype"]:checked')].map(i=>i.value);
@@ -2767,11 +2909,18 @@ function showFullResult() {
       <tr><td>Inspector</td><td>${s.inspector || '—'}</td></tr>
       <tr><td>Date</td><td>${s.date || '—'}</td></tr>
       <tr><td>Building</td><td>${s.buildingName ? s.buildingName + '<br>' : ''}${s.address}</td></tr>
-      <tr><td>Stories / Units</td><td>${s.stories || '—'} / ${s.units || '—'}</td></tr>
+      <tr><td>Stories</td><td>${s.stories || '—'}</td></tr>
       <tr><td>Age / Style</td><td>${s.age || '—'}${s.archStyle ? ' — ' + s.archStyle : ''}</td></tr>
-      <tr><td>Foundation / Wall</td><td>${s.foundation || '—'} / ${s.wallFinish || '—'}</td></tr>
+      <tr><td>Construction</td><td>${s.constructionType || '—'}</td></tr>
+      <tr><td>Occupancy</td><td>${s.occupancy || '—'}</td></tr>
+      <tr><td>Foundation</td><td>${s.foundation || '—'}</td></tr>
+      <tr><td>Roof</td><td>${[s.roof, s.roofCovering].filter(Boolean).join(' / ') || '—'}</td></tr>
+      <tr><td>Wall Finish</td><td>${s.wallFinish || '—'}</td></tr>
       <tr><td>Historic Status</td><td>${s.historicStatus.join(', ') || '—'}</td></tr>
-      ${gpsValid.length ? `<tr><td>GPS Points</td><td>${gpsValid.join('<br>')}</td></tr>` : ''}
+      ${gpsValid.length ? `<tr><td>GPS</td><td>${gpsValid.join('<br>')}</td></tr>` : ''}
+      ${s.waterNature?.length ? `<tr><td>Water</td><td>${s.waterNature.join(', ')}</td></tr>` : ''}
+      ${s.waterDepth?.length ? `<tr><td>Depth</td><td>${s.waterDepth.join('; ')}</td></tr>` : ''}
+      ${s.sediment ? `<tr><td>Sediment / Erosion</td><td>${s.sediment} / ${s.erosion || '—'}</td></tr>` : ''}
     </table>
 
     ${s.hazards.length ? `
