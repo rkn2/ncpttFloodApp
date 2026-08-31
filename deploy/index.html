@@ -1087,6 +1087,8 @@ const I18N = {
     safety_water: "I am NOT wading through standing water to access the building",
     safety_gear: "Protective gear:",
     safety_gear_desc: "At minimum, wear rubber boots, heavy gloves, and an N95 mask or respirator. Floodwater carries sewage, chemicals, and mold spores.",
+    safety_water_tip_title: "If water is still inside:",
+    safety_water_tip: "Wait for it to recede before entering. You can still use this tool — estimate the water level from the outside by looking through windows or at exterior waterlines, and note what you can see from the doorway. The walkthrough will ask about interior conditions, but you can select \"I haven't been inside yet\" if you can't safely enter.",
     safety_confirm: "I confirm — continue →",
     safety_incomplete: "You have not confirmed all safety items. If any of these conditions are not met, do NOT enter the building — call your local emergency services. Continue anyway?",
     // ── Building info (step 1) ──
@@ -1217,6 +1219,8 @@ const I18N = {
     safety_water: "NO estoy caminando por agua estancada para acceder al edificio",
     safety_gear: "Equipo de protección:",
     safety_gear_desc: "Como mínimo, use botas de goma, guantes resistentes y una mascarilla N95 o respirador. El agua de inundación contiene aguas residuales, químicos y esporas de moho.",
+    safety_water_tip_title: "Si todavía hay agua adentro:",
+    safety_water_tip: "Espere a que baje antes de entrar. Aún puede usar esta herramienta — estime el nivel del agua desde afuera mirando por las ventanas o las marcas de agua en el exterior, y observe lo que pueda ver desde la puerta. El recorrido preguntará sobre condiciones interiores, pero puede seleccionar \"Aún no he entrado\" si no puede entrar de manera segura.",
     safety_confirm: "Confirmo — continuar →",
     safety_incomplete: "No ha confirmado todos los puntos de seguridad. Si alguna de estas condiciones no se cumple, NO entre al edificio — llame a los servicios de emergencia locales. ¿Continuar de todos modos?",
     // ── Building info (step 1) ──
@@ -1501,6 +1505,7 @@ const WALKTHROUGH_QUESTIONS = [
       { label: 'Staining, peeling paint, or surface dirt only', label_es: 'Solo manchas, pintura descascarada o suciedad superficial', value: 'cosmetic', icon: '🎨' },
       { label: 'Cracks in walls, missing siding, or damaged trim', label_es: 'Grietas en paredes, revestimiento faltante o molduras dañadas', value: 'moderate', icon: '⚠️' },
       { label: 'Walls leaning, bowing, or large cracks visible', label_es: 'Paredes inclinadas, combadas o grietas grandes visibles', value: 'severe', icon: '🚨' },
+      { label: "Not sure — I can't tell", label_es: 'No estoy seguro — no puedo determinar', value: 'unknown', icon: '❓' },
     ]
   },
   {
@@ -1539,6 +1544,7 @@ const WALKTHROUGH_QUESTIONS = [
       { label: 'Windows and doors seem fine', label_es: 'Las ventanas y puertas parecen estar bien', value: 'none', icon: '✅' },
       { label: 'Some are stuck, swollen, or have peeling paint', label_es: 'Algunas están atascadas, hinchadas o con pintura descascarada', value: 'minor', icon: '⚠️' },
       { label: 'Broken, badly warped, or missing', label_es: 'Rotas, muy deformadas o faltantes', value: 'severe', icon: '🚨' },
+      { label: "Not sure — I can't check them", label_es: 'No estoy seguro — no puedo verificarlas', value: 'unknown', icon: '❓' },
     ]
   },
   {
@@ -1551,7 +1557,8 @@ const WALKTHROUGH_QUESTIONS = [
       { label: 'Mostly dry, just some watermarks or staining', label_es: 'Mayormente seco, solo algunas marcas de agua o manchas', value: 'minor', icon: '💧' },
       { label: 'Walls or ceilings are damp, plaster is crumbling or bubbling', label_es: 'Paredes o techos húmedos, yeso desmoronándose o con burbujas', value: 'moderate', icon: '⚠️' },
       { label: 'Standing water, severe damage to walls/floors/ceilings', label_es: 'Agua estancada, daño severo en paredes/pisos/techos', value: 'severe', icon: '🚨' },
-      { label: 'Not flooded inside / I haven\'t been inside yet', label_es: 'No se inundó adentro / Aún no he entrado', value: 'none', icon: '✅' },
+      { label: 'Not flooded inside — interior looks dry', label_es: 'No se inundó adentro — el interior se ve seco', value: 'none', icon: '✅' },
+      { label: "I haven't been inside yet", label_es: 'Aún no he entrado', value: 'unknown', icon: '❓' },
     ],
     showIf: (answers) => answers.water_level !== 'none'
   },
@@ -1566,6 +1573,7 @@ const WALKTHROUGH_QUESTIONS = [
       { label: 'Some musty smell or small patches of discoloration', label_es: 'Algo de olor a humedad o pequeñas áreas de decoloración', value: 'minor', icon: '⚠️' },
       { label: 'Visible mold growth on walls, ceilings, or belongings', label_es: 'Crecimiento de moho visible en paredes, techos o pertenencias', value: 'moderate', icon: '🦠' },
       { label: 'Extensive mold — large areas, strong smell', label_es: 'Moho extenso — áreas grandes, olor fuerte', value: 'severe', icon: '🚨' },
+      { label: "Not sure — I can't tell if it's mold or just dirt/staining", label_es: 'No estoy seguro — no puedo distinguir si es moho o solo suciedad/manchas', value: 'unknown', icon: '❓' },
     ],
     showIf: (answers) => answers.water_level !== 'none'
   },
@@ -1597,6 +1605,7 @@ function walkthruToDamage(answers) {
   if (answers.exterior_damage === 'severe') d.siding = 'severe';
   else if (answers.exterior_damage === 'moderate') d.siding = 'moderate';
   else if (answers.exterior_damage === 'cosmetic') d.siding = 'minor';
+  else if (answers.exterior_damage === 'unknown' && answers.water_level !== 'none') d.siding = 'minor';
 
   // Roof
   if (answers.roof_damage === 'severe') d.roof = 'severe';
@@ -1605,11 +1614,13 @@ function walkthruToDamage(answers) {
   // Windows
   if (answers.windows_doors === 'severe') d.windows = 'severe';
   else if (answers.windows_doors === 'minor') d.windows = 'minor';
+  else if (answers.windows_doors === 'unknown' && answers.water_level !== 'none') d.windows = 'minor';
 
-  // Interior
+  // Interior — "unknown" means they haven't been inside; conservatively flag if water entered
   if (answers.interior_condition === 'severe') d.interior = 'severe';
   else if (answers.interior_condition === 'moderate') d.interior = 'moderate';
   else if (answers.interior_condition === 'minor') d.interior = 'minor';
+  else if (answers.interior_condition === 'unknown' && answers.water_level !== 'none') d.interior = 'minor';
 
   // Insulation — infer from water level + interior damage
   if (answers.water_level === 'above_knee' || answers.water_level === 'upper') d.insulation = 'severe';
@@ -1625,10 +1636,11 @@ function walkthruToDamage(answers) {
   else if (answers.water_level === 'ankle_knee') d.electrical = 'moderate';
   else if (answers.water_level === 'below_floor') d.electrical = 'minor';
 
-  // Mold
+  // Mold — "unknown" conservatively flags for guidance since mold is easy to miss
   if (answers.mold_visible === 'severe') d.mold = 'severe';
   else if (answers.mold_visible === 'moderate') d.mold = 'moderate';
   else if (answers.mold_visible === 'minor') d.mold = 'minor';
+  else if (answers.mold_visible === 'unknown') d.mold = 'minor';
 
   return d;
 }
@@ -1663,6 +1675,10 @@ function showHwStep0() {
           ${t('safety_water')}
         </label>
       </div>
+    </div>
+
+    <div class="info-box" style="margin-bottom:16px;">
+      <strong>${t('safety_water_tip_title')}</strong> ${t('safety_water_tip')}
     </div>
 
     <div class="warn-box">
