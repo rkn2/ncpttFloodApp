@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SHPO Assessment Dashboard</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<style>
+  :root {
+    --bg: #F5F5F5;
+    --card-bg: #FFFFFF;
+    --text: #1A1A1A;
+    --text-muted: #666;
+    --border: #E0E0E0;
+    --primary: #1B3A5C;
+    --primary-light: #EEF3F8;
+    --danger: #B22222;
+    --warning: #E65100;
+    --ok: #2E7D32;
+    --font: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: var(--font);
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+  }
+
+  header {
+    background: #1B3A5C;
+    color: #fff;
+    padding: 16px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  header h1 { font-size: 1.1rem; font-weight: 600; }
+  header .sub { font-size: 0.78rem; opacity: 0.7; }
+
+  .setup-banner {
+    background: #FFF3E0;
+    border-bottom: 2px solid #FFB74D;
+    padding: 16px 24px;
+    font-size: 0.85rem;
+    line-height: 1.6;
+  }
+  .setup-banner code {
+    background: #FFF;
+    border: 1px solid #DDD;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 0.8rem;
+  }
+
+  .controls {
+    padding: 12px 24px;
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    align-items: center;
+    background: var(--card-bg);
+    border-bottom: 1px solid var(--border);
+  }
+  .controls select, .controls input {
+    padding: 6px 10px;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    font-size: 0.82rem;
+    font-family: var(--font);
+  }
+  .controls label {
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: var(--text-muted);
+  }
+  .stat-row {
+    display: flex;
+    gap: 16px;
+    margin-left: auto;
+    flex-wrap: wrap;
+  }
+  .stat {
+    text-align: center;
+  }
+  .stat-num {
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--primary);
+  }
+  .stat-label {
+    font-size: 0.68rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+
+  #map {
+    height: 300px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .table-wrap {
+    overflow-x: auto;
+    padding: 0 24px 24px;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.82rem;
+    margin-top: 16px;
+  }
+  th {
+    background: var(--primary-light);
+    color: var(--primary);
+    font-weight: 600;
+    text-align: left;
+    padding: 8px 10px;
+    white-space: nowrap;
+    cursor: pointer;
+    user-select: none;
+    position: sticky;
+    top: 0;
+  }
+  th:hover { background: #D6E4F0; }
+  td {
+    padding: 7px 10px;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+  }
+  tr:hover td { background: #FAFAFA; }
+
+  .posting-badge {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+  }
+  .posting-inspected { background: #E8F5E9; color: #2E7D32; }
+  .posting-restricted { background: #FFF3E0; color: #E65100; }
+  .posting-unsafe { background: #FFEBEE; color: #B22222; }
+
+  .sev-dot {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    margin-right: 4px;
+  }
+  .sev-severe { background: #B22222; }
+  .sev-moderate { background: #E65100; }
+  .sev-minor { background: #2E7D32; }
+
+  .empty-state {
+    text-align: center;
+    padding: 60px 24px;
+    color: var(--text-muted);
+  }
+  .empty-state h2 { font-size: 1.1rem; margin-bottom: 8px; color: var(--text); }
+
+  .refresh-btn {
+    background: var(--primary);
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    padding: 6px 14px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    cursor: pointer;
+  }
+  .refresh-btn:hover { opacity: 0.9; }
+
+  @media (max-width: 768px) {
+    .controls { flex-direction: column; align-items: stretch; }
+    .stat-row { margin-left: 0; justify-content: space-around; }
+    #map { height: 220px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div>
+    <h1>SHPO Assessment Dashboard</h1>
+    <div class="sub">Historic Flood Recovery Tool — Aggregated Field Assessments</div>
+  </div>
+  <button class="refresh-btn" onclick="loadData()">↻ Refresh</button>
+</header>
+
+<div id="setup-banner" class="setup-banner" style="display:none;">
+  <strong>Setup needed:</strong> Paste your Google Sheet's published CSV URL below.
+  <br>Go to your Sheet → File → Share → Publish to web → select the tab (e.g. "Rapid Triage") → CSV → Publish.
+  <br>Then paste the URL here:
+  <div style="margin-top:8px;display:flex;gap:8px;">
+    <input type="text" id="sheet-url" placeholder="https://docs.google.com/spreadsheets/d/.../pub?gid=...&single=true&output=csv" style="flex:1;padding:8px;font-size:0.82rem;">
+    <button class="refresh-btn" onclick="saveSheetUrl()">Save & Load</button>
+  </div>
+</div>
+
+<div class="controls" id="controls" style="display:none;">
+  <div>
+    <label>Posting</label><br>
+    <select id="filter-posting" onchange="applyFilters()">
+      <option value="">All</option>
+      <option value="Unsafe">Unsafe</option>
+      <option value="Restricted Use">Restricted Use</option>
+      <option value="Inspected">Inspected</option>
+    </select>
+  </div>
+  <div>
+    <label>Severity</label><br>
+    <select id="filter-severity" onchange="applyFilters()">
+      <option value="">All</option>
+      <option value="severe">Has Severe</option>
+      <option value="moderate">Has Moderate+</option>
+    </select>
+  </div>
+  <div>
+    <label>Search</label><br>
+    <input type="text" id="filter-search" placeholder="Address, name, area…" oninput="applyFilters()">
+  </div>
+  <div class="stat-row" id="stats"></div>
+</div>
+
+<div id="map"></div>
+
+<div class="table-wrap">
+  <div id="empty-state" class="empty-state" style="display:none;">
+    <h2>No assessments yet</h2>
+    <p>Assessments will appear here once field data syncs from the Historic Flood Recovery Tool.</p>
+  </div>
+  <table id="data-table" style="display:none;">
+    <thead id="table-head"></thead>
+    <tbody id="table-body"></tbody>
+  </table>
+</div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+const LS_SHEET_URL = 'shpo_dashboard_sheet_url';
+let allRows = [];
+let filteredRows = [];
+let map = null;
+let markers = [];
+let sortCol = 0;
+let sortAsc = true;
+
+const DISPLAY_COLS = [
+  { key: 'Submitted', label: 'Date' },
+  { key: 'Building Name', label: 'Building' },
+  { key: 'Address', label: 'Address' },
+  { key: 'Area/Event', label: 'Area' },
+  { key: 'Posting', label: 'Posting' },
+  { key: 'Overall Damage', label: 'Damage %' },
+  { key: 'Construction Type', label: 'Construction' },
+  { key: 'Roof Covering', label: 'Roof' },
+  { key: 'Occupied', label: 'Occupied' },
+  { key: 'Inspector', label: 'Inspector' },
+];
+
+function init() {
+  map = L.map('map').setView([39.8, -77.0], 5);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '© OpenStreetMap contributors',
+    maxZoom: 18
+  }).addTo(map);
+
+  const url = localStorage.getItem(LS_SHEET_URL);
+  if (url) {
+    loadData();
+  } else {
+    document.getElementById('setup-banner').style.display = '';
+    document.getElementById('map').style.display = 'none';
+  }
+}
+
+function saveSheetUrl() {
+  const url = document.getElementById('sheet-url').value.trim();
+  if (!url) return;
+  localStorage.setItem(LS_SHEET_URL, url);
+  document.getElementById('setup-banner').style.display = 'none';
+  document.getElementById('map').style.display = '';
+  loadData();
+}
+
+async function loadData() {
+  const url = localStorage.getItem(LS_SHEET_URL);
+  if (!url) {
+    document.getElementById('setup-banner').style.display = '';
+    return;
+  }
+  try {
+    const resp = await fetch(url);
+    const text = await resp.text();
+    allRows = parseCSV(text);
+    applyFilters();
+    document.getElementById('controls').style.display = '';
+  } catch (e) {
+    document.getElementById('setup-banner').style.display = '';
+    document.getElementById('setup-banner').innerHTML = `<strong style="color:#B22222;">Error loading sheet:</strong> ${e.message}. Check the published CSV URL.`;
+  }
+}
+
+function parseCSV(text) {
+  const lines = text.split('\n').map(l => l.trim()).filter(Boolean);
+  if (lines.length < 2) return [];
+  const headers = parseCSVLine(lines[0]);
+  return lines.slice(1).map(line => {
+    const vals = parseCSVLine(line);
+    const obj = {};
+    headers.forEach((h, i) => { obj[h.trim()] = (vals[i] || '').trim(); });
+    return obj;
+  });
+}
+
+function parseCSVLine(line) {
+  const result = [];
+  let current = '';
+  let inQuotes = false;
+  for (let i = 0; i < line.length; i++) {
+    const c = line[i];
+    if (inQuotes) {
+      if (c === '"' && line[i+1] === '"') { current += '"'; i++; }
+      else if (c === '"') { inQuotes = false; }
+      else { current += c; }
+    } else {
+      if (c === '"') { inQuotes = true; }
+      else if (c === ',') { result.push(current); current = ''; }
+      else { current += c; }
+    }
+  }
+  result.push(current);
+  return result;
+}
+
+function applyFilters() {
+  const posting = document.getElementById('filter-posting').value;
+  const severity = document.getElementById('filter-severity').value;
+  const search = document.getElementById('filter-search').value.toLowerCase();
+
+  filteredRows = allRows.filter(r => {
+    if (posting && r['Posting'] !== posting) return false;
+    if (severity === 'severe' && !hasSeverity(r, 'severe')) return false;
+    if (severity === 'moderate' && !hasSeverity(r, 'moderate') && !hasSeverity(r, 'severe')) return false;
+    if (search) {
+      const text = Object.values(r).join(' ').toLowerCase();
+      if (!text.includes(search)) return false;
+    }
+    return true;
+  });
+
+  if (sortCol !== null) {
+    const key = DISPLAY_COLS[sortCol]?.key;
+    if (key) {
+      filteredRows.sort((a, b) => {
+        const va = a[key] || '';
+        const vb = b[key] || '';
+        return sortAsc ? va.localeCompare(vb) : vb.localeCompare(va);
+      });
+    }
+  }
+
+  renderStats();
+  renderTable();
+  renderMap();
+}
+
+function hasSeverity(row, level) {
+  const cats = ['Collapsed/Off Foundation','Structural','Roof Dmg','Siding','Windows','Chimney','Electrical','Insulation','Interior','Mold'];
+  return cats.some(c => row[c] === level);
+}
+
+function worstSeverity(row) {
+  const cats = ['Collapsed/Off Foundation','Structural','Roof Dmg','Siding','Windows','Chimney','Electrical','Insulation','Interior','Mold'];
+  if (cats.some(c => row[c] === 'severe')) return 'severe';
+  if (cats.some(c => row[c] === 'moderate')) return 'moderate';
+  if (cats.some(c => row[c] === 'minor')) return 'minor';
+  return '';
+}
+
+function renderStats() {
+  const total = filteredRows.length;
+  const unsafe = filteredRows.filter(r => r['Posting'] === 'Unsafe').length;
+  const restricted = filteredRows.filter(r => r['Posting'] === 'Restricted Use').length;
+  const severeCount = filteredRows.filter(r => hasSeverity(r, 'severe')).length;
+
+  document.getElementById('stats').innerHTML = `
+    <div class="stat"><div class="stat-num">${total}</div><div class="stat-label">Total</div></div>
+    <div class="stat"><div class="stat-num" style="color:var(--danger)">${unsafe}</div><div class="stat-label">Unsafe</div></div>
+    <div class="stat"><div class="stat-num" style="color:var(--warning)">${restricted}</div><div class="stat-label">Restricted</div></div>
+    <div class="stat"><div class="stat-num" style="color:var(--danger)">${severeCount}</div><div class="stat-label">Severe Damage</div></div>
+  `;
+}
+
+function renderTable() {
+  const table = document.getElementById('data-table');
+  const empty = document.getElementById('empty-state');
+
+  if (!filteredRows.length) {
+    table.style.display = 'none';
+    empty.style.display = '';
+    return;
+  }
+  empty.style.display = 'none';
+  table.style.display = '';
+
+  document.getElementById('table-head').innerHTML = '<tr>' +
+    DISPLAY_COLS.map((c, i) =>
+      `<th onclick="sortBy(${i})">${c.label} ${sortCol === i ? (sortAsc ? '▲' : '▼') : ''}</th>`
+    ).join('') +
+    '<th>Damage</th></tr>';
+
+  document.getElementById('table-body').innerHTML = filteredRows.map(r => {
+    const postCls = r['Posting'] === 'Inspected' ? 'posting-inspected' : r['Posting'] === 'Restricted Use' ? 'posting-restricted' : r['Posting'] === 'Unsafe' ? 'posting-unsafe' : '';
+    const worst = worstSeverity(r);
+    const sevDots = ['Collapsed/Off Foundation','Structural','Roof Dmg','Siding','Windows','Chimney','Electrical','Insulation','Interior','Mold']
+      .filter(c => r[c] && r[c] !== 'none')
+      .map(c => `<span class="sev-dot sev-${r[c]}" title="${c}: ${r[c]}"></span>`)
+      .join('');
+
+    return '<tr>' +
+      DISPLAY_COLS.map(c => {
+        let val = r[c.key] || '—';
+        if (c.key === 'Submitted' && val !== '—') {
+          try { val = new Date(val).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: '2-digit' }); } catch {}
+        }
+        if (c.key === 'Posting' && postCls) val = `<span class="posting-badge ${postCls}">${val}</span>`;
+        return `<td>${val}</td>`;
+      }).join('') +
+      `<td>${sevDots || '—'}</td></tr>`;
+  }).join('');
+}
+
+function sortBy(colIdx) {
+  if (sortCol === colIdx) { sortAsc = !sortAsc; }
+  else { sortCol = colIdx; sortAsc = true; }
+  applyFilters();
+}
+
+function renderMap() {
+  markers.forEach(m => map.removeLayer(m));
+  markers = [];
+  const bounds = [];
+
+  filteredRows.forEach(r => {
+    const gps = r['GPS'];
+    if (!gps) return;
+    const parts = gps.split(/[,;]/).map(s => parseFloat(s.trim()));
+    if (parts.length < 2 || isNaN(parts[0]) || isNaN(parts[1])) return;
+    const [lat, lon] = parts;
+    if (lat < -90 || lat > 90 || lon < -180 || lon > 180) return;
+
+    const posting = r['Posting'] || '';
+    const color = posting === 'Unsafe' ? '#B22222' : posting === 'Restricted Use' ? '#E65100' : '#2E7D32';
+
+    const marker = L.circleMarker([lat, lon], {
+      radius: 8,
+      fillColor: color,
+      fillOpacity: 0.8,
+      color: '#fff',
+      weight: 2
+    }).addTo(map);
+
+    marker.bindPopup(`
+      <strong>${r['Building Name'] || r['Address'] || 'Assessment'}</strong><br>
+      ${r['Address'] || ''}<br>
+      <span class="posting-badge ${posting === 'Unsafe' ? 'posting-unsafe' : posting === 'Restricted Use' ? 'posting-restricted' : 'posting-inspected'}">${posting}</span>
+      ${r['Overall Damage'] ? '<br>Damage: ' + r['Overall Damage'] : ''}
+      ${r['Inspector'] ? '<br>Inspector: ' + r['Inspector'] : ''}
+    `);
+
+    markers.push(marker);
+    bounds.push([lat, lon]);
+  });
+
+  if (bounds.length > 0) {
+    map.fitBounds(bounds, { padding: [30, 30], maxZoom: 14 });
+  }
+}
+
+init();
+</script>
+</body>
+</html>
