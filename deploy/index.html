@@ -232,6 +232,12 @@
   .sev-btn.sel-moderate { border-color: #FF9800; background: #FFF3E0; color: #E65100; }
   .sev-btn.sel-severe { border-color: #F44336; background: #FFEBEE; color: #B71C1C; }
 
+  @media (max-width: 480px) {
+    .damage-row { flex-direction: column; align-items: stretch; }
+    .severity-btns { width: 100%; }
+    .sev-btn { flex: 1; padding: 8px 4px; font-size: 0.75rem; }
+  }
+
   /* ── Severity info modal ── */
   .sev-modal-overlay {
     display: none;
@@ -494,18 +500,42 @@
   }
   .full-damage-row:last-child { border-bottom: none; }
 
+  /* ── Walkthrough options ── */
+  .walk-option {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 16px;
+    border: 2px solid #DDD;
+    border-radius: 10px;
+    background: #FAFAFA;
+    cursor: pointer;
+    font-size: 0.88rem;
+    font-family: var(--font);
+    text-align: left;
+    color: #333;
+    transition: all 0.15s;
+  }
+  .walk-option:hover { border-color: var(--hw-accent); background: var(--hw-light); }
+  .walk-option.walk-selected {
+    border-color: var(--hw-accent);
+    background: var(--hw-light);
+    font-weight: 600;
+  }
+  .walk-icon { font-size: 1.3rem; flex-shrink: 0; width: 32px; text-align: center; }
+
   /* ── Chat widget ── */
   #chat-btn {
     position: fixed;
     bottom: 24px; right: 24px;
+    width: 56px; height: 56px;
     background: #1B3A5C;
     color: #FFF;
-    border: none; border-radius: 28px;
-    padding: 12px 20px;
-    font-size: 0.85rem; font-weight: 600;
+    border: none; border-radius: 50%;
+    font-size: 1.4rem;
     cursor: pointer;
     box-shadow: 0 4px 16px rgba(0,0,0,0.22);
-    display: flex; align-items: center; gap: 8px;
+    display: flex; align-items: center; justify-content: center;
     z-index: 900;
     transition: background 0.15s;
   }
@@ -741,7 +771,7 @@
 </div>
 
 <!-- Chat widget -->
-<button id="chat-btn" onclick="toggleChat()" style="display:none">💬 Ask about grants</button>
+<button id="chat-btn" onclick="toggleChat()" style="display:none" aria-label="Ask about grants" title="Ask about grants">💬</button>
 <div id="chat-panel">
   <div id="chat-header">
     <div>
@@ -1019,7 +1049,8 @@ let state = {
   // Homeowner
   hw: {
     state: "", address: "", buildingType: "", materials: [], age: "", designations: [],
-    affectedAreas: [], damage: {} // { structural: 'minor'|'moderate'|'severe', ... }
+    affectedAreas: [], damage: {}, // { structural: 'minor'|'moderate'|'severe', ... }
+    safetyChecked: {}, walkAnswers: {}, walkIdx: 0
   },
   // Assessor
   as: {
@@ -1089,7 +1120,8 @@ function syncLangUI() {
 function renderCurrent() {
   if (!state.mode) return showModeSelect();
   if (state.mode === 'homeowner') {
-    if (state.step >= 2) showHwResults();
+    if (state.step >= 3) showHwResults();
+    else if (state.step >= 2) showWalkQuestion();
     else if (state.step >= 1) showHwStep1();
     else showHwStep0();
   } else {
@@ -1179,20 +1211,219 @@ function showModeSelect() {
 
 function startHomeowner() {
   state.mode = 'homeowner'; state.step = 0;
-  setChatVisible(true);
   badgeHtml('homeowner');
   showHwStep0();
 }
 
-const HW_STEPS = ['Building Info', 'Flood Damage', 'Results'];
+const HW_STEPS = ['Safety', 'Building', 'Walkthrough', 'Results'];
+
+// ── Guided walkthrough questions ──
+// Each question is one screen. The user picks an answer; based on what they pick,
+// damage categories get auto-populated and the next question may branch.
+const WALKTHROUGH_QUESTIONS = [
+  {
+    id: 'water_level',
+    question: 'How high did the water get inside your building?',
+    desc: 'Select the highest level the floodwater reached. This helps us determine which parts of your building may be affected.',
+    options: [
+      { label: 'Water did not enter the building', value: 'none', icon: '✅' },
+      { label: 'Below the floor (crawl space / basement only)', value: 'below_floor', icon: '🔻' },
+      { label: 'Ankle to knee height on the first floor', value: 'ankle_knee', icon: '🌊' },
+      { label: 'Above knee height on the first floor', value: 'above_knee', icon: '🌊🌊' },
+      { label: 'Reached the upper floors or higher', value: 'upper', icon: '🌊🌊🌊' },
+    ]
+  },
+  {
+    id: 'exterior_damage',
+    question: 'Do you see damage to the outside of the building?',
+    desc: 'Look at the exterior walls, siding, and any visible cracks or shifting.',
+    options: [
+      { label: 'No visible exterior damage', value: 'none', icon: '✅' },
+      { label: 'Staining, peeling paint, or surface dirt only', value: 'cosmetic', icon: '🎨' },
+      { label: 'Cracks in walls, missing siding, or damaged trim', value: 'moderate', icon: '⚠️' },
+      { label: 'Walls leaning, bowing, or large cracks visible', value: 'severe', icon: '🚨' },
+    ]
+  },
+  {
+    id: 'foundation_visible',
+    question: 'Can you see the foundation or basement walls?',
+    desc: 'If you can see them, look for cracks, shifting, or erosion around the base of the building.',
+    options: [
+      { label: 'Foundation looks normal — no visible cracks or shifting', value: 'ok', icon: '✅' },
+      { label: 'Minor cracks or some erosion around the base', value: 'minor', icon: '⚠️' },
+      { label: 'Large cracks, walls leaning, or the building seems to have shifted', value: 'severe', icon: '🚨' },
+      { label: "I can't see the foundation or I'm not sure", value: 'unknown', icon: '❓' },
+    ]
+  },
+  {
+    id: 'roof_damage',
+    question: 'Is there any damage to the roof?',
+    desc: 'Look for missing shingles or tiles, sagging, or water stains on upper ceilings.',
+    options: [
+      { label: 'Roof looks intact from outside', value: 'none', icon: '✅' },
+      { label: 'A few missing shingles or tiles, minor leaks', value: 'minor', icon: '⚠️' },
+      { label: 'Significant damage — large areas missing, sagging, or holes', value: 'severe', icon: '🚨' },
+      { label: "I can't tell from the ground", value: 'unknown', icon: '❓' },
+    ]
+  },
+  {
+    id: 'windows_doors',
+    question: 'What about windows and doors?',
+    desc: 'Check if they open and close, look for swelling, broken glass, or warped frames.',
+    options: [
+      { label: 'Windows and doors seem fine', value: 'none', icon: '✅' },
+      { label: 'Some are stuck, swollen, or have peeling paint', value: 'minor', icon: '⚠️' },
+      { label: 'Broken, badly warped, or missing', value: 'severe', icon: '🚨' },
+    ]
+  },
+  {
+    id: 'interior_condition',
+    question: 'What does the inside look like?',
+    desc: 'Look at walls, ceilings, and floors on any level that was flooded.',
+    options: [
+      { label: 'Mostly dry, just some watermarks or staining', value: 'minor', icon: '💧' },
+      { label: 'Walls or ceilings are damp, plaster is crumbling or bubbling', value: 'moderate', icon: '⚠️' },
+      { label: 'Standing water, severe damage to walls/floors/ceilings', value: 'severe', icon: '🚨' },
+      { label: 'Not flooded inside / I haven\'t been inside yet', value: 'none', icon: '✅' },
+    ],
+    showIf: (answers) => answers.water_level !== 'none'
+  },
+  {
+    id: 'mold_visible',
+    question: 'Do you see or smell mold?',
+    desc: 'Mold can appear as dark spots, fuzzy growth, or a musty smell — it can start within 24–48 hours after flooding.',
+    options: [
+      { label: 'No mold visible, no musty smell', value: 'none', icon: '✅' },
+      { label: 'Some musty smell or small patches of discoloration', value: 'minor', icon: '⚠️' },
+      { label: 'Visible mold growth on walls, ceilings, or belongings', value: 'moderate', icon: '🦠' },
+      { label: 'Extensive mold — large areas, strong smell', value: 'severe', icon: '🚨' },
+    ],
+    showIf: (answers) => answers.water_level !== 'none'
+  },
+  {
+    id: 'chimney',
+    question: 'Does your building have a masonry chimney?',
+    desc: 'Brick or stone chimneys are especially vulnerable after flooding — the mortar can be weakened by water.',
+    options: [
+      { label: 'No chimney, or it\'s a metal flue', value: 'na', icon: '➖' },
+      { label: 'Chimney looks fine from outside', value: 'none', icon: '✅' },
+      { label: 'Mortar looks crumbly or there are new cracks', value: 'minor', icon: '⚠️' },
+      { label: 'Chimney is leaning, has large cracks, or pieces have fallen', value: 'severe', icon: '🚨' },
+    ]
+  },
+];
+
+// Map walkthrough answers → damage categories + severity
+function walkthruToDamage(answers) {
+  const d = {};
+
+  // Structural / Foundation
+  if (answers.foundation_visible === 'severe') d.structural = 'severe';
+  else if (answers.foundation_visible === 'minor') d.structural = 'minor';
+  else if (answers.foundation_visible === 'unknown' && answers.water_level !== 'none') d.structural = 'minor';
+
+  // Exterior / Siding
+  if (answers.exterior_damage === 'severe') d.siding = 'severe';
+  else if (answers.exterior_damage === 'moderate') d.siding = 'moderate';
+  else if (answers.exterior_damage === 'cosmetic') d.siding = 'minor';
+
+  // Roof
+  if (answers.roof_damage === 'severe') d.roof = 'severe';
+  else if (answers.roof_damage === 'minor') d.roof = 'minor';
+
+  // Windows
+  if (answers.windows_doors === 'severe') d.windows = 'severe';
+  else if (answers.windows_doors === 'minor') d.windows = 'minor';
+
+  // Interior
+  if (answers.interior_condition === 'severe') d.interior = 'severe';
+  else if (answers.interior_condition === 'moderate') d.interior = 'moderate';
+  else if (answers.interior_condition === 'minor') d.interior = 'minor';
+
+  // Insulation — infer from water level + interior damage
+  if (answers.water_level === 'above_knee' || answers.water_level === 'upper') d.insulation = 'severe';
+  else if (answers.water_level === 'ankle_knee') d.insulation = 'moderate';
+  else if (answers.water_level === 'below_floor' && answers.interior_condition && answers.interior_condition !== 'none') d.insulation = 'minor';
+
+  // Chimney
+  if (answers.chimney === 'severe') d.chimney = 'severe';
+  else if (answers.chimney === 'minor') d.chimney = 'minor';
+
+  // Electrical — infer from water level (any interior flooding means get it inspected)
+  if (answers.water_level === 'above_knee' || answers.water_level === 'upper') d.electrical = 'severe';
+  else if (answers.water_level === 'ankle_knee') d.electrical = 'moderate';
+  else if (answers.water_level === 'below_floor') d.electrical = 'minor';
+
+  // Mold
+  if (answers.mold_visible === 'severe') d.mold = 'severe';
+  else if (answers.mold_visible === 'moderate') d.mold = 'moderate';
+  else if (answers.mold_visible === 'minor') d.mold = 'minor';
+
+  return d;
+}
+
+// ── Step 0: Safety Check ──
 
 function showHwStep0() {
   state.step = 0;
-  updateProgress(20, false);
+  updateProgress(5, false);
   renderStepIndicator(HW_STEPS, 0, false);
+  const safetyChecked = state.hw.safetyChecked || {};
   screens().innerHTML = card(`
-    <h2>Building Information</h2>
-    <p class="section-desc">Tell us about your building. This tool is designed for historic structures — all building types are welcome.</p>
+    <h2 style="color:var(--danger);">Before You Enter</h2>
+    <p class="section-desc">Your safety comes first. Please confirm these before going inside a flood-damaged building.</p>
+
+    <div style="background:#FFEBEE;border:2px solid var(--danger);border-radius:8px;padding:16px;margin-bottom:16px;">
+      <div class="check-group" style="gap:14px;">
+        <label class="check-item" style="font-size:0.9rem;font-weight:600;">
+          <input type="checkbox" name="safety" value="power" ${safetyChecked.power?'checked':''}>
+          Electricity is OFF at the breaker or meter — do not enter with active power and standing water
+        </label>
+        <label class="check-item" style="font-size:0.9rem;font-weight:600;">
+          <input type="checkbox" name="safety" value="gas" ${safetyChecked.gas?'checked':''}>
+          Gas is turned off, and I do not smell gas
+        </label>
+        <label class="check-item" style="font-size:0.9rem;font-weight:600;">
+          <input type="checkbox" name="safety" value="structure" ${safetyChecked.structure?'checked':''}>
+          The building has NOT been posted "Unsafe" or "Do Not Enter" by officials
+        </label>
+        <label class="check-item" style="font-size:0.9rem;font-weight:600;">
+          <input type="checkbox" name="safety" value="water" ${safetyChecked.water?'checked':''}>
+          I am NOT wading through standing water to access the building
+        </label>
+      </div>
+    </div>
+
+    <div class="warn-box">
+      <strong>Protective gear:</strong> At minimum, wear rubber boots, heavy gloves, and an N95 mask or respirator. Floodwater carries sewage, chemicals, and mold spores.
+    </div>
+
+    <div class="btn-row">
+      <button class="btn btn-secondary" onclick="showModeSelect()">← Back</button>
+      <button class="btn btn-primary" onclick="saveHwSafety()">I confirm — continue →</button>
+    </div>
+  `);
+}
+
+function saveHwSafety() {
+  const checks = [...document.querySelectorAll('input[name="safety"]:checked')].map(i=>i.value);
+  state.hw.safetyChecked = {};
+  checks.forEach(c => state.hw.safetyChecked[c] = true);
+  if (checks.length < 4) {
+    if (!confirm('You have not confirmed all safety items. If any of these conditions are not met, do NOT enter the building — call your local emergency services. Continue anyway?')) return;
+  }
+  showHwStep1();
+}
+
+// ── Step 1: Building Info ──
+
+function showHwStep1() {
+  state.step = 1;
+  updateProgress(20, false);
+  renderStepIndicator(HW_STEPS, 1, false);
+  screens().innerHTML = card(`
+    <h2>About Your Building</h2>
+    <p class="section-desc">A few quick details so we can find the right assistance programs and tailor the guidance.</p>
     <div class="field-group">
       <label class="field-label">Building Address <span>(helps you find this entry later)</span></label>
       <input type="text" id="hw-address" value="${state.hw.address}" placeholder="e.g. 123 Main St, Montpelier, VT">
@@ -1205,95 +1436,129 @@ function showHwStep0() {
       </select>
     </div>
     <div class="field-group">
-      <label class="field-label">Building Type</label>
-      <div class="radio-group">
-        ${['Single-family residential','Multi-family residential','Commercial / mixed-use','Civic / institutional'].map(v =>
-          `<label class="radio-item"><input type="radio" name="hw-btype" value="${v}" ${state.hw.buildingType===v?'checked':''}> ${v}</label>`
-        ).join('')}
-      </div>
-    </div>
-    <div class="field-group">
       <label class="field-label">Primary Construction Material <span>(check all that apply)</span></label>
-      <div class="check-group">
-        ${['Wood frame','Masonry (brick / stone)','Concrete','Mixed'].map(v =>
+      <div class="check-group inline">
+        ${['Wood frame','Masonry (brick / stone)','Concrete','Mixed / not sure'].map(v =>
           `<label class="check-item"><input type="checkbox" name="hw-mat" value="${v}" ${state.hw.materials.includes(v)?'checked':''}> ${v}</label>`
         ).join('')}
       </div>
     </div>
     <div class="field-group">
-      <label class="field-label">Approximate Building Age</label>
-      <div class="radio-group">
-        ${['Pre-1870','1870–1940','1940–1970','Post-1970'].map(v =>
-          `<label class="radio-item"><input type="radio" name="hw-age" value="${v}" ${state.hw.age===v?'checked':''}> ${v}</label>`
-        ).join('')}
-      </div>
-    </div>
-    <div class="field-group">
-      <label class="field-label">Historic Designation <span>(check all that apply)</span></label>
+      <label class="field-label">Is this building historically designated? <span>(check all that apply)</span></label>
       <div class="check-group">
-        ${['Listed on the National Register of Historic Places','Local historic landmark','Contributing structure in a historic district','Not formally designated, but historically significant'].map(v =>
+        ${['Listed on the National Register of Historic Places','Local historic landmark','Contributing structure in a historic district','Not sure, but it may be historically significant'].map(v =>
           `<label class="check-item"><input type="checkbox" name="hw-desig" value="${v}" ${state.hw.designations.includes(v)?'checked':''}> ${v}</label>`
         ).join('')}
       </div>
     </div>
     <div class="btn-row">
-      <button class="btn btn-secondary" onclick="showModeSelect()">← Back</button>
-      <button class="btn btn-primary" onclick="saveHwStep0()">Next: Flood Damage →</button>
+      <button class="btn btn-secondary" onclick="showHwStep0()">← Back</button>
+      <button class="btn btn-primary" onclick="saveHwStep1()">Next: Walk me through the damage →</button>
     </div>
   `);
 }
 
-function saveHwStep0() {
+function saveHwStep1() {
   state.hw.address = document.getElementById('hw-address').value.trim();
   state.hw.state = document.getElementById('hw-state').value;
-  state.hw.buildingType = document.querySelector('input[name="hw-btype"]:checked')?.value || '';
   state.hw.materials = [...document.querySelectorAll('input[name="hw-mat"]:checked')].map(i=>i.value);
-  state.hw.age = document.querySelector('input[name="hw-age"]:checked')?.value || '';
   state.hw.designations = [...document.querySelectorAll('input[name="hw-desig"]:checked')].map(i=>i.value);
   if (!state.hw.state) { alert('Please select your state or territory.'); return; }
-  showHwStep1();
+  state.hw.walkAnswers = state.hw.walkAnswers || {};
+  state.hw.walkIdx = 0;
+  showWalkQuestion();
 }
 
-function showHwStep1() {
-  state.step = 1;
-  autoSave();
-  updateProgress(55, false);
-  renderStepIndicator(HW_STEPS, 1, false);
+// ── Step 2: Guided Walkthrough ──
 
-  const areas = ['Basement / crawl space','First floor','Upper floors','Exterior / site'];
-  const catHtml = DAMAGE_CATEGORIES.map(cat => {
-    const cur = state.hw.damage[cat.key] || '';
-    return `<div class="damage-row">
-      <span class="damage-row-label">${cat.label}</span>
-      <div class="severity-btns">
-        <button class="sev-btn ${cur==='none'?'sel-none':''}" onclick="setSev('${cat.key}','none',this)">None</button>
-        <button class="sev-btn ${cur==='minor'?'sel-minor':''}" onclick="setSev('${cat.key}','minor',this)">Minor</button>
-        <button class="sev-btn ${cur==='moderate'?'sel-moderate':''}" onclick="setSev('${cat.key}','moderate',this)">Moderate</button>
-        <button class="sev-btn ${cur==='severe'?'sel-severe':''}" onclick="setSev('${cat.key}','severe',this)">Severe</button>
-      </div>
-    </div>`;
-  }).join('');
+function showWalkQuestion() {
+  state.step = 2;
+  autoSave();
+
+  const answers = state.hw.walkAnswers;
+  // Find the next applicable question
+  while (state.hw.walkIdx < WALKTHROUGH_QUESTIONS.length) {
+    const q = WALKTHROUGH_QUESTIONS[state.hw.walkIdx];
+    if (!q.showIf || q.showIf(answers)) break;
+    state.hw.walkIdx++;
+  }
+
+  if (state.hw.walkIdx >= WALKTHROUGH_QUESTIONS.length) {
+    finishWalkthrough();
+    return;
+  }
+
+  const q = WALKTHROUGH_QUESTIONS[state.hw.walkIdx];
+  const qNum = state.hw.walkIdx + 1;
+  const totalQ = WALKTHROUGH_QUESTIONS.length;
+  const pct = 30 + Math.round((state.hw.walkIdx / totalQ) * 50);
+  updateProgress(pct, false);
+  renderStepIndicator(HW_STEPS, 2, false);
+
+  const cur = answers[q.id] || '';
 
   screens().innerHTML = card(`
-    <h2>Flood Damage</h2>
-    <p class="section-desc">For each damage category below, select the severity level. <button class="info-link" onclick="showSevModal()">What do these levels mean?</button></p>
-    <div class="damage-section">
-      <div class="damage-section-header">📍 Affected Areas <span style="font-weight:400;color:#888;font-size:0.78rem;margin-left:6px">check all that apply</span></div>
-      <div style="padding:10px 14px;">
-        <div class="check-group">
-          ${areas.map(a => `<label class="check-item"><input type="checkbox" name="hw-area" value="${a}" ${state.hw.affectedAreas.includes(a)?'checked':''}> ${a}</label>`).join('')}
-        </div>
-      </div>
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">
+      <h2>${q.question}</h2>
+      <span style="font-size:0.75rem;color:#888;white-space:nowrap;margin-left:12px;">Question ${qNum} of ${totalQ}</span>
     </div>
-    <div class="damage-section">
-      <div class="damage-section-header">🔍 Damage by Category</div>
-      ${catHtml}
+    <p class="section-desc">${q.desc}</p>
+    <div style="display:flex;flex-direction:column;gap:8px;margin-top:8px;">
+      ${q.options.map(opt => {
+        const sel = cur === opt.value;
+        return `<button class="walk-option ${sel ? 'walk-selected' : ''}" onclick="pickWalkOption('${q.id}','${opt.value}')">
+          <span class="walk-icon">${opt.icon}</span>
+          <span>${opt.label}</span>
+        </button>`;
+      }).join('')}
     </div>
-    <div class="btn-row">
-      <button class="btn btn-secondary" onclick="showHwStep0()">← Back</button>
-      <button class="btn btn-primary" onclick="saveHwStep1()">See Results →</button>
+    <div class="btn-row" style="margin-top:20px;">
+      <button class="btn btn-secondary" onclick="prevWalkQuestion()">← Back</button>
+      ${cur ? `<button class="btn btn-primary" onclick="nextWalkQuestion()">Next →</button>` : ''}
     </div>
   `);
+}
+
+function pickWalkOption(qId, value) {
+  state.hw.walkAnswers[qId] = value;
+  // Brief delay so the user sees their selection highlighted, then auto-advance
+  setTimeout(() => nextWalkQuestion(), 200);
+}
+
+function nextWalkQuestion() {
+  state.hw.walkIdx++;
+  showWalkQuestion();
+}
+
+function prevWalkQuestion() {
+  if (state.hw.walkIdx <= 0) {
+    showHwStep1();
+    return;
+  }
+  // Go back to previous applicable question
+  state.hw.walkIdx--;
+  const answers = state.hw.walkAnswers;
+  while (state.hw.walkIdx > 0) {
+    const q = WALKTHROUGH_QUESTIONS[state.hw.walkIdx];
+    if (!q.showIf || q.showIf(answers)) break;
+    state.hw.walkIdx--;
+  }
+  showWalkQuestion();
+}
+
+function finishWalkthrough() {
+  state.hw.damage = walkthruToDamage(state.hw.walkAnswers);
+  // Infer affected areas from water level
+  const wl = state.hw.walkAnswers.water_level;
+  state.hw.affectedAreas = [];
+  if (wl === 'below_floor') state.hw.affectedAreas = ['Basement / crawl space'];
+  else if (wl === 'ankle_knee') state.hw.affectedAreas = ['Basement / crawl space', 'First floor'];
+  else if (wl === 'above_knee') state.hw.affectedAreas = ['Basement / crawl space', 'First floor'];
+  else if (wl === 'upper') state.hw.affectedAreas = ['Basement / crawl space', 'First floor', 'Upper floors'];
+  if (state.hw.walkAnswers.exterior_damage && state.hw.walkAnswers.exterior_damage !== 'none') {
+    state.hw.affectedAreas.push('Exterior / site');
+  }
+  showHwResults();
 }
 
 function showSevModal() {
@@ -1303,29 +1568,11 @@ function closeSevModal() {
   document.getElementById('sev-modal-overlay').classList.remove('open');
 }
 
-function setSev(key, level, btn) {
-  state.hw.damage[key] = (state.hw.damage[key] === level) ? '' : level;
-  // re-render severity buttons for this row
-  const row = btn.closest('.damage-row');
-  row.querySelectorAll('.sev-btn').forEach(b => {
-    b.className = 'sev-btn';
-    if (state.hw.damage[key] === 'none' && b.textContent === 'None') b.classList.add('sel-none');
-    if (state.hw.damage[key] === 'minor' && b.textContent === 'Minor') b.classList.add('sel-minor');
-    if (state.hw.damage[key] === 'moderate' && b.textContent === 'Moderate') b.classList.add('sel-moderate');
-    if (state.hw.damage[key] === 'severe' && b.textContent === 'Severe') b.classList.add('sel-severe');
-  });
-}
-
-function saveHwStep1() {
-  state.hw.affectedAreas = [...document.querySelectorAll('input[name="hw-area"]:checked')].map(i=>i.value);
-  showHwResults();
-}
-
 function showHwResults() {
-  state.step = 2;
+  state.step = 3;
   autoSave();
   updateProgress(100, false);
-  renderStepIndicator(HW_STEPS, 2, false);
+  renderStepIndicator(HW_STEPS, 3, false);
 
   // Assistance programs
   const stateProgs = STATE_PROGRAMS[state.hw.state] || STATE_PROGRAMS['_default'];
@@ -1435,7 +1682,7 @@ function showHwResults() {
       </div>
 
       <div class="btn-row">
-        <button class="btn btn-secondary" onclick="showHwStep1()">← Back</button>
+        <button class="btn btn-secondary" onclick="state.hw.walkIdx = WALKTHROUGH_QUESTIONS.length - 1; showWalkQuestion()">← Back</button>
         <button class="btn btn-print" onclick="window.print()">🖨 Print / Save</button>
         <button class="btn btn-primary" onclick="showModeSelect()">Start Over</button>
       </div>
@@ -2550,12 +2797,17 @@ function loadAssessment(id) {
   const entry = getSaves().find(s => s.id === id);
   if (!entry) return;
   Object.assign(state, entry.state);
+  // Ensure new fields exist for older saves
+  state.hw.safetyChecked = state.hw.safetyChecked || {};
+  state.hw.walkAnswers = state.hw.walkAnswers || {};
+  state.hw.walkIdx = state.hw.walkIdx || 0;
   currentSaveName = entry.name;
   document.getElementById('saves-panel').classList.remove('open');
   setChatVisible(true);
   if (state.mode === 'homeowner') {
     badgeHtml('homeowner');
-    if (state.step >= 2) showHwResults();
+    if (state.step >= 3) showHwResults();
+    else if (state.step >= 2) showWalkQuestion();
     else if (state.step >= 1) showHwStep1();
     else showHwStep0();
   } else if (state.mode === 'assessor') {
@@ -2649,11 +2901,14 @@ loadContentBundle();
 document.documentElement.lang = LANG;
 syncLangUI();
 if (checkShareHash()) {
-  // Shared link — restore state and navigate to the right screen
+  state.hw.safetyChecked = state.hw.safetyChecked || {};
+  state.hw.walkAnswers = state.hw.walkAnswers || {};
+  state.hw.walkIdx = state.hw.walkIdx || 0;
   setChatVisible(!!state.mode);
   if (state.mode === 'homeowner') {
     badgeHtml('homeowner');
-    if (state.step >= 2) showHwResults();
+    if (state.step >= 3) showHwResults();
+    else if (state.step >= 2) showWalkQuestion();
     else if (state.step >= 1) showHwStep1();
     else showHwStep0();
   } else if (state.mode === 'assessor') {

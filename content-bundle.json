@@ -4,9 +4,9 @@
   "generator": "pipeline/ (extract->retrieve->synthesize->verify_citations->directive_lint->entailment audit)",
   "provenance_note": "Every do/dont item carries >=1 citation whose verbatim quote was mechanically verified present in its cited docs/ source, and passed an independent LLM claim-entailment audit. Records are advisory preservation guidance, not a substitute for a professional assessment.",
   "verification": {
-    "citations_verified": 49,
-    "citations_total": 49,
-    "items": 43,
+    "citations_verified": 85,
+    "citations_total": 85,
+    "items": 76,
     "entailment_audited": true,
     "entailment_dropped": [
       "chimney: foundation-wall quote over-applied to chimney"
@@ -24,7 +24,11 @@
     "windows",
     "chimney",
     "insulation",
-    "interior"
+    "interior",
+    "structural",
+    "electrical",
+    "mold",
+    "roof"
   ],
   "guidance": [
     {
@@ -497,6 +501,367 @@
           ]
         }
       ]
+    },
+    {
+      "id": "structural",
+      "label": "Structural / Foundation",
+      "audience": [
+        "homeowner"
+      ],
+      "summary": "Flood damage to foundations is one of the most dangerous situations a homeowner can face. Water exerts tremendous hydrostatic pressure on foundation walls, and pumping a flooded basement too soon can cause walls to collapse inward. Inspect masonry mortar joints for erosion, replace eroded soil around the foundation, and always consult a structural engineer before making repairs.",
+      "do": [
+        {
+          "text": "Be aware that pumping water from a flooded basement can be dangerous — the water inside may be balancing the hydrostatic pressure of groundwater outside, and removing it too quickly can cause foundation walls to collapse.",
+          "citations": [
+            {
+              "source_file": "nthp-treatment-flood-damaged-historic-buildings.pdf",
+              "quote": "pumping water from your basement can be dangerous. This water may be providing the necessary pressure to balance the hydrostatic pressure of the groundwater"
+            }
+          ]
+        },
+        {
+          "text": "Leave water in a flooded basement until the groundwater table drops and the water recedes on its own, rather than pumping it out while exterior groundwater levels are still high.",
+          "citations": [
+            {
+              "source_file": "nthp-treatment-flood-damaged-historic-buildings.pdf",
+              "quote": "It is advisable to leave the water in place until the groundwater table sinks and the water recedes by itself"
+            }
+          ]
+        },
+        {
+          "text": "Inspect the mortar of stone masonry foundation walls to check whether it has been washed out of the joints, which can make the wall unstable.",
+          "citations": [
+            {
+              "source_file": "nthp-treatment-flood-damaged-historic-buildings.pdf",
+              "quote": "Inspect the mortar of stone masonry foundation walls to ensure that it has not leeched from the joints and made the wall unstable"
+            }
+          ]
+        },
+        {
+          "text": "Replace eroded soil around foundation walls and restore positive drainage away from the building to prevent ongoing water damage.",
+          "citations": [
+            {
+              "source_file": "nthp-treatment-flood-damaged-historic-buildings.pdf",
+              "quote": "Eroded soil at foundation wall leads to continuing water damage"
+            },
+            {
+              "source_file": "nthp-treatment-flood-damaged-historic-buildings.pdf",
+              "quote": "Fill with soil to provide positive drainage away from building"
+            }
+          ]
+        },
+        {
+          "text": "When repointing sandstone or soft stone foundations, use a lime-rich mortar (at least two parts hydrated lime to one part white Portland cement and nine parts sand — ASTM Type O) so the mortar is softer than the surrounding stone.",
+          "citations": [
+            {
+              "source_file": "nthp-treatment-flood-damaged-historic-buildings.pdf",
+              "quote": "new mortar should contain at least two parts hydrated lime to each part of white Portland cement and nine parts sand"
+            }
+          ]
+        },
+        {
+          "text": "Inspect brick masonry and concrete block foundation walls for missing mortar and repair them, especially if there is reason to suspect structural problems from the flooding.",
+          "citations": [
+            {
+              "source_file": "nthp-treatment-flood-damaged-historic-buildings.pdf",
+              "quote": "they should be inspected for missing mortar and repaired in the same manner as aboveground walls, unless there is reason to suspect a more serious structural problem created by the flooding"
+            }
+          ]
+        }
+      ],
+      "dont": [
+        {
+          "text": "Do not pump a flooded basement if the groundwater outside is still high — the foundation walls could be pushed inward and collapse from unbalanced hydrostatic pressure.",
+          "citations": [
+            {
+              "source_file": "nthp-treatment-flood-damaged-historic-buildings.pdf",
+              "quote": "If the groundwater level is higher than your basement floor and you pump the water from your basement, the foundation walls could be pushed inward and collapse"
+            }
+          ]
+        },
+        {
+          "text": "Do not underestimate the pressure that water exerts on below-grade walls and floor slabs — even standing water in a basement may be preventing structural failure.",
+          "citations": [
+            {
+              "source_file": "nthp-treatment-flood-damaged-historic-buildings.pdf",
+              "quote": "Water can exert tremendous pressure on foundation walls and floor slabs"
+            }
+          ]
+        }
+      ],
+      "call_a_pro": "Consult a licensed structural engineer before making any foundation or structural repairs. If walls are cracked, settling, or showing signs of movement, get a professional assessment before re-occupying the building."
+    },
+    {
+      "id": "electrical",
+      "label": "Electrical / Mechanical / HVAC",
+      "audience": [
+        "homeowner"
+      ],
+      "summary": "Flood-damaged electrical, mechanical, and HVAC systems pose immediate life-safety risks. All power must be confirmed off before entering, and any submerged wiring must be professionally inspected before the power is restored. When planning repairs, relocate utilities above the established flood risk level to protect them in future events.",
+      "do": [
+        {
+          "text": "Make sure all electricity is turned off before entering a flood-damaged building, and have any submerged electrical wiring inspected by a licensed electrician before restoring power.",
+          "citations": [
+            {
+              "source_file": "nthp-treatment-flood-damaged-historic-buildings.pdf",
+              "quote": "Make sure that all of your electricity is turned off. If any electrical wiring was submerged, have it inspected before turning the power back on"
+            }
+          ]
+        },
+        {
+          "text": "Stay away from downed power lines and electrical wires in and around the flood area.",
+          "citations": [
+            {
+              "source_file": "nthp-treatment-flood-damaged-historic-buildings.pdf",
+              "quote": "Stay away from power lines and electrical wires"
+            }
+          ]
+        },
+        {
+          "text": "If using generators or charcoal grills during cleanup, make sure they are properly vented to prevent carbon monoxide poisoning.",
+          "citations": [
+            {
+              "source_file": "nthp-treatment-flood-damaged-historic-buildings.pdf",
+              "quote": "Carbon monoxide exhaust kills. If you use electrical generators or charcoal grills, make sure that they are properly vented"
+            }
+          ]
+        },
+        {
+          "text": "Elevate or relocate utilities and mechanical systems above the established flood risk level, placing them in utilitarian or insignificant spaces in the building that are unlikely to flood.",
+          "citations": [
+            {
+              "source_file": "nps-flood-adaptation-guidelines-2021.pdf",
+              "quote": "Any part of these systems that is in flood-vulnerable locations should be elevated or relocated above the established flood risk level"
+            },
+            {
+              "source_file": "nps-flood-adaptation-guidelines-2021.pdf",
+              "quote": "Utilities and mechanical systems should be relocated to utilitarian or insignificant spaces in historic buildings that are unlikely to flood"
+            }
+          ]
+        },
+        {
+          "text": "Consider installing an electrical disconnect well above the flood risk level, separate from the main utility panel, so power to flood-prone areas can be cut quickly.",
+          "citations": [
+            {
+              "source_file": "nps-flood-adaptation-guidelines-2021.pdf",
+              "quote": "Installing an electrical disconnect well above the established flood risk level in an easy to access location. This should be separate from the utility panel"
+            }
+          ]
+        },
+        {
+          "text": "When planning any project involving mechanical, electrical, plumbing, or fire suppression systems, consider the service life of the various system components so you can plan upgrades strategically.",
+          "citations": [
+            {
+              "source_file": "nps-flood-adaptation-guidelines-2021.pdf",
+              "quote": "When planning a project involving mechanical, electrical, plumbing, or fire suppression systems, it is helpful to be aware of the service life of the various features of the systems involved"
+            }
+          ]
+        }
+      ],
+      "dont": [
+        {
+          "text": "Do not damage or destroy historic interior or exterior features excessively when accessing wall cavities for re-wiring — plan electrical work to minimize impact on historic character.",
+          "citations": [
+            {
+              "source_file": "nps-flood-adaptation-guidelines-2021.pdf",
+              "quote": "Damaging or destroying historic interior or exterior features, finishes, or materials to an excessive degree in order to access wall cavities for re-wiring"
+            }
+          ]
+        }
+      ],
+      "call_a_pro": "All submerged electrical, mechanical, and HVAC systems must be fully inspected and recertified by licensed professionals before use. This is a life-safety issue — do not attempt electrical repairs yourself."
+    },
+    {
+      "id": "mold",
+      "label": "Mold / Contamination",
+      "audience": [
+        "homeowner"
+      ],
+      "summary": "Mold can begin to grow on materials that stay wet longer than two or three days after a flood. The longer it grows, the greater the health hazard and the harder it is to control. Prompt cleanup, proper protective equipment, and careful isolation of affected areas are essential. For large infestations, hire a licensed mold remediation contractor.",
+      "do": [
+        {
+          "text": "Begin cleanup as soon as it is safe to return — mold grows rapidly on materials that stay wet, and the longer it grows, the greater the health hazard and the harder it is to control.",
+          "citations": [
+            {
+              "source_file": "nthp-treatment-flood-damaged-historic-buildings.pdf",
+              "quote": "grow on materials that stay wet longer than two or three days. The longer it grows, the greater the health hazard and the harder it is to control"
+            }
+          ]
+        },
+        {
+          "text": "Wear gloves, goggles, and a respirator rated N-95 or higher when working in mold-affected areas, since people are mainly exposed by breathing spores and skin contact.",
+          "citations": [
+            {
+              "source_file": "nthp-treatment-flood-damaged-historic-buildings.pdf",
+              "quote": "People are mainly exposed to mold by breathing spores and skin contact. Wear gloves, goggles, and a respirator rated N-95 or higher"
+            }
+          ]
+        },
+        {
+          "text": "Seal off moldy areas from the rest of the house before disturbing mold colonies, and ventilate to outdoors — do not run the central air system during cleanup.",
+          "citations": [
+            {
+              "source_file": "nthp-treatment-flood-damaged-historic-buildings.pdf",
+              "quote": "seal off the moldy areas from the rest of the house. Open windows, and don't run the central air system"
+            }
+          ]
+        },
+        {
+          "text": "Tape plastic over air grilles and drape plastic in stairwells to isolate clean areas. If power is on, put a fan in a window to exhaust mold-filled air to the outdoors.",
+          "citations": [
+            {
+              "source_file": "nthp-treatment-flood-damaged-historic-buildings.pdf",
+              "quote": "Tape plastic over air grilles, and drape plastic in the stairwell if the second story is dry and clean. If power is on, put a fan in a window to blow out and exhaust mold-filled air to the outdoors"
+            }
+          ]
+        },
+        {
+          "text": "Remove all porous, moldy, or sewage-contaminated materials — bag them in plastic before removing to reduce the release and spread of spores.",
+          "citations": [
+            {
+              "source_file": "nthp-treatment-flood-damaged-historic-buildings.pdf",
+              "quote": "Porous moldy or sewage-contaminated materials should be removed, put in plastic bags if possible, and thrown away"
+            }
+          ]
+        },
+        {
+          "text": "Remove all wet fibrous insulation from walls, even if the wallboard appears dry — wet insulation stays wet far too long and leads to hidden mold and decay fungi.",
+          "citations": [
+            {
+              "source_file": "nthp-treatment-flood-damaged-historic-buildings.pdf",
+              "quote": "Remove all wet fibrous insulation—even if wallboard appears to be dry. Wet insulation will stay wet far too long, leading to the growth of hidden unhealthy mold and decay fungi inside the walls"
+            }
+          ]
+        },
+        {
+          "text": "Clean mold from non-porous surfaces (hard plastic, concrete, glass, metal, solid wood) — cleaning should remove the mold, not just kill it, because dead spores can still cause health problems.",
+          "citations": [
+            {
+              "source_file": "nthp-treatment-flood-damaged-historic-buildings.pdf",
+              "quote": "Surface mold can be effectively cleaned from non-porous materials such as hard plastic, concrete, glass, and metal. Solid wood can also be cleaned"
+            },
+            {
+              "source_file": "nthp-treatment-flood-damaged-historic-buildings.pdf",
+              "quote": "Cleaning should remove, not just kill, the mold, because dead spores can still cause health problems"
+            }
+          ]
+        },
+        {
+          "text": "Take photographs for insurance purposes before cleaning up — do not wait for the claims adjuster before removing wet and moldy materials.",
+          "citations": [
+            {
+              "source_file": "nthp-treatment-flood-damaged-historic-buildings.pdf",
+              "quote": "Take photographs for insurance purposes before cleaning up. Do not wait for the claims adjuster to see the site before removing wet and moldy materials"
+            }
+          ]
+        }
+      ],
+      "dont": [
+        {
+          "text": "Do not disturb mold colonies without first sealing off the area — disturbing them can cause a huge release of spores into the air.",
+          "citations": [
+            {
+              "source_file": "nthp-treatment-flood-damaged-historic-buildings.pdf",
+              "quote": "Disturbing mold colonies during cleanup can cause a huge release of spores into the air, so seal off the moldy areas from the rest of the house"
+            }
+          ]
+        },
+        {
+          "text": "Remove all flooded carpeting, upholstery, fabrics, and mattresses right away — discard them or have them professionally cleaned and dried quickly outside the home.",
+          "citations": [
+            {
+              "source_file": "nthp-treatment-flood-damaged-historic-buildings.pdf",
+              "quote": "Remove all flooded carpeting, upholstery, fabrics, and mattresses right away"
+            }
+          ]
+        },
+        {
+          "text": "Do not ignore mold exposure risks — mold can trigger allergic reactions, asthma attacks, and may lower resistance to illness, especially in children, the elderly, and people in poor health.",
+          "citations": [
+            {
+              "source_file": "nthp-treatment-flood-damaged-historic-buildings.pdf",
+              "quote": "Mold can trigger allergic reactions and asthma attacks, may lower resistance to illness, or have other effects"
+            }
+          ]
+        }
+      ],
+      "call_a_pro": "For severe mold colonization (larger than 10 square feet), or if the building may contain asbestos or lead paint (common in historic buildings), hire a licensed mold remediation contractor with special training and equipment."
+    },
+    {
+      "id": "roof",
+      "label": "Roof",
+      "audience": [
+        "homeowner"
+      ],
+      "summary": "After a flood, inspect the roof for water damage, damaged or missing materials, and compromised flashing. Document all damage with photographs before any work begins. Historic roofing materials should be repaired rather than replaced where possible, and a well-maintained roof will sustain less damage in future events.",
+      "do": [
+        {
+          "text": "Inspect the roof at least annually and after any flood or storm event — replace missing or damaged roofing shingles, slates, or tiles and repair flashing promptly.",
+          "citations": [
+            {
+              "source_file": "nps-preservation-brief-39-moisture-control.pdf",
+              "quote": "inspect roofing at least once a year, preferably spring; replace missing or damaged roofing shingles, slates, or tiles; repair flashing; repair or replace cracked downspouts"
+            }
+          ]
+        },
+        {
+          "text": "Inspect and clean gutters regularly to keep drainage operational and prevent water from backing up into the roof structure.",
+          "citations": [
+            {
+              "source_file": "nps-preservation-brief-39-moisture-control.pdf",
+              "quote": "Make weather-tight and operational; inspect and clean gutters as necessary depending on number of nearby trees, but at least twice a year"
+            }
+          ]
+        },
+        {
+          "text": "Document all damage with photographs before beginning any cleanup or repair — this is essential for insurance purposes and to record important historic building features.",
+          "citations": [
+            {
+              "source_file": "nthp-treatment-flood-damaged-historic-buildings.pdf",
+              "quote": "Before you begin to clean up your historic property, it is important to carefully document any damage to the structure. This is essential not only for insurance purposes, but also to record important historic building features"
+            }
+          ]
+        },
+        {
+          "text": "Allow flood-saturated wood roof structures to dry naturally — a one-time flood event should not cause serious damage as long as the wood is allowed to dry afterward.",
+          "citations": [
+            {
+              "source_file": "historic-england-flooding-and-historic-buildings.pdf",
+              "quote": "A one-off event such as a flood should not cause serious damage as long as the wood is allowed to dry afterwards"
+            }
+          ]
+        },
+        {
+          "text": "If the roof needs replacement, use the opportunity to incorporate storm-resistant materials, secure the roof decking, and strengthen the connections between the roof and the building structure.",
+          "citations": [
+            {
+              "source_file": "louisiana-resilient-heritage-homeowner-guide.pdf",
+              "quote": "The best time to upgrade a roof is when it needs replacement. Use this opportunity to incorporate new storm-resistant materials, secure the roof decking, and strengthen the connections"
+            }
+          ]
+        }
+      ],
+      "dont": [
+        {
+          "text": "Do not close up a wet roof assembly — trapped moisture in wood can lead to decay if the moisture content exceeds 28 percent, especially in wall cavities, sill plates, and behind impermeable finishes.",
+          "citations": [
+            {
+              "source_file": "historic-england-flooding-and-historic-buildings.pdf",
+              "quote": "Problems occur when moisture is trapped in the wood and cannot escape. This can happen in wall cavities, in sill plates under floors, behind panelling and under impermeable finishes such as oil-based gloss paint"
+            }
+          ]
+        },
+        {
+          "text": "Do not skip opening up the structure if needed to check for hidden moisture sources, assess the condition of the fabric, and allow trapped moisture to evaporate.",
+          "citations": [
+            {
+              "source_file": "historic-england-flooding-and-historic-buildings.pdf",
+              "quote": "It may be necessary to open up the structure of the building to check for sources of moisture, to check on the condition of the fabric, and to allow trapped moisture to evaporate from masonry and timber"
+            }
+          ]
+        }
+      ],
+      "call_a_pro": "If your roof has historic materials (slate, clay tile, wood shingle), contact your State Historic Preservation Office before replacing — compatible materials and techniques are required for historic properties."
     }
   ]
 }
