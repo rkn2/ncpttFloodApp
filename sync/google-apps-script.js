@@ -61,15 +61,15 @@ function getOrCreateSheet(ss, name, headers) {
 
 function appendRapid(ss, payload, as) {
   const headers = [
-    'Submitted', 'Synced From', 'Inspector', 'Date', 'Area/Event',
+    'Submitted', 'Synced From', 'Inspector', 'Affiliation', 'Date', 'Area Inspected', 'Area/Event',
     'Building Name', 'Address', 'GPS',
     'Stories', 'Footprint', 'Units', 'Age', 'Construction Type', 'Occupancy',
     'Foundation', 'Roof Shape', 'Roof Covering', 'Wall Finish',
     'Historic Status',
     'Water Nature', 'Water Depth', 'Sediment', 'Erosion',
-    'Structural', 'Roof Dmg', 'Siding', 'Windows', 'Chimney',
+    'Collapsed/Off Foundation', 'Structural', 'Roof Dmg', 'Siding', 'Windows', 'Chimney',
     'Electrical', 'Insulation', 'Interior', 'Mold',
-    'Overall Damage', 'Posting', 'Recommend Full?', 'Trigger Reasons', 'Notes'
+    'Overall Damage', 'Occupied', 'Repairs Begun', 'Posting', 'Recommend Full?', 'Trigger Reasons', 'Notes'
   ];
   const sheet = getOrCreateSheet(ss, 'Rapid Triage', headers);
 
@@ -77,15 +77,15 @@ function appendRapid(ss, payload, as) {
   sheet.appendRow([
     payload.queuedAt || new Date().toISOString(),
     payload.name || '',
-    as.inspector, as.date, as.area,
+    as.inspector, as.affiliation, as.date, as.areaInspected, as.area,
     as.buildingName, as.address, (as.gps || []).filter(Boolean).join('; '),
     as.stories, as.footprint, as.units, as.age, as.constructionType, as.occupancy,
     as.foundation, as.roof, as.roofCovering, as.wallFinish,
     (as.historicStatus || []).join(', '),
     (as.waterNature || []).join(', '), (as.waterDepth || []).join(', '), as.sediment, as.erosion,
-    rd.structural || '', rd.roof || '', rd.siding || '', rd.windows || '', rd.chimney || '',
+    rd.collapsed || '', rd.structural || '', rd.roof || '', rd.siding || '', rd.windows || '', rd.chimney || '',
     rd.electrical || '', rd.insulation || '', rd.interior || '', rd.mold || '',
-    as.overallDamage, as.posting, as.recommendFull ? 'Yes' : 'No',
+    as.overallDamage, as.occupied, as.repairsBegun, as.posting, as.recommendFull ? 'Yes' : 'No',
     (as.triggerReasons || []).join(', '), as.notes
   ]);
 }

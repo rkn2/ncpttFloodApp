@@ -1,0 +1,51 @@
+{
+  "national": [
+    {
+      "name": "FEMA Individual Assistance (IA)",
+      "name_es": "Asistencia Individual de FEMA (IA)",
+      "tag": "fema",
+      "desc": "Federal disaster assistance for homeowners and renters in federally declared disaster areas. Covers temporary housing, home repair, and other disaster-related expenses. This is NOT a grant for historic preservation — repairs may need to meet basic habitability standards.",
+      "desc_es": "Asistencia federal por desastre para propietarios e inquilinos en áreas declaradas como zona de desastre federal. Cubre vivienda temporal, reparación del hogar y otros gastos relacionados con el desastre. NO es una subvención para preservación histórica — las reparaciones pueden necesitar cumplir con estándares básicos de habitabilidad.",
+      "note": "Historic property owners: notify FEMA that your building is historically significant. FEMA must consider historic character in repair requirements.",
+      "note_es": "Propietarios de propiedades históricas: notifique a FEMA que su edificio es históricamente significativo. FEMA debe considerar el carácter histórico en los requisitos de reparación.",
+      "url": "https://www.disasterassistance.gov",
+      "apply": "Register at DisasterAssistance.gov or call 1-800-621-3362"
+    },
+    {
+      "name": "SBA Disaster Loans — Home & Personal Property",
+      "name_es": "Préstamos por Desastre SBA — Hogar y Propiedad Personal",
+      "tag": "loan",
+      "desc": "Low-interest federal loans (up to $500,000 for real property) for homeowners to repair or replace disaster-damaged property. Must be in a declared disaster area. This is a loan, NOT a grant — repayment required.",
+      "desc_es": "Préstamos federales de bajo interés (hasta $500,000 para propiedad real) para propietarios para reparar o reemplazar propiedad dañada por desastre. Debe estar en un área declarada de desastre. Es un préstamo, NO una subvención — se requiere reembolso.",
+      "note": "SBA loan approval is often required before FEMA can provide certain types of additional assistance.",
+      "note_es": "La aprobación del préstamo SBA frecuentemente se requiere antes de que FEMA pueda proporcionar ciertos tipos de asistencia adicional.",
+      "url": "https://disasterloanassistance.sba.gov",
+      "apply": "Apply at SBA Disaster Loan Assistance portal"
+    },
+    {
+      "name": "NPS / SHPO Historic Preservation Programs",
+      "name_es": "Programas de Preservación Histórica NPS / SHPO",
+      "tag": "grant",
+      "desc": "National Park Service preservation grants (via state SHPOs) and Section 106 review processes protect historic properties in federal disaster response. Formally listed properties have additional protections and may qualify for specific technical assistance.",
+      "desc_es": "Subvenciones de preservación del Servicio de Parques Nacionales (a través de SHPOs estatales) y procesos de revisión de la Sección 106 protegen propiedades históricas en la respuesta federal a desastres. Las propiedades formalmente inscritas tienen protecciones adicionales y pueden calificar para asistencia técnica específica.",
+      "note": "Contact your State Historic Preservation Office early — they can advocate for preservation-sensitive repair approaches with FEMA.",
+      "note_es": "Contacte a su Oficina Estatal de Preservación Histórica temprano — pueden abogar por enfoques de reparación sensibles a la preservación con FEMA.",
+      "url": "https://www.nps.gov/subjects/historicpreservation/grants.htm",
+      "apply": "Contact your state SHPO (see state-specific programs above)"
+    }
+  ],
+  "states": {
+    "VT": [
+      { "name": "Vermont Division for Historic Preservation", "tag": "grant", "desc": "Vermont SHPO can connect you with state preservation programs and FEMA-related historic building assistance. Eligible listed and contributing structures may qualify for additional review support.", "url": "https://accd.vermont.gov/historic-preservation", "apply": "Contact Vermont SHPO" },
+      { "name": "Vermont Emergency Relief and Assistance Fund (ERAF)", "tag": "grant", "desc": "State fund that can supplement FEMA assistance for eligible Vermonters. Contact Vermont Emergency Management for current disaster declaration status.", "url": "https://vem.vermont.gov", "apply": "Vermont Emergency Management" }
+    ],
+    "NC": [
+      { "name": "NC State Historic Preservation Office", "tag": "grant", "desc": "SHPO can identify preservation grant programs and connect historic property owners with technical assistance for appropriate repair approaches.", "url": "https://www.dncr.nc.gov/about/offices/state-historic-preservation-office", "apply": "Contact NC SHPO" },
+      { "name": "NC Emergency Management", "tag": "local", "desc": "State-level disaster assistance coordination, including Individual Assistance programs in federally declared disaster areas.", "url": "https://www.ncdps.gov/emergency-management", "apply": "NC Emergency Management" }
+    ],
+    "PR": [
+      { "name": "Puerto Rico State Historic Preservation Office (SHPO)", "name_es": "Oficina Estatal de Preservación Histórica de Puerto Rico (SHPO)", "tag": "grant", "desc": "PR SHPO has an active NPS capacity-building grant and can provide assessment support, technical guidance, and connection to preservation programs for historic properties.", "desc_es": "La SHPO de PR tiene una subvención activa de desarrollo de capacidad del NPS y puede proporcionar apoyo de evaluación, orientación técnica y conexión con programas de preservación para propiedades históricas.", "url": "https://www.icp.pr.gov", "apply": "Contact PR SHPO / ICP" },
+      { "name": "PR Emergency Management Bureau (NMEAD)", "name_es": "Negociado de Manejo de Emergencias y Administración de Desastres (NMEAD)", "tag": "local", "desc": "Coordinates federal disaster assistance programs in Puerto Rico, including FEMA IA registration and state-level supplemental programs.", "desc_es": "Coordina programas federales de asistencia por desastre en Puerto Rico, incluyendo el registro de FEMA IA y programas suplementarios a nivel estatal.", "url": "https://www.estado.pr.gov/en/puerto-rico-emergency-management", "apply": "NMEAD / FEMA Puerto Rico" }
+    ]
+  }
+}
