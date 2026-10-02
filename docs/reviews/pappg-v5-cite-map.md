@@ -27,6 +27,9 @@ Maps every claim in `2026-10-02-pappg-v4-review.md` (Headline, Aligns, Conflicts
 - **not found**: couldn't locate.
 - **new in v5**: no v4 counterpart in the review, listed because it matters.
 - **n/a**: the review row has no PAPPG cite.
+- **Not counted as a change:** v5's document-wide swap of "may" to "must"/"is" (Summary p.21; e.g. A1b, A3a). Those rows stay "renumbered" and the wording shift is noted.
+
+**Quote normalization.** Quotes are verbatim except that ligatures are expanded (ﬂ→fl, ﬁ→fi), bullet glyphs are dropped and curly quotes are straightened. For exact string matching against the PDF text, search a distinctive fragment, not the whole quote.
 
 ## Counts (45 rows in the Headline, Aligns, Conflicts and Gaps tables)
 
@@ -91,7 +94,7 @@ The review's compound bullets are split into one row per cite. A single review b
 | G3b | Missing the SBA deadline makes permanent work ineligible | 58 | Ch.3 V.J.1, p.52 | renumbered | "If the PNP misses the SBA application deadline, including any SBA approved extension, permanent work is ineligible for PA funding." (p.52) | Declining the loan, or being unable to meet its terms, limits PA to costs the loan would not have covered (p.52) |
 | G3c | Worked example: a chapel must apply to SBA | App. B p.229 | **App. E** VII, p.285 | renumbered | "Houses of worship provide noncritical services, so Community Church is required to apply for an SBA loan for the chapel." (p.285) | The PNP examples appendix moved from B to E |
 | G4a | Uninsured building in an SFHA: PA cut by the maximum NFIP payout | 162 | Ch.8 IX.C.1, p.219 | renumbered | "FEMA reduces eligible project costs by the lesser of: The maximum amount of insurance proceeds that could have been obtained from an NFIP standard flood insurance policy" (p.219) | The cut applies only when the area has been mapped SFHA for over a year, the building was flood-damaged, and it was uninsured (p.219). The alternative cap is the value of the building and contents. PNPs in communities outside the NFIP: the community must join within 6 months (p.220) |
-| G4b | Obtain-and-maintain insurance requirement | 144-145 | Ch.8 X, pp.220-221 | **changed** | "Applicants that receive PA funding for permanent work to replace, repair, reconstruct, or construct a facility must obtain and maintain insurance to protect the facility against future loss." (p.220) | Core rule unchanged. Differences: (1) the modification basis is narrower. v4 listed three alternative grounds; v5 requires "not reasonably available; and, … not necessary" (p.220) and drops "an alternative… provides adequate protection". (2) v4 p.145 §A on subsequent-disaster reductions is not repeated; v5 points to FP 206-086-1. (3) It adds a letter of commitment (LOC) for facilities not yet insurable (p.221). (4) The waiver at ≤$5,000 is kept |
+| G4b | Obtain-and-maintain insurance requirement | 144-145 | Ch.8 X, pp.220-221 | **changed** | "Applicants that receive PA funding for permanent work to replace, repair, reconstruct, or construct a facility must obtain and maintain insurance to protect the facility against future loss." (p.220) | Core rule unchanged. Differences: (1) Textually, v4 listed three grounds for modifying the requirement, joined by "or". v5 lists two joined by "; and," (p.220) and drops "an alternative… provides adequate protection". The "and" may be an artifact of v5's list-punctuation sweep, so treat a stricter policy as **unconfirmed** until checked against FP 206-086-1. (2) v4 p.145 §A on subsequent-disaster reductions is not repeated; v5 points to FP 206-086-1. (3) It adds a letter of commitment (LOC) for facilities not yet insurable (p.221). (4) The waiver at ≤$5,000 is kept |
 | G5a | RPA deadline 30 days | 36 | Ch.3 III, p.45 | renumbered | "it must submit an RPA to FEMA via PA Grants Portal within 30 days after the respective area is designated." (p.45) | **No change found** in substance. Extension grounds are on p.46 |
 | G5b | Damage list due 60 days after the scoping meeting | 60 | Ch.5 I.A, p.70 | renumbered | "Applicants are required to identify and report all incident-related impacts and damage to FEMA within 60 days of attending a recovery scoping meeting." (p.70) | **No change found** in the deadline. The term is now "Impact List" (p.70) |
 | G5c | Replacement request within 1 year | 158 | Ch.8 VI.B, p.209 | renumbered | "Applicants should submit their requests for replacement within one year of the declaration." (p.209) | **No change found** |
@@ -135,25 +138,26 @@ Source: IAPPG v1.1 Amended (July 2025), printed pages.
 
 > "Historic property owners: notify FEMA that your building is historically significant. FEMA must consider historic character in repair requirements."
 
-**Verdict: not supported. Rewrite it.**
+**Verdict: overstated. Rewrite the second sentence.**
+
+- **"Notify FEMA":** the IAPPG doesn't say this, but the advice is harmless and sensible. IA grants are covered by NHPA (p.14), so FEMA needs to know.
+- **"Must consider historic character in repair requirements":** unsupported. IHP pays for safe, sanitary, functional repair at average quality.
 
 | Point | IAPPG location | Quote (≤30 words) |
 |---|---|---|
 | IHP Home Repair Assistance is for basic habitability, not restoration | Ch.3 IV.E, p.86 | "Home Repair Assistance is intended to make the damaged home safe, sanitary, or functional. It is not intended to return the home to its pre-disaster condition." |
 | Awards are priced at average quality | Ch.3 IV.E.2, p.89 | "Home Repair Assistance award amounts are based on repair or replacement of components that are of average quality, size, or capacity." |
 | No upgrades beyond pre-disaster condition, except for code, unavailable products or mitigation | p.89 | "will not be provided to make improvements to a component's pre-disaster condition unless required by current SLTT government building codes or ordinances" |
-| Section 106 is FEMA's duty for a federally funded "project", not a repair standard placed on the owner | Ch.1 D, p.14; App. G, p.266 | "Section 106 of the National Historic Preservation Act requires FEMA to consider the effects a project will have on historic properties" (p.266) |
+| IA grants are subject to NHPA | Ch.1 D, p.14 | "Federally-funded IA grants and programs are subject to compliance with EHP compliance requirements, including… the National Historic Preservation Act." |
+| Section 106 is FEMA's duty to *consider effects*, not a repair standard that raises the award | App. G, p.266 | "Section 106 of the National Historic Preservation Act requires FEMA to consider the effects a project will have on historic properties" |
 | Where EHP review explicitly applies in IHP | p.91 (private access routes), p.95 (direct housing), p.118 (TTHU sites) | "Eligible activities for the repair of privately-owned access routes are subject to Federal Environmental Planning and Historic Preservation (EHP) compliance review requirements." (p.91) |
 
 A search of the whole IAPPG text for "historic" found no provision telling owners to notify FEMA of historic significance. It also found nothing requiring FEMA to factor historic character into IHP repair amounts or methods. Every hit is the generic EHP/Section 106 description (pp.14, 266) or a FEMA-built or FEMA-funded site (pp.91, 95, 118-119).
 
 **Suggested replacement (verified wording):**
-- FEMA home repair grants cover only making the home "safe, sanitary, or functional" at "average quality".
-- They will not pay for historic-quality materials.
-- Talk to your SHPO before repairs.
-- If you use other federal money (SBA, HUD, FEMA mitigation), that agency's Section 106 review may apply.
-
-The "other federal money" point is an inference for Becca to confirm. The IAPPG doesn't say it.
+- Tell FEMA if your home is historic (listed, eligible, or in a historic district). FEMA's IA grants are subject to historic preservation review (IAPPG p.14).
+- FEMA home repair money only makes a home "safe, sanitary, or functional" at "average quality" (pp.86, 89). It will not pay for historic-quality materials or restoration.
+- Talk to your SHPO before removing historic fabric.
 
 ### `programs.json:20` (SBA note)
 
@@ -182,7 +186,7 @@ The "other federal money" point is an inference for Becca to confirm. The IAPPG 
 
 | Topic | IAPPG location | Quote / fact |
 |---|---|---|
-| IHP housing maximum | p.42-43 | The cap is set annually by notice: "FEMA adjusts these maximum awards each fiscal year based on the Department of Labor Consumer Price Index." (p.42). Separate, equal caps for Housing Assistance and ONA. Current figure: **$44,800 housing / $44,800 ONA** for disasters declared on or after 2025-10-01 (Federal Register 2026-19854, 91 FR 61429, published 2026-09-29). This figure is not in the IAPPG. |
+| IHP housing maximum | p.42-43 | The cap is set annually by notice: "FEMA adjusts these maximum awards each fiscal year based on the Department of Labor Consumer Price Index." (p.42). Separate, equal caps for Housing Assistance and ONA. Current figure: **$44,800 housing / $44,800 ONA** for disasters declared on or after 2025-10-01 (Federal Register 2026-19854, 91 FR 61429, published 2026-09-29). A newer notice for disasters declared from 2026-10-01 may supersede it, so re-check by declaration date. This figure is not in the IAPPG. |
 | What home repair covers | p.87 | Structural components (foundation, exterior walls, roof); windows, doors, floors, walls, ceilings, cabinetry; HVAC; utilities; private access. Not covered: garage, pool, fences, landscaping (Fig. 21, p.87) |
 | Conditions | p.88 | Component was "functional immediately before the declared disaster", the disaster caused the damage, and it "is not covered by insurance". Maintenance need alone doesn't disqualify (sidebar p.88) |
 | Must file insurance first | p.88 | "An applicant with insurance for a covered peril will be ineligible for Home Repair Assistance for insured real property components when the applicant fails to file a claim" |
@@ -199,4 +203,6 @@ The "other federal money" point is an inference for Becca to confirm. The IAPPG 
 
 ## Next steps
 - **Rebuild the knowledge base.** `knowledge-base.json` (gitignored) doesn't yet include `docs/fema-pappg-v5.0-amended-2025.pdf` or `docs/fema-iappg-v1.1-amended-2025.pdf`. Becca should rerun `build-kb.py`; it was deliberately not run here. If the extractor doesn't normalize ligatures (ﬂ/ﬁ) and private-use bullet glyphs, add that, or searches for "flood" will miss hits.
+- `deploy/programs.json` lines 9 and 20 match `programs.json` (checked 2026-10-02), so a fix has to land in both. Those files belong to the app agent.
+- Commit 45ecada widened the Section 106 trigger to listed, contributing and eligible buildings. It does not yet include the v5 "45 years or older / historic landmarks of any age" EHP trigger (C1d, p.237).
 - The v4 review (`2026-10-02-pappg-v4-review.md`) should now cite this file. Its v4 page numbers are superseded for any shipped content.
