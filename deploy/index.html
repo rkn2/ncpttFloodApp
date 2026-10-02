@@ -1004,7 +1004,8 @@ let state = {
   step: 0,    // current step index
   // Homeowner
   hw: {
-    state: "", address: "", buildingType: "", materials: [], age: "", designations: [],
+    state: "", address: "", buildingType: "", materials: [], age: "", // age: '' | 'old' (45+ yrs) | 'new' | 'unsure'
+    designations: [],
     owner: "", // '' | 'private' | 'nonprofit' | 'government' ('' = private: homeowner/IA path unchanged)
     affectedAreas: [], damage: {}, // { structural: 'minor'|'moderate'|'severe', ... }
     safetyChecked: {}, walkAnswers: {}, walkIdx: 0
@@ -1104,6 +1105,13 @@ const I18N = {
     results_pa: "FEMA Public Assistance (nonprofit and public owners)",
     results_pa_assist_note: "Some programs listed here are for individuals and households. As a nonprofit or public owner, start with FEMA Public Assistance above.",
     pa_unavailable: "The Public Assistance guidance could not be loaded. Reconnect to the internet and reload this page.",
+    age_legend: "About when was this building built?",
+    age_hint: "(optional)",
+    age_old: "In {year} or earlier (45 years old or more)",
+    age_new: "After {year} (less than 45 years old)",
+    age_unsure: "Not sure",
+    age45_lead_yes: "This building is 45 years old or more.",
+    age45_lead_maybe: "If this building was built in {year} or earlier, it is 45 years old or more.",
     as_pa_intro: "Occupancy is {occ}. If a nonprofit or a government owns this building, FEMA help usually comes through Public Assistance (PA), not the household program. Confirm who owns it. These points come from FEMA's PA policy guide (PAPPG v5.0 Amended).",
     building_next: "Next: Walk me through the damage →",
     building_state_required: "Please select your state or territory.",
@@ -1118,7 +1126,7 @@ const I18N = {
     // ── Results (step 3) ──
     results_title: "Your Recovery Guidance",
     results_desc: "Based on your building's location and the damage you described. Expand each section for details.",
-    results_listed: "Your building is listed on the National Register of Historic Places. This provides additional protections under Section 106 of the National Historic Preservation Act when federal funds are involved (including FEMA assistance). Notify FEMA and your SHPO early in the process.",
+    results_listed: "Your building is listed on the National Register of Historic Places. When federal funds are involved (including FEMA assistance), Section 106 of the National Historic Preservation Act requires review of effects on buildings listed in or eligible for the National Register. Notify FEMA and your State Historic Preservation Office (SHPO) early, before demolition or removal of historic material.",
     results_district: "Your building is a contributing structure in a historic district. If that district is listed on the National Register, a contributing building is treated as historic for federal review: when federal funds are involved (including FEMA assistance), Section 106 of the National Historic Preservation Act requires review of effects on it. A district designated only by your town or county may not count for federal review. Ask your State Historic Preservation Office (SHPO) to confirm your building's status, and notify FEMA and your SHPO early.",
     results_local: "Local landmark designation by itself does not trigger federal review. Your building may still be eligible for the National Register, and eligible buildings get Section 106 review when federal funds are involved (including FEMA assistance). Before demolition or removal of historic material such as plaster, trim, windows, or flooring, ask your State Historic Preservation Office (SHPO) for an eligibility determination.",
     results_eligible: "Even if your building is not listed on the National Register, it may still be eligible, and eligible buildings get the same Section 106 review as listed ones when federal funds are involved (including FEMA assistance). Before demolition or removal of historic material such as plaster, trim, windows, or flooring, ask your State Historic Preservation Office (SHPO) for an eligibility determination.",
@@ -1252,6 +1260,13 @@ const I18N = {
     results_pa: "Asistencia Pública de FEMA (dueños sin fines de lucro y públicos)",
     results_pa_assist_note: "Algunos programas de esta lista son para personas y hogares. Como dueño sin fines de lucro o público, empiece por la Asistencia Pública de FEMA, más arriba.",
     pa_unavailable: "No se pudo cargar la guía de Asistencia Pública. Vuelva a conectarse a internet y recargue esta página.",
+    age_legend: "¿Más o menos cuándo se construyó este edificio?",
+    age_hint: "(opcional)",
+    age_old: "En {year} o antes (45 años o más)",
+    age_new: "Después de {year} (menos de 45 años)",
+    age_unsure: "No estoy seguro",
+    age45_lead_yes: "Este edificio tiene 45 años o más.",
+    age45_lead_maybe: "Si este edificio se construyó en {year} o antes, tiene 45 años o más.",
     as_pa_intro: "La ocupación es {occ}. Si el dueño de este edificio es una organización sin fines de lucro o un gobierno, la ayuda de FEMA suele llegar por la Asistencia Pública (PA), no por el programa para hogares. Confirme quién es el dueño. Estos puntos vienen de la guía de políticas de PA de FEMA (PAPPG v5.0 enmendada).",
     building_next: "Siguiente: Guíame por los daños →",
     building_state_required: "Por favor seleccione su estado o territorio.",
@@ -1266,7 +1281,7 @@ const I18N = {
     // ── Results (step 3) ──
     results_title: "Su Guía de Recuperación",
     results_desc: "Basado en la ubicación de su edificio y los daños que describió. Expanda cada sección para más detalles.",
-    results_listed: "Su edificio está inscrito en el Registro Nacional de Lugares Históricos. Esto provee protecciones adicionales bajo la Sección 106 de la Ley Nacional de Preservación Histórica cuando se involucran fondos federales (incluyendo asistencia de FEMA). Notifique a FEMA y a su SHPO temprano en el proceso.",
+    results_listed: "Su edificio está inscrito en el Registro Nacional de Lugares Históricos. Cuando se usan fondos federales (incluida la asistencia de FEMA), la Sección 106 de la Ley Nacional de Preservación Histórica exige revisar cómo les afectan los trabajos a los edificios inscritos o elegibles para el Registro Nacional. Notifique a FEMA y a su Oficina Estatal de Preservación Histórica (SHPO) desde el principio, antes de demoler o retirar material histórico.",
     results_district: "Su edificio es una estructura contribuyente en un distrito histórico. Si ese distrito está inscrito en el Registro Nacional, un edificio contribuyente se considera histórico en la revisión federal: cuando se usan fondos federales (incluida la asistencia de FEMA), la Sección 106 de la Ley Nacional de Preservación Histórica exige revisar cómo le afectan los trabajos. Un distrito designado solo por su municipio o condado puede no contar para la revisión federal. Pida a su Oficina Estatal de Preservación Histórica (SHPO) que confirme la situación de su edificio, y notifique a FEMA y a su SHPO desde el principio.",
     results_local: "La designación como monumento histórico local, por sí sola, no activa la revisión federal. Aun así, su edificio podría ser elegible para el Registro Nacional, y los edificios elegibles reciben la revisión de la Sección 106 cuando se usan fondos federales (incluida la asistencia de FEMA). Antes de demoler o retirar material histórico, como yeso, molduras, ventanas o pisos, pida a su Oficina Estatal de Preservación Histórica (SHPO) una determinación de elegibilidad.",
     results_eligible: "Aunque su edificio no esté inscrito en el Registro Nacional, podría ser elegible, y los edificios elegibles reciben la misma revisión de la Sección 106 que los inscritos cuando se usan fondos federales (incluida la asistencia de FEMA). Antes de demoler o retirar material histórico, como yeso, molduras, ventanas o pisos, pida a su Oficina Estatal de Preservación Histórica (SHPO) una determinación de elegibilidad.",
@@ -1777,6 +1792,14 @@ function showHwStep1() {
         ).join('')}
       </div>
     </div>
+    <fieldset class="field-group">
+      <legend class="field-label">${t('age_legend')} <span>${t('age_hint')}</span></legend>
+      <div class="radio-group">
+        ${[['old','age_old'],['new','age_new'],['unsure','age_unsure']].map(([v, k]) =>
+          `<label class="radio-item"><input type="radio" name="hw-age" value="${v}" ${state.hw.age===v?'checked':''}> ${t(k).replace('{year}', age45Year())}</label>`
+        ).join('')}
+      </div>
+    </fieldset>
     <div class="btn-row">
       <button class="btn btn-secondary" onclick="showHwStep0()">${t('btn_back')}</button>
       <button class="btn btn-primary" onclick="saveHwStep1()">${t('building_next')}</button>
@@ -1893,6 +1916,7 @@ function saveHwStep1() {
   state.hw.materials = [...document.querySelectorAll('input[name="hw-mat"]:checked')].map(i=>i.value);
   state.hw.designations = [...document.querySelectorAll('input[name="hw-desig"]:checked')].map(i=>i.value);
   state.hw.owner = document.querySelector('input[name="hw-owner"]:checked')?.value || '';
+  state.hw.age = document.querySelector('input[name="hw-age"]:checked')?.value || '';
   if (!state.hw.state) { alert(t('building_state_required')); return; }
   state.hw.walkAnswers = state.hw.walkAnswers || {};
   state.hw.walkIdx = 0;
@@ -2110,6 +2134,7 @@ function showHwResults() {
       <h2>${t('results_title')}</h2>
       <p class="section-desc">${t('results_desc')}</p>
       ${listedNote}
+      ${ageNoteSlot(state.hw.age === 'old' ? 'yes' : state.hw.age === 'unsure' ? 'maybe' : null, paOwner ? 'age45_pa' : 'age45_private')}
       ${paPanel}
 
       <div class="result-panel" style="border:1.5px solid var(--hw-border);">
@@ -3122,6 +3147,9 @@ async function loadPaGuidance() {
   document.querySelectorAll('[data-pa-owner]').forEach(el => {
     el.innerHTML = paBodyHtml(el.dataset.paOwner, el.dataset.paIntro === '1');
   });
+  document.querySelectorAll('[data-age-note]').forEach(el => {
+    el.outerHTML = ageNoteSlot(el.dataset.ageLead, el.dataset.ageNote);
+  });
 }
 function paOwnerMatch(x, owner) { return !x.owners || x.owners.includes(owner); }
 // Visible, keyboard-reachable source line; the exact (English) quote opens on demand.
@@ -3154,6 +3182,18 @@ function paBodyHtml(owner, withIntro) {
     </div>`;
   }).join('');
 }
+// Building-age note (PAPPG v5 p.237: complex EHP review covers work on buildings "45 years or
+// older, historic landmarks of any age"). The cutoff year moves with the calendar.
+function age45Year() { return new Date().getFullYear() - 45; }
+// lead: 'yes' (45+), 'maybe' (age unknown), or null (no note). key: notes.age45_pa | notes.age45_private
+function ageNoteSlot(lead, key) {
+  if (!lead) return '';
+  const note = paGuidance && paGuidance.notes && paGuidance.notes[key];
+  if (!note) return paLoadFailed ? '' : `<div data-age-note="${key}" data-age-lead="${lead}"></div>`;
+  const leadText = t(lead === 'yes' ? 'age45_lead_yes' : 'age45_lead_maybe').replace('{year}', age45Year());
+  return `<div class="warn-box age-note"><strong>${escAttr(leadText)}</strong> ${escAttr(note.text)}` +
+    `${(note.citations || []).map(paCiteHtml).join('')}</div>`;
+}
 // Assessor occupancy -> PA owner type. Schools: public (government) or private (critical-service
 // PNP), neither needs the SBA step, so 'school' hides the SBA record.
 function paOwnerForOccupancy(occ) {
@@ -3167,6 +3207,7 @@ function assessorPaSection(s) {
       <div class="damage-section-header">🏛️ ${t('results_pa')}</div>
       <div style="padding:12px 14px;">
         <p class="pa-intro">${escAttr(t('as_pa_intro').replace('{occ}', s.occupancy))}</p>
+        ${ageNoteSlot(['Pre-1870', '1870–1940', '1940–1970'].includes(s.age) ? 'yes' : 'maybe', 'age45_pa')}
         <div data-pa-owner="${owner}" data-pa-intro="0">${paBodyHtml(owner, false)}</div>
       </div>
     </div>`;
