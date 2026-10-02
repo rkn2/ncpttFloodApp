@@ -1,0 +1,815 @@
+{
+  "schema_version": "1.0",
+  "built_at": "2026-10-02",
+  "lang": "es",
+  "generator": "hand-authored from docs/fema-pappg-v5.0-amended-2025.pdf (and two supporting docs) per docs/reviews/pappg-v5-cite-map.md; checked by pipeline/verify_pa_guidance.py",
+  "provenance_note": "Traducción al español de pa-guidance.json. Cada punto conserva sus citas originales en inglés, cuyas frases textuales se verifican mecánicamente en la página impresa citada del documento fuente. Orientación consultiva; no es una determinación de elegibilidad de FEMA. Requiere revisión por un hablante nativo / SHPO antes de publicarse como guía oficial.",
+  "verification": {
+    "citations_verified": 73,
+    "citations_total": 73,
+    "pages_verified": 73,
+    "items": 46,
+    "entailment_audited": false,
+    "entailment_note": "El texto en español NO ha pasado una auditoría de implicación contra las citas en inglés. Las citas se copian del archivo en inglés verificado. Requiere revisión humana (hablante nativo / SHPO)."
+  },
+  "owner_types": [
+    "nonprofit",
+    "government",
+    "school"
+  ],
+  "panel_title": "Asistencia Pública de FEMA para dueños sin fines de lucro y públicos",
+  "panel_intro": "Como el dueño de este edificio es una organización sin fines de lucro o un gobierno, la ayuda de FEMA suele llegar por la Asistencia Pública (PA, por sus siglas en inglés), no por el programa para hogares. Estos puntos vienen de la guía de políticas de Asistencia Pública de FEMA (PAPPG v5.0 enmendada). Toque una sección para abrirla. Toque \"Fuente\" para ver las palabras exactas de FEMA (en inglés).",
+  "label_do": "Haga esto",
+  "label_dont": "Tenga cuidado",
+  "label_source": "Fuente",
+  "sources": {
+    "fema-pappg-v5.0-amended-2025.pdf": "FEMA PAPPG v5.0 enmendada",
+    "fema-iappg-v1.1-amended-2025.pdf": "FEMA IAPPG v1.1 enmendada",
+    "thc-historic-property-owners-disaster-handbook-2023.pdf": "Comisión Histórica de Texas, manual para dueños de propiedades históricas ante desastres (2023)"
+  },
+  "label_page": "pág.",
+  "guidance": [
+    {
+      "id": "pa_start",
+      "label": "Quién puede solicitar Asistencia Pública",
+      "audience": [
+        "homeowner",
+        "assessor"
+      ],
+      "owners": [
+        "nonprofit",
+        "government",
+        "school"
+      ],
+      "summary": "Las organizaciones privadas sin fines de lucro, incluidas las casas de culto, y los gobiernos solicitan la Asistencia Pública de FEMA.",
+      "do": [
+        {
+          "text": "Las organizaciones privadas sin fines de lucro, incluidas las casas de culto, pueden solicitar Asistencia Pública. También pueden hacerlo los gobiernos estatales, locales, tribales y territoriales.",
+          "citations": [
+            {
+              "source_file": "fema-pappg-v5.0-amended-2025.pdf",
+              "page": 45,
+              "quote": "Private nonprofit (PNP) organizations, including houses of worship and other faith-based organizations."
+            }
+          ]
+        },
+        {
+          "text": "Cuentan los edificios de propiedad del gobierno, incluidos los que se usan para educación, recreación o cultura, como un museo o una biblioteca municipal.",
+          "owners": [
+            "government",
+            "school"
+          ],
+          "citations": [
+            {
+              "source_file": "fema-pappg-v5.0-amended-2025.pdf",
+              "page": 60,
+              "quote": "Public buildings, structure, or system, including those used for educational, recreational, or cultural purposes"
+            }
+          ]
+        },
+        {
+          "text": "Organizaciones sin fines de lucro: tengan a mano la carta del IRS que les otorga la exención de impuestos, o la documentación de su estado como entidad sin fines de lucro.",
+          "owners": [
+            "nonprofit",
+            "school"
+          ],
+          "citations": [
+            {
+              "source_file": "fema-pappg-v5.0-amended-2025.pdf",
+              "page": 57,
+              "quote": "A ruling letter from the Internal Revenue Service that was in effect on the declaration date and granted tax exemption"
+            }
+          ]
+        },
+        {
+          "text": "Esté atento a la reunión informativa para solicitantes que organiza su estado poco después de la declaración de desastre. Su estado o territorio la ofrece a todos los que podrían solicitar.",
+          "citations": [
+            {
+              "source_file": "fema-pappg-v5.0-amended-2025.pdf",
+              "page": 45,
+              "quote": "As soon as possible following the president's declaration, a recipient conducts briefings for all potential applicants."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ehp_first",
+      "label": "Hable con FEMA y su SHPO antes de reparar",
+      "audience": [
+        "homeowner",
+        "assessor"
+      ],
+      "owners": [
+        "nonprofit",
+        "government",
+        "school"
+      ],
+      "summary": "Si quiere que FEMA ayude a pagar, permita que FEMA y su Oficina Estatal de Preservación Histórica (SHPO) revisen las reparaciones permanentes, la demolición o el retiro de material histórico antes de empezar.",
+      "do": [
+        {
+          "text": "Antes de hacer reparaciones permanentes, demoler o retirar material histórico (yeso, molduras, ventanas, pisos), comuníquese con FEMA y con su Oficina Estatal de Preservación Histórica (SHPO). Dé a FEMA la oportunidad de hacer primero su revisión ambiental e histórica.",
+          "citations": [
+            {
+              "source_file": "fema-pappg-v5.0-amended-2025.pdf",
+              "page": 214,
+              "quote": "Applicants need to make every effort to afford FEMA the opportunity to perform environmental and historic preservation (EHP) reviews prior to starting any work that has the potential to impact the environment or historic properties."
+            },
+            {
+              "source_file": "fema-pappg-v5.0-amended-2025.pdf",
+              "page": 239,
+              "quote": "Modifying to the interior or exterior of a historic building"
+            }
+          ]
+        },
+        {
+          "text": "El trabajo para atender una amenaza inmediata, como sacar el agua y limpiar el lodo, cuenta como trabajo de emergencia si se hace con prontitud. FEMA debe asegurarse de que las medidas de protección de emergencia eviten dañar propiedades históricas cuando sea posible, y le recomienda coordinar antes de empezar.",
+          "citations": [
+            {
+              "source_file": "fema-pappg-v5.0-amended-2025.pdf",
+              "page": 132,
+              "quote": "Extracting water and clearing mud, silt, or other accumulated debris from eligible facilities if the work is conducted expeditiously for the purpose of addressing an immediate threat"
+            },
+            {
+              "source_file": "fema-pappg-v5.0-amended-2025.pdf",
+              "page": 238,
+              "quote": "FEMA must ensure that the applicant's emergency protective measures, where possible: 1) avoid impacts to resources such as federally listed threatened and endangered species and their critical habitats, and historic properties"
+            },
+            {
+              "source_file": "fema-pappg-v5.0-amended-2025.pdf",
+              "page": 238,
+              "quote": "FEMA encourages applicants to coordinate prior to conducting work to front-load any applicable EHP considerations in a timely manner."
+            }
+          ]
+        },
+        {
+          "text": "Guarde fotos y notas del trabajo de emergencia que haga. FEMA aún necesita esos registros para su revisión histórica, incluso después de terminado el trabajo.",
+          "citations": [
+            {
+              "source_file": "fema-pappg-v5.0-amended-2025.pdf",
+              "page": 238,
+              "quote": "documentation is still needed to facilitate the EHP review of emergency work projects and to demonstrate EHP compliance even if it is after-the-fact."
+            }
+          ]
+        }
+      ],
+      "dont": [
+        {
+          "text": "No empiece trabajos permanentes que cambien elementos históricos antes de la revisión de FEMA. Si el trabajo no cumple las reglas, FEMA puede negarse a pagar todo o parte de él.",
+          "citations": [
+            {
+              "source_file": "fema-pappg-v5.0-amended-2025.pdf",
+              "page": 62,
+              "quote": "FEMA may take one of several actions including disallowing all or part of the cost of the project not in compliance."
+            }
+          ]
+        },
+        {
+          "text": "No deje que los equipos de escombros se lleven material histórico sin revisarlo antes. FEMA debe asegurarse de que el retiro de escombros evite dañar propiedades históricas.",
+          "citations": [
+            {
+              "source_file": "fema-pappg-v5.0-amended-2025.pdf",
+              "page": 238,
+              "quote": "FEMA must ensure that the applicant's debris removal operations avoid impacts to such resources as floodplains, wetlands, federally listed threatened and endangered species and their critical habitats, and historic properties"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "document",
+      "label": "Tome fotos y guarde registros",
+      "audience": [
+        "homeowner",
+        "assessor"
+      ],
+      "owners": [
+        "nonprofit",
+        "government",
+        "school"
+      ],
+      "summary": "Los buenos registros ayudan a demostrar que la inundación causó el daño. FEMA no siempre los exige, así que se recomienda mucho, pero no es obligatorio.",
+      "do": [
+        {
+          "text": "Antes de limpiar y reparar, tome fotos o video de todo el edificio y de los daños. En proyectos grandes, FEMA puede pedir fotos de antes de la inundación, así que reúna las que tenga.",
+          "citations": [
+            {
+              "source_file": "fema-pappg-v5.0-amended-2025.pdf",
+              "page": 64,
+              "quote": "If necessary to validate that the impacts or damage was caused by the declared event, applicants will be required to provide"
+            },
+            {
+              "source_file": "fema-pappg-v5.0-amended-2025.pdf",
+              "page": 64,
+              "quote": "Pre-incident photographs and/or video of the impacted site or facility"
+            }
+          ]
+        },
+        {
+          "text": "Reúna registros de mantenimiento, informes de inspección y fotos antiguas que muestren el estado del edificio antes de la inundación. FEMA no siempre los exige, pero pueden ayudar.",
+          "citations": [
+            {
+              "source_file": "fema-pappg-v5.0-amended-2025.pdf",
+              "page": 64,
+              "quote": "Documentation supporting pre-disaster condition of the facility (e.g., facility maintenance records or inspection/safety reports)."
+            },
+            {
+              "source_file": "fema-pappg-v5.0-amended-2025.pdf",
+              "page": 22,
+              "quote": "Clarified that maintenance records are not always required to substantiate damage"
+            }
+          ]
+        },
+        {
+          "text": "Cuando describa las reparaciones a FEMA, incluya fotos y descripciones de cómo era el edificio antes del desastre. Así recibirá menos preguntas de seguimiento de los revisores históricos de FEMA.",
+          "citations": [
+            {
+              "source_file": "fema-pappg-v5.0-amended-2025.pdf",
+              "page": 240,
+              "quote": "Provide maps or sketches of work details, photographs, site plans, and area descriptions of pre-disaster conditions and proposed or completed work to reduce requests for information from EHP."
+            }
+          ]
+        },
+        {
+          "text": "Seque el edificio y detenga el moho tan pronto como pueda hacerlo con seguridad. FEMA no paga por arreglar moho causado por no actuar en un tiempo razonable, salvo que haya una buena razón, como falta de electricidad o que el edificio siguiera bajo el agua.",
+          "citations": [
+            {
+              "source_file": "fema-pappg-v5.0-amended-2025.pdf",
+              "page": 163,
+              "quote": "mold must not be a result of poor facility maintenance or failure to take protective measures to prevent the spread of mold in a reasonable time after the incident."
+            },
+            {
+              "source_file": "fema-pappg-v5.0-amended-2025.pdf",
+              "page": 163,
+              "quote": "Examples of extenuating circumstances include: Disruption of power; Facility is underwater;"
+            }
+          ]
+        },
+        {
+          "text": "FEMA revisa los reclamos por moho buscando señales de filtraciones anteriores a la inundación, como ventanas mal selladas, canaletas oxidadas o tapadas y plafones del techo manchados de agua. Tome fotos de esas áreas y guarde sus registros de reparación.",
+          "citations": [
+            {
+              "source_file": "fema-pappg-v5.0-amended-2025.pdf",
+              "page": 164,
+              "quote": "FEMA evaluates whether the facility had pre-existing water infiltration conditions when determining whether mold remediation is eligible."
+            },
+            {
+              "source_file": "fema-pappg-v5.0-amended-2025.pdf",
+              "page": 164,
+              "quote": "Poorly maintained drains or gutters with rust or vegetative growth; and, Leaking and or water-stained ceiling tiles."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "sba",
+      "label": "Organizaciones sin fines de lucro: soliciten también un préstamo de la SBA",
+      "audience": [
+        "homeowner",
+        "assessor"
+      ],
+      "owners": [
+        "nonprofit"
+      ],
+      "summary": "Las casas de culto, los museos, las bibliotecas, los centros comunitarios y la mayoría de las demás organizaciones sin fines de lucro deben solicitar un préstamo por desastre de la Administración de Pequeñas Empresas (SBA) para recibir ayuda de FEMA con las reparaciones permanentes.",
+      "do": [
+        {
+          "text": "Si su organización sin fines de lucro no presta servicios críticos (como los de una escuela o un hospital), debe solicitar un préstamo por desastre de la SBA y recibir la respuesta de la SBA antes de que FEMA pague las reparaciones permanentes. Las casas de culto, los museos y las bibliotecas están en este grupo.",
+          "citations": [
+            {
+              "source_file": "fema-pappg-v5.0-amended-2025.pdf",
+              "page": 51,
+              "quote": "PNPs that do not provide any critical services must also apply for a disaster loan from the SBA"
+            },
+            {
+              "source_file": "fema-pappg-v5.0-amended-2025.pdf",
+              "page": 56,
+              "quote": "Houses of worship and faith-based organizations (e.g., churches, synagogues, mosques, and temples); Libraries; Museums;"
+            },
+            {
+              "source_file": "fema-pappg-v5.0-amended-2025.pdf",
+              "page": 285,
+              "quote": "Houses of worship provide noncritical services, so Community Church is required to apply for an SBA loan for the chapel."
+            }
+          ]
+        },
+        {
+          "text": "No necesita la solicitud a la SBA para el trabajo de emergencia. Solo se exige para el trabajo permanente.",
+          "citations": [
+            {
+              "source_file": "fema-pappg-v5.0-amended-2025.pdf",
+              "page": 52,
+              "quote": "Non-critical but Essential Social Services SBA loan application not required SBA loan application is required"
+            }
+          ]
+        },
+        {
+          "text": "Presente su solicitud a la SBA y a FEMA lo antes posible. Si no cumple el plazo de la SBA (incluida cualquier extensión), FEMA no pagará el trabajo permanente.",
+          "citations": [
+            {
+              "source_file": "fema-pappg-v5.0-amended-2025.pdf",
+              "page": 52,
+              "quote": "Applying to both agencies as soon as possible ensures meeting both application deadlines."
+            },
+            {
+              "source_file": "fema-pappg-v5.0-amended-2025.pdf",
+              "page": 52,
+              "quote": "If the PNP misses the SBA application deadline, including any SBA approved extension, permanent work is ineligible for PA funding."
+            }
+          ]
+        },
+        {
+          "text": "Los préstamos por desastre de la SBA para la mayoría de las organizaciones sin fines de lucro llegan hasta $2 millones.",
+          "citations": [
+            {
+              "source_file": "fema-pappg-v5.0-amended-2025.pdf",
+              "page": 52,
+              "quote": "SBA disaster loans are available up to $2 million to qualified businesses and most private nonprofit organizations."
+            }
+          ]
+        }
+      ],
+      "dont": [
+        {
+          "text": "No rechace el préstamo de la SBA sin pensarlo bien. Si lo rechaza, FEMA solo paga los costos que el préstamo no habría cubierto. Lo mismo pasa si la SBA niega el préstamo porque usted no puede cumplir sus condiciones.",
+          "citations": [
+            {
+              "source_file": "fema-pappg-v5.0-amended-2025.pdf",
+              "page": 52,
+              "quote": "If the PNP declines an SBA loan, PA funding is limited to the costs that the loan would not have otherwise covered. This applies even when the PNP cannot accept the terms of the loan"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "flood_insurance",
+      "label": "Seguro de inundación",
+      "audience": [
+        "homeowner",
+        "assessor"
+      ],
+      "owners": [
+        "nonprofit",
+        "government",
+        "school"
+      ],
+      "summary": "El seguro de inundación cambia cuánto paga FEMA ahora, y FEMA exige tener seguro después de pagar reparaciones permanentes.",
+      "do": [
+        {
+          "text": "Presente sus reclamos a su propio seguro. FEMA no puede pagar costos que paga su seguro.",
+          "citations": [
+            {
+              "source_file": "fema-pappg-v5.0-amended-2025.pdf",
+              "page": 52,
+              "quote": "FEMA and SBA cannot provide disaster assistance funding that duplicates insurance proceeds. Applicants must pursue claims to recover insurance proceeds that they are entitled to receive from their insurer(s)."
+            }
+          ]
+        },
+        {
+          "text": "Si cree que el mapa de inundaciones ubica por error su edificio en la zona de alto riesgo, puede pedir a FEMA un cambio de mapa (una Carta de Enmienda o de Revisión del Mapa) dentro de los 6 meses siguientes a la declaración.",
+          "citations": [
+            {
+              "source_file": "fema-pappg-v5.0-amended-2025.pdf",
+              "page": 219,
+              "quote": "it may request a letter of map amendment or letter of map revision from FEMA within 6 months of the disaster declaration."
+            }
+          ]
+        }
+      ],
+      "dont": [
+        {
+          "text": "Si el edificio ha estado más de un año en una zona de alto riesgo de inundación según el mapa (Área Especial de Riesgo de Inundación) y no tenía seguro de inundación, FEMA reduce su ayuda. La reducción es lo máximo que habría pagado una póliza estándar de seguro de inundación (NFIP), o el valor del edificio y su contenido si es menor.",
+          "citations": [
+            {
+              "source_file": "fema-pappg-v5.0-amended-2025.pdf",
+              "page": 219,
+              "quote": "Located in an area that FEMA has identified as an SFHA for more than 1 year;"
+            },
+            {
+              "source_file": "fema-pappg-v5.0-amended-2025.pdf",
+              "page": 219,
+              "quote": "FEMA reduces eligible project costs by the lesser of: The maximum amount of insurance proceeds that could have been obtained from an NFIP standard flood insurance policy for the building and its contents"
+            }
+          ]
+        },
+        {
+          "text": "Si FEMA paga reparaciones permanentes, usted debe comprar y mantener un seguro para el edificio. Si no lo hace, FEMA puede quitarle el dinero, y el edificio no podrá recibir Asistencia Pública de FEMA en desastres futuros.",
+          "citations": [
+            {
+              "source_file": "fema-pappg-v5.0-amended-2025.pdf",
+              "page": 220,
+              "quote": "Applicants that receive PA funding for permanent work to replace, repair, reconstruct, or construct a facility must obtain and maintain insurance to protect the facility against future loss."
+            },
+            {
+              "source_file": "fema-pappg-v5.0-amended-2025.pdf",
+              "page": 221,
+              "quote": "If an applicant does not comply with the requirement to obtain and maintain insurance, FEMA will deny or deobligate PA funds related to the noncompliance from the current disaster. Additionally, the facilities for which the applicant failed to comply are ineligible for future PA funding."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "deadlines",
+      "label": "Plazos",
+      "audience": [
+        "homeowner",
+        "assessor"
+      ],
+      "owners": [
+        "nonprofit",
+        "government",
+        "school"
+      ],
+      "summary": "Los plazos son cortos y empiezan en fechas distintas. La mayoría se puede extender, pero hay que pedirlo por escrito y dar una razón.",
+      "do": [
+        {
+          "text": "Solicitud de Asistencia Pública (RPA): vence 30 días después de que FEMA designa su área. FEMA puede extenderla si su estado lo pide por escrito y da una buena razón.",
+          "citations": [
+            {
+              "source_file": "fema-pappg-v5.0-amended-2025.pdf",
+              "page": 45,
+              "quote": "it must submit an RPA to FEMA via PA Grants Portal within 30 days after the respective area is designated."
+            },
+            {
+              "source_file": "fema-pappg-v5.0-amended-2025.pdf",
+              "page": 46,
+              "quote": "FEMA extends the deadline for submitting an RPA if a recipient submits a request in writing with justification based on extenuating circumstances"
+            }
+          ]
+        },
+        {
+          "text": "Lista de Impactos (cada edificio o sitio dañado, con un costo aproximado): vence 60 días después de que usted asista a su reunión de alcance de recuperación con FEMA. FEMA puede extenderla si usted lo pide con una buena razón.",
+          "citations": [
+            {
+              "source_file": "fema-pappg-v5.0-amended-2025.pdf",
+              "page": 70,
+              "quote": "Applicants are required to identify and report all incident-related impacts and damage to FEMA within 60 days of attending a recovery scoping meeting."
+            },
+            {
+              "source_file": "fema-pappg-v5.0-amended-2025.pdf",
+              "page": 70,
+              "quote": "FEMA may extend the deadline to identify and report the impacts if an applicant submits a request with justification based on extenuating circumstances"
+            }
+          ]
+        },
+        {
+          "text": "Si quiere que FEMA pague para reemplazar el edificio en vez de repararlo, envíe esa solicitud dentro del año siguiente a la declaración.",
+          "citations": [
+            {
+              "source_file": "fema-pappg-v5.0-amended-2025.pdf",
+              "page": 209,
+              "quote": "Applicants should submit their requests for replacement within one year of the declaration."
+            }
+          ]
+        },
+        {
+          "text": "Termine el trabajo de emergencia dentro de los 6 meses siguientes a la fecha de la declaración. La mayor parte del trabajo permanente tiene 18 meses. Su estado puede extender el trabajo de emergencia hasta 6 meses más y el trabajo permanente hasta 30 meses, proyecto por proyecto.",
+          "citations": [
+            {
+              "source_file": "fema-pappg-v5.0-amended-2025.pdf",
+              "page": 247,
+              "quote": "For emergency work, the deadline is six months from the disaster declaration date."
+            },
+            {
+              "source_file": "fema-pappg-v5.0-amended-2025.pdf",
+              "page": 247,
+              "quote": "For most permanent work, the deadline is 18 months, except for category I projects"
+            },
+            {
+              "source_file": "fema-pappg-v5.0-amended-2025.pdf",
+              "page": 248,
+              "quote": "Recipients may extend emergency work up to an additional six months and permanent work up to 30 months on a project-by-project basis"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "collections",
+      "label": "Colecciones, documentos y contenido",
+      "audience": [
+        "homeowner",
+        "assessor"
+      ],
+      "owners": [
+        "nonprofit",
+        "government",
+        "school"
+      ],
+      "summary": "FEMA puede ayudar a pagar la estabilización de colecciones dañadas, pero no el reemplazo de objetos irreemplazables.",
+      "do": [
+        {
+          "text": "Saque las colecciones y otros contenidos de donde corren peligro y guárdelos en un lugar seguro. Esto cuenta como trabajo de emergencia.",
+          "citations": [
+            {
+              "source_file": "fema-pappg-v5.0-amended-2025.pdf",
+              "page": 132,
+              "quote": "Removal and storage of contents from eligible facilities for the purpose of minimizing additional damage"
+            }
+          ]
+        },
+        {
+          "text": "FEMA puede pagar la estabilización de colecciones y objetos dañados, por ejemplo controlando la temperatura y la humedad, y limpiándolos para evitar más daño.",
+          "citations": [
+            {
+              "source_file": "fema-pappg-v5.0-amended-2025.pdf",
+              "page": 197,
+              "quote": "Stabilization of damaged collections or individual objects is eligible."
+            },
+            {
+              "source_file": "fema-pappg-v5.0-amended-2025.pdf",
+              "page": 197,
+              "quote": "Treating damaged items utilizing environmental controls to achieve proper temperature and humidity"
+            }
+          ]
+        },
+        {
+          "text": "Contrate a un conservador calificado con la especialidad adecuada. El tratamiento debe seguir el Código de Ética del Instituto Americano de Conservación (AIC).",
+          "citations": [
+            {
+              "source_file": "fema-pappg-v5.0-amended-2025.pdf",
+              "page": 198,
+              "quote": "Treatment needs to be conducted by a qualified conservation professional with the appropriate specialty and in accordance with the American Institute for Conservation Code of Ethics and Guidelines for Practice."
+            }
+          ]
+        },
+        {
+          "text": "El contenido dañado por la inundación puede ser elegible aunque el edificio no tenga daños, por ejemplo en un sótano inundado.",
+          "citations": [
+            {
+              "source_file": "fema-pappg-v5.0-amended-2025.pdf",
+              "page": 196,
+              "quote": "Contents damaged as a result of the disaster are eligible even if the building housing the contents is not damaged (e.g. basement flooding which does not result in structural damage"
+            }
+          ]
+        },
+        {
+          "text": "Mantenga a salvo sus registros de adquisición, catálogos e inventarios. Documentan lo que usted tenía.",
+          "citations": [
+            {
+              "source_file": "fema-pappg-v5.0-amended-2025.pdf",
+              "page": 197,
+              "quote": "Documentation of collections and individual objects generally include accession, catalog, and inventories."
+            }
+          ]
+        },
+        {
+          "text": "Los documentos de papel mojados a menudo se pueden salvar. La liofilización (secado por congelación) es una forma de estabilizarlos que FEMA puede pagar.",
+          "citations": [
+            {
+              "source_file": "fema-pappg-v5.0-amended-2025.pdf",
+              "page": 197,
+              "quote": "Recovery of damaged hard copies includes labor and materials, such as bags, boxes, and containers. Stabilizing damaged hard copies includes freeze-drying."
+            }
+          ]
+        }
+      ],
+      "dont": [
+        {
+          "text": "No cuente con que FEMA reemplace objetos irreemplazables destruidos. El reemplazo no es elegible. Los libros raros, los manuscritos y las colecciones especiales de bibliotecas solo reciben tratamiento.",
+          "citations": [
+            {
+              "source_file": "fema-pappg-v5.0-amended-2025.pdf",
+              "page": 198,
+              "quote": "Replacement of destroyed irreplaceable collections or objects is ineligible."
+            },
+            {
+              "source_file": "fema-pappg-v5.0-amended-2025.pdf",
+              "page": 197,
+              "quote": "special library collections, including rare books, manuscripts, and other fragile materials, are only eligible for treatment, not replacement."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "historic_exceptions",
+      "label": "Reglas especiales para edificios históricos",
+      "audience": [
+        "homeowner",
+        "assessor"
+      ],
+      "owners": [
+        "nonprofit",
+        "government",
+        "school"
+      ],
+      "summary": "Algunas reglas de FEMA tienen excepciones para edificios inscritos en el Registro Nacional de Lugares Históricos, o elegibles para él. Pregunte a FEMA por ellas cuando se planifiquen sus reparaciones.",
+      "do": [
+        {
+          "text": "Si los códigos de construcción que exige FEMA dañarían un edificio inscrito en el Registro Nacional, o elegible para él, puede pedir una exención. Necesita la aprobación del Administrador Regional de FEMA.",
+          "citations": [
+            {
+              "source_file": "fema-pappg-v5.0-amended-2025.pdf",
+              "page": 169,
+              "quote": "It would otherwise be inappropriate for the facility (such as adversely affecting a facility that is listed or is eligible to be listed on the National Register of Historic Places)."
+            },
+            {
+              "source_file": "fema-pappg-v5.0-amended-2025.pdf",
+              "page": 169,
+              "quote": "Applicants may request a waiver for the incorporation of codes, specifications, and standards with approval from the Regional Administrator."
+            }
+          ]
+        },
+        {
+          "text": "Normalmente, cuando reparar costaría más que reemplazar, FEMA paga solo el costo del reemplazo. En un edificio histórico, si un código o norma exige reparar de cierta manera, FEMA puede pagar ese trabajo aunque cueste más que reemplazar el edificio.",
+          "citations": [
+            {
+              "source_file": "fema-pappg-v5.0-amended-2025.pdf",
+              "page": 182,
+              "quote": "If the facility is listed in, or meets the criteria to be listed in, the National Register of Historic Places, and an applicable code or standard requires repair in a certain manner, costs associated with work to comply with that code or standard are eligible, even if repair costs exceed replacement costs."
+            },
+            {
+              "source_file": "fema-pappg-v5.0-amended-2025.pdf",
+              "page": 211,
+              "quote": "A historic facility is defined as one listed in, or eligible for listing in, the National Register of Historic Places."
+            }
+          ]
+        },
+        {
+          "text": "Si las reglas locales de llanura aluvial le obligan a elevar el edificio o protegerlo contra inundaciones, FEMA suele limitar el costo a lo que costaría reemplazarlo. Los edificios inscritos en el Registro Nacional, o elegibles para él, son una excepción.",
+          "citations": [
+            {
+              "source_file": "fema-pappg-v5.0-amended-2025.pdf",
+              "page": 217,
+              "quote": "Based on the floodplain ordinance, if the cost to repair a facility is greater than the cost to replace the facility, the eligible cost is capped at the replacement cost."
+            },
+            {
+              "source_file": "fema-pappg-v5.0-amended-2025.pdf",
+              "page": 217,
+              "quote": "There is an exception for facilities eligible for or on the National Register of Historic Places."
+            }
+          ]
+        }
+      ],
+      "dont": [
+        {
+          "text": "No dé por hecho que el código estatal de edificios históricos califica para estas excepciones. FEMA dice que la mayoría de los códigos históricos estatales no cumplen sus reglas.",
+          "citations": [
+            {
+              "source_file": "fema-pappg-v5.0-amended-2025.pdf",
+              "page": 182,
+              "quote": "Most state historic building codes and standards encourage code officials to allow less intrusive alternatives to requirements of the prevailing codes or standards, but do not require any particular work be performed. As a result, the codes and standards usually fail to meet the eligibility criteria."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "other_rules",
+      "label": "Otras reglas que conviene saber",
+      "audience": [
+        "homeowner",
+        "assessor"
+      ],
+      "owners": [
+        "nonprofit",
+        "government",
+        "school"
+      ],
+      "summary": "Algunas reglas más que a menudo afectan a edificios históricos de organizaciones sin fines de lucro y gobiernos.",
+      "do": [
+        {
+          "text": "Si hace pruebas de moho, use a un profesional independiente de ambientes interiores, no a alguien que trabaje para la empresa de limpieza.",
+          "citations": [
+            {
+              "source_file": "fema-pappg-v5.0-amended-2025.pdf",
+              "page": 163,
+              "quote": "The indoor environmental professional should not be employed by the remediation company to avoid a conflict of interest."
+            }
+          ]
+        },
+        {
+          "text": "Edificios de uso mixto: más de la mitad del espacio tiene que usarse para servicios elegibles, como culto, museo o biblioteca. Luego FEMA paga solo la parte elegible.",
+          "owners": [
+            "nonprofit",
+            "school"
+          ],
+          "citations": [
+            {
+              "source_file": "fema-pappg-v5.0-amended-2025.pdf",
+              "page": 50,
+              "quote": "Primary use is the use for which more than 50 percent of the physical space in the facility is dedicated."
+            },
+            {
+              "source_file": "fema-pappg-v5.0-amended-2025.pdf",
+              "page": 50,
+              "quote": "If the facility is eligible, FEMA prorates funding based on the percentage of physical space dedicated to eligible services."
+            }
+          ]
+        }
+      ],
+      "dont": [
+        {
+          "text": "Los edificios vacíos o sin uso por lo general no son elegibles. El edificio debe haber estado en uso activo cuando empezó el desastre, salvo que estuviera cerrado solo por reparaciones, o que usted tuviera planes o un presupuesto aprobados para usarlo.",
+          "citations": [
+            {
+              "source_file": "fema-pappg-v5.0-amended-2025.pdf",
+              "page": 61,
+              "quote": "To be eligible, a facility must have been in active use at the start of the incident period."
+            },
+            {
+              "source_file": "fema-pappg-v5.0-amended-2025.pdf",
+              "page": 61,
+              "quote": "The facility was only temporarily inactive for repairs or remodeling"
+            },
+            {
+              "source_file": "fema-pappg-v5.0-amended-2025.pdf",
+              "page": 61,
+              "quote": "The applicant established future active use in an approved budget or plans"
+            }
+          ]
+        },
+        {
+          "text": "Los terrenos alrededor de museos y sitios históricos no son elegibles para dueños sin fines de lucro.",
+          "owners": [
+            "nonprofit"
+          ],
+          "citations": [
+            {
+              "source_file": "fema-pappg-v5.0-amended-2025.pdf",
+              "page": 57,
+              "quote": "Grounds at museums and historic sites; and, Open natural areas or features, or facilities that promote the preservation or conservation of such areas."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "help",
+      "label": "Consiga ayuda experta",
+      "audience": [
+        "homeowner",
+        "assessor"
+      ],
+      "owners": [
+        "nonprofit",
+        "government",
+        "school"
+      ],
+      "summary": "Expertos en patrimonio cultural pueden ayudar con colecciones dañadas y edificios históricos.",
+      "do": [
+        {
+          "text": "Pregunte a su contacto de FEMA por el Grupo de Trabajo Nacional de Emergencias del Patrimonio (HENTF, por sus siglas en inglés), una alianza de FEMA y el Smithsonian. El HENTF ayuda a FEMA con solicitantes de arte y cultura: busca recursos, asesora sobre conservadores y revisa planes de tratamiento de objetos. Puede escribir al HENTF a culturalrescue@si.edu (en inglés).",
+          "citations": [
+            {
+              "source_file": "fema-pappg-v5.0-amended-2025.pdf",
+              "page": 245,
+              "quote": "HENTF can serve as a technical assistance resource for field staff to address issues specific to applicants in the arts and culture sector, by identifying resources, advising on conservators and allied professionals, and evaluating scopes of work for treatment of objects."
+            },
+            {
+              "source_file": "thc-historic-property-owners-disaster-handbook-2023.pdf",
+              "page": 19,
+              "quote": "and address their aftermath; they can be contacted by email at culturalrescue@si.edu."
+            }
+          ]
+        },
+        {
+          "text": "Para consejos sobre colecciones dañadas, comuníquese con National Heritage Responders (Instituto Americano de Conservación). Las instituciones pueden llamar al 202.661.8068. Las personas pueden escribir a NHRpublichelpline@culturalheritage.org (en inglés).",
+          "citations": [
+            {
+              "source_file": "thc-historic-property-owners-disaster-handbook-2023.pdf",
+              "page": 19,
+              "quote": "The American Institute for Conservation also offers tip sheets, support, and assistance through their National Heritage Responder program"
+            },
+            {
+              "source_file": "thc-historic-property-owners-disaster-handbook-2023.pdf",
+              "page": 19,
+              "quote": "by individuals via email, NHRpublichelpline@culturalheritage.org, and by institutions via phone, (202) 661-8068."
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "notes": {
+    "age45_pa": {
+      "text": "En el programa de Asistencia Pública de FEMA, el trabajo en edificios de 45 años o más está en la lista de FEMA de trabajos que pueden afectar recursos históricos y necesitan una revisión más detallada. Esto aplica aunque el edificio no esté inscrito como histórico. Cuente con esta revisión antes de las reparaciones permanentes y hable pronto con FEMA y su SHPO.",
+      "citations": [
+        {
+          "source_file": "fema-pappg-v5.0-amended-2025.pdf",
+          "page": 237,
+          "quote": "Work affecting buildings, structures, sites, objects, or districts that are 45 years or older, historic landmarks of any age"
+        }
+      ]
+    },
+    "age45_private": {
+      "text": "Un edificio de esta edad puede ser histórico aunque no esté inscrito. Las reglas de Asistencia Pública de FEMA (para organizaciones sin fines de lucro y gobiernos) envían el trabajo en edificios de 45 años o más a una revisión histórica más detallada. Las ayudas de FEMA para hogares tienen sus propias reglas, pero también están sujetas a la ley de preservación histórica. Consulte a su SHPO antes de retirar material histórico.",
+      "citations": [
+        {
+          "source_file": "fema-pappg-v5.0-amended-2025.pdf",
+          "page": 237,
+          "quote": "Work affecting buildings, structures, sites, objects, or districts that are 45 years or older, historic landmarks of any age"
+        },
+        {
+          "source_file": "fema-iappg-v1.1-amended-2025.pdf",
+          "page": 14,
+          "quote": "Federally-funded IA grants and programs are subject to compliance with EHP compliance requirements, including but not limited to, the National Environmental Policy Act; EO 11988 Floodplain Management; EO 11990, Protection of Wetlands; Endangered Species Act; and the National Historic Preservation Act."
+        }
+      ]
+    }
+  }
+}

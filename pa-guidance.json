@@ -1,0 +1,815 @@
+{
+  "schema_version": "1.0",
+  "built_at": "2026-10-02",
+  "lang": "en",
+  "generator": "hand-authored from docs/fema-pappg-v5.0-amended-2025.pdf (and two supporting docs) per docs/reviews/pappg-v5-cite-map.md; checked by pipeline/verify_pa_guidance.py",
+  "provenance_note": "Public Assistance (PA) guidance for buildings owned by private nonprofits or governments. Every item carries at least one citation whose verbatim quote is mechanically verified present on the cited printed page of its docs/ source. Page numbers are printed (footer) page numbers. Advisory only, not a FEMA eligibility determination.",
+  "verification": {
+    "citations_verified": 73,
+    "citations_total": 73,
+    "pages_verified": 73,
+    "items": 46,
+    "entailment_audited": false,
+    "entailment_note": "Quotes are verified verbatim and on-page. The plain-language item text has NOT been through an independent entailment audit. Needs human (Becca / APTI DRI) review before it is reported as audited."
+  },
+  "owner_types": [
+    "nonprofit",
+    "government",
+    "school"
+  ],
+  "panel_title": "FEMA Public Assistance for nonprofit and public owners",
+  "panel_intro": "Because a nonprofit or a government owns this building, FEMA help usually comes through Public Assistance (PA), not the household program. These points come from FEMA's Public Assistance policy guide (PAPPG v5.0 Amended). Tap a section to open it. Tap \"Source\" to see FEMA's exact words.",
+  "label_do": "Do this",
+  "label_dont": "Watch out",
+  "label_source": "Source",
+  "sources": {
+    "fema-pappg-v5.0-amended-2025.pdf": "FEMA PAPPG v5.0 Amended",
+    "fema-iappg-v1.1-amended-2025.pdf": "FEMA IAPPG v1.1 Amended",
+    "thc-historic-property-owners-disaster-handbook-2023.pdf": "Texas Historical Commission, Historic Property Owners' Disaster Handbook (2023)"
+  },
+  "label_page": "p.",
+  "guidance": [
+    {
+      "id": "pa_start",
+      "label": "Who can apply for Public Assistance",
+      "audience": [
+        "homeowner",
+        "assessor"
+      ],
+      "owners": [
+        "nonprofit",
+        "government",
+        "school"
+      ],
+      "summary": "Private nonprofits, including houses of worship, and governments apply to FEMA Public Assistance.",
+      "do": [
+        {
+          "text": "Private nonprofits, including houses of worship, can apply for Public Assistance. So can state, local, tribal, and territorial governments.",
+          "citations": [
+            {
+              "source_file": "fema-pappg-v5.0-amended-2025.pdf",
+              "page": 45,
+              "quote": "Private nonprofit (PNP) organizations, including houses of worship and other faith-based organizations."
+            }
+          ]
+        },
+        {
+          "text": "Government-owned buildings count, including ones used for education, recreation, or culture, like a town museum or library.",
+          "owners": [
+            "government",
+            "school"
+          ],
+          "citations": [
+            {
+              "source_file": "fema-pappg-v5.0-amended-2025.pdf",
+              "page": 60,
+              "quote": "Public buildings, structure, or system, including those used for educational, recreational, or cultural purposes"
+            }
+          ]
+        },
+        {
+          "text": "Nonprofits: have your IRS tax-exemption ruling letter ready, or your state's nonprofit documentation.",
+          "owners": [
+            "nonprofit",
+            "school"
+          ],
+          "citations": [
+            {
+              "source_file": "fema-pappg-v5.0-amended-2025.pdf",
+              "page": 57,
+              "quote": "A ruling letter from the Internal Revenue Service that was in effect on the declaration date and granted tax exemption"
+            }
+          ]
+        },
+        {
+          "text": "Watch for your state's applicant briefing soon after the disaster declaration. Your state or territory holds it for everyone who may apply.",
+          "citations": [
+            {
+              "source_file": "fema-pappg-v5.0-amended-2025.pdf",
+              "page": 45,
+              "quote": "As soon as possible following the president's declaration, a recipient conducts briefings for all potential applicants."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ehp_first",
+      "label": "Talk to FEMA and your SHPO before repairs",
+      "audience": [
+        "homeowner",
+        "assessor"
+      ],
+      "owners": [
+        "nonprofit",
+        "government",
+        "school"
+      ],
+      "summary": "If you want FEMA to help pay, let FEMA and your State Historic Preservation Office (SHPO) review permanent repairs, demolition, or removal of historic material before the work starts.",
+      "do": [
+        {
+          "text": "Before permanent repairs, demolition, or removing historic material (plaster, trim, windows, floors), contact FEMA and your State Historic Preservation Office (SHPO). Give FEMA the chance to do its environmental and historic review first.",
+          "citations": [
+            {
+              "source_file": "fema-pappg-v5.0-amended-2025.pdf",
+              "page": 214,
+              "quote": "Applicants need to make every effort to afford FEMA the opportunity to perform environmental and historic preservation (EHP) reviews prior to starting any work that has the potential to impact the environment or historic properties."
+            },
+            {
+              "source_file": "fema-pappg-v5.0-amended-2025.pdf",
+              "page": 239,
+              "quote": "Modifying to the interior or exterior of a historic building"
+            }
+          ]
+        },
+        {
+          "text": "Emergency work to deal with an immediate threat, like pumping out water and clearing mud, counts as emergency work if you do it promptly. FEMA must make sure emergency protective work avoids harm to historic properties where possible, and it encourages you to coordinate before you start.",
+          "citations": [
+            {
+              "source_file": "fema-pappg-v5.0-amended-2025.pdf",
+              "page": 132,
+              "quote": "Extracting water and clearing mud, silt, or other accumulated debris from eligible facilities if the work is conducted expeditiously for the purpose of addressing an immediate threat"
+            },
+            {
+              "source_file": "fema-pappg-v5.0-amended-2025.pdf",
+              "page": 238,
+              "quote": "FEMA must ensure that the applicant's emergency protective measures, where possible: 1) avoid impacts to resources such as federally listed threatened and endangered species and their critical habitats, and historic properties"
+            },
+            {
+              "source_file": "fema-pappg-v5.0-amended-2025.pdf",
+              "page": 238,
+              "quote": "FEMA encourages applicants to coordinate prior to conducting work to front-load any applicable EHP considerations in a timely manner."
+            }
+          ]
+        },
+        {
+          "text": "Keep photos and notes of the emergency work you do. FEMA still needs records for its historic review, even after the work is finished.",
+          "citations": [
+            {
+              "source_file": "fema-pappg-v5.0-amended-2025.pdf",
+              "page": 238,
+              "quote": "documentation is still needed to facilitate the EHP review of emergency work projects and to demonstrate EHP compliance even if it is after-the-fact."
+            }
+          ]
+        }
+      ],
+      "dont": [
+        {
+          "text": "Don't start permanent work that changes historic features before FEMA's review. If work doesn't follow the rules, FEMA may refuse to pay for all or part of it.",
+          "citations": [
+            {
+              "source_file": "fema-pappg-v5.0-amended-2025.pdf",
+              "page": 62,
+              "quote": "FEMA may take one of several actions including disallowing all or part of the cost of the project not in compliance."
+            }
+          ]
+        },
+        {
+          "text": "Don't let debris crews haul away historic material without checking first. FEMA must make sure debris removal avoids harm to historic properties.",
+          "citations": [
+            {
+              "source_file": "fema-pappg-v5.0-amended-2025.pdf",
+              "page": 238,
+              "quote": "FEMA must ensure that the applicant's debris removal operations avoid impacts to such resources as floodplains, wetlands, federally listed threatened and endangered species and their critical habitats, and historic properties"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "document",
+      "label": "Photograph and keep records",
+      "audience": [
+        "homeowner",
+        "assessor"
+      ],
+      "owners": [
+        "nonprofit",
+        "government",
+        "school"
+      ],
+      "summary": "Good records help show the flood caused the damage. FEMA doesn't always require them, so this is strongly advised, not required.",
+      "do": [
+        {
+          "text": "Before cleanup and repairs, photograph or video the whole building and the damage. For larger projects FEMA may ask for photos from before the flood, so gather any you have.",
+          "citations": [
+            {
+              "source_file": "fema-pappg-v5.0-amended-2025.pdf",
+              "page": 64,
+              "quote": "If necessary to validate that the impacts or damage was caused by the declared event, applicants will be required to provide"
+            },
+            {
+              "source_file": "fema-pappg-v5.0-amended-2025.pdf",
+              "page": 64,
+              "quote": "Pre-incident photographs and/or video of the impacted site or facility"
+            }
+          ]
+        },
+        {
+          "text": "Collect maintenance records, inspection reports, and older photos that show the building's condition before the flood. FEMA doesn't always require them, but they can help.",
+          "citations": [
+            {
+              "source_file": "fema-pappg-v5.0-amended-2025.pdf",
+              "page": 64,
+              "quote": "Documentation supporting pre-disaster condition of the facility (e.g., facility maintenance records or inspection/safety reports)."
+            },
+            {
+              "source_file": "fema-pappg-v5.0-amended-2025.pdf",
+              "page": 22,
+              "quote": "Clarified that maintenance records are not always required to substantiate damage"
+            }
+          ]
+        },
+        {
+          "text": "When you describe repairs to FEMA, include photos and descriptions of how the building looked before the disaster. This cuts down on follow-up questions from FEMA's historic reviewers.",
+          "citations": [
+            {
+              "source_file": "fema-pappg-v5.0-amended-2025.pdf",
+              "page": 240,
+              "quote": "Provide maps or sketches of work details, photographs, site plans, and area descriptions of pre-disaster conditions and proposed or completed work to reduce requests for information from EHP."
+            }
+          ]
+        },
+        {
+          "text": "Dry the building and stop mold as soon as you safely can. FEMA won't pay to fix mold caused by not acting in a reasonable time, unless there was a good reason, like no power or the building was still underwater.",
+          "citations": [
+            {
+              "source_file": "fema-pappg-v5.0-amended-2025.pdf",
+              "page": 163,
+              "quote": "mold must not be a result of poor facility maintenance or failure to take protective measures to prevent the spread of mold in a reasonable time after the incident."
+            },
+            {
+              "source_file": "fema-pappg-v5.0-amended-2025.pdf",
+              "page": 163,
+              "quote": "Examples of extenuating circumstances include: Disruption of power; Facility is underwater;"
+            }
+          ]
+        },
+        {
+          "text": "FEMA checks mold claims for signs of leaks from before the flood, like poorly sealed windows, rusty or clogged gutters, and water-stained ceiling tiles. Photograph these areas and keep your repair records.",
+          "citations": [
+            {
+              "source_file": "fema-pappg-v5.0-amended-2025.pdf",
+              "page": 164,
+              "quote": "FEMA evaluates whether the facility had pre-existing water infiltration conditions when determining whether mold remediation is eligible."
+            },
+            {
+              "source_file": "fema-pappg-v5.0-amended-2025.pdf",
+              "page": 164,
+              "quote": "Poorly maintained drains or gutters with rust or vegetative growth; and, Leaking and or water-stained ceiling tiles."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "sba",
+      "label": "Nonprofits: apply for an SBA loan too",
+      "audience": [
+        "homeowner",
+        "assessor"
+      ],
+      "owners": [
+        "nonprofit"
+      ],
+      "summary": "Houses of worship, museums, libraries, community centers, and most other nonprofits must apply for a Small Business Administration (SBA) disaster loan to get FEMA help with permanent repairs.",
+      "do": [
+        {
+          "text": "If your nonprofit doesn't provide critical services (like a school or a hospital does), you must apply for an SBA disaster loan and get SBA's answer before FEMA will pay for permanent repairs. Houses of worship, museums, and libraries are in this group.",
+          "citations": [
+            {
+              "source_file": "fema-pappg-v5.0-amended-2025.pdf",
+              "page": 51,
+              "quote": "PNPs that do not provide any critical services must also apply for a disaster loan from the SBA"
+            },
+            {
+              "source_file": "fema-pappg-v5.0-amended-2025.pdf",
+              "page": 56,
+              "quote": "Houses of worship and faith-based organizations (e.g., churches, synagogues, mosques, and temples); Libraries; Museums;"
+            },
+            {
+              "source_file": "fema-pappg-v5.0-amended-2025.pdf",
+              "page": 285,
+              "quote": "Houses of worship provide noncritical services, so Community Church is required to apply for an SBA loan for the chapel."
+            }
+          ]
+        },
+        {
+          "text": "You don't need the SBA application for emergency work. It is only required for permanent work.",
+          "citations": [
+            {
+              "source_file": "fema-pappg-v5.0-amended-2025.pdf",
+              "page": 52,
+              "quote": "Non-critical but Essential Social Services SBA loan application not required SBA loan application is required"
+            }
+          ]
+        },
+        {
+          "text": "Apply to SBA and FEMA as soon as you can. If you miss the SBA deadline (including any extension), FEMA won't pay for permanent work.",
+          "citations": [
+            {
+              "source_file": "fema-pappg-v5.0-amended-2025.pdf",
+              "page": 52,
+              "quote": "Applying to both agencies as soon as possible ensures meeting both application deadlines."
+            },
+            {
+              "source_file": "fema-pappg-v5.0-amended-2025.pdf",
+              "page": 52,
+              "quote": "If the PNP misses the SBA application deadline, including any SBA approved extension, permanent work is ineligible for PA funding."
+            }
+          ]
+        },
+        {
+          "text": "SBA disaster loans for most nonprofits go up to $2 million.",
+          "citations": [
+            {
+              "source_file": "fema-pappg-v5.0-amended-2025.pdf",
+              "page": 52,
+              "quote": "SBA disaster loans are available up to $2 million to qualified businesses and most private nonprofit organizations."
+            }
+          ]
+        }
+      ],
+      "dont": [
+        {
+          "text": "Don't turn down the SBA loan without thinking it through. If you decline it, FEMA only pays the costs the loan would not have covered. The same is true if SBA denies the loan because you can't meet its terms.",
+          "citations": [
+            {
+              "source_file": "fema-pappg-v5.0-amended-2025.pdf",
+              "page": 52,
+              "quote": "If the PNP declines an SBA loan, PA funding is limited to the costs that the loan would not have otherwise covered. This applies even when the PNP cannot accept the terms of the loan"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "flood_insurance",
+      "label": "Flood insurance",
+      "audience": [
+        "homeowner",
+        "assessor"
+      ],
+      "owners": [
+        "nonprofit",
+        "government",
+        "school"
+      ],
+      "summary": "Flood insurance changes how much FEMA pays now, and FEMA requires insurance after it pays for permanent repairs.",
+      "do": [
+        {
+          "text": "File claims with your own insurance. FEMA can't pay for costs your insurance pays.",
+          "citations": [
+            {
+              "source_file": "fema-pappg-v5.0-amended-2025.pdf",
+              "page": 52,
+              "quote": "FEMA and SBA cannot provide disaster assistance funding that duplicates insurance proceeds. Applicants must pursue claims to recover insurance proceeds that they are entitled to receive from their insurer(s)."
+            }
+          ]
+        },
+        {
+          "text": "If you think the flood map wrongly puts your building in the high-risk flood zone, you can ask FEMA for a map change (a Letter of Map Amendment or Revision) within 6 months of the declaration.",
+          "citations": [
+            {
+              "source_file": "fema-pappg-v5.0-amended-2025.pdf",
+              "page": 219,
+              "quote": "it may request a letter of map amendment or letter of map revision from FEMA within 6 months of the disaster declaration."
+            }
+          ]
+        }
+      ],
+      "dont": [
+        {
+          "text": "If the building has been in a mapped high-risk flood zone (Special Flood Hazard Area) for more than a year and had no flood insurance, FEMA cuts its funding. The cut is the most a standard flood insurance (NFIP) policy would have paid, or the value of the building and contents if that is less.",
+          "citations": [
+            {
+              "source_file": "fema-pappg-v5.0-amended-2025.pdf",
+              "page": 219,
+              "quote": "Located in an area that FEMA has identified as an SFHA for more than 1 year;"
+            },
+            {
+              "source_file": "fema-pappg-v5.0-amended-2025.pdf",
+              "page": 219,
+              "quote": "FEMA reduces eligible project costs by the lesser of: The maximum amount of insurance proceeds that could have been obtained from an NFIP standard flood insurance policy for the building and its contents"
+            }
+          ]
+        },
+        {
+          "text": "If FEMA pays for permanent repairs, you must buy and keep insurance on the building. If you don't, FEMA can take back the money, and the building can't get FEMA Public Assistance in future disasters.",
+          "citations": [
+            {
+              "source_file": "fema-pappg-v5.0-amended-2025.pdf",
+              "page": 220,
+              "quote": "Applicants that receive PA funding for permanent work to replace, repair, reconstruct, or construct a facility must obtain and maintain insurance to protect the facility against future loss."
+            },
+            {
+              "source_file": "fema-pappg-v5.0-amended-2025.pdf",
+              "page": 221,
+              "quote": "If an applicant does not comply with the requirement to obtain and maintain insurance, FEMA will deny or deobligate PA funds related to the noncompliance from the current disaster. Additionally, the facilities for which the applicant failed to comply are ineligible for future PA funding."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "deadlines",
+      "label": "Deadlines",
+      "audience": [
+        "homeowner",
+        "assessor"
+      ],
+      "owners": [
+        "nonprofit",
+        "government",
+        "school"
+      ],
+      "summary": "Deadlines are short, and they start on different dates. Most can be extended, but you have to ask in writing and give a reason.",
+      "do": [
+        {
+          "text": "Request for Public Assistance (RPA): due within 30 days after FEMA designates your area. FEMA can extend it if your state asks in writing and gives a good reason.",
+          "citations": [
+            {
+              "source_file": "fema-pappg-v5.0-amended-2025.pdf",
+              "page": 45,
+              "quote": "it must submit an RPA to FEMA via PA Grants Portal within 30 days after the respective area is designated."
+            },
+            {
+              "source_file": "fema-pappg-v5.0-amended-2025.pdf",
+              "page": 46,
+              "quote": "FEMA extends the deadline for submitting an RPA if a recipient submits a request in writing with justification based on extenuating circumstances"
+            }
+          ]
+        },
+        {
+          "text": "Impact List (each damaged building or site, with a rough cost): due within 60 days after you attend your recovery scoping meeting with FEMA. FEMA may extend it if you ask with a good reason.",
+          "citations": [
+            {
+              "source_file": "fema-pappg-v5.0-amended-2025.pdf",
+              "page": 70,
+              "quote": "Applicants are required to identify and report all incident-related impacts and damage to FEMA within 60 days of attending a recovery scoping meeting."
+            },
+            {
+              "source_file": "fema-pappg-v5.0-amended-2025.pdf",
+              "page": 70,
+              "quote": "FEMA may extend the deadline to identify and report the impacts if an applicant submits a request with justification based on extenuating circumstances"
+            }
+          ]
+        },
+        {
+          "text": "If you want FEMA to pay to replace the building instead of repairing it, send that request within one year of the declaration.",
+          "citations": [
+            {
+              "source_file": "fema-pappg-v5.0-amended-2025.pdf",
+              "page": 209,
+              "quote": "Applicants should submit their requests for replacement within one year of the declaration."
+            }
+          ]
+        },
+        {
+          "text": "Finish emergency work within 6 months of the declaration date. Most permanent work has 18 months. Your state can extend emergency work by up to 6 more months and permanent work up to 30 months, one project at a time.",
+          "citations": [
+            {
+              "source_file": "fema-pappg-v5.0-amended-2025.pdf",
+              "page": 247,
+              "quote": "For emergency work, the deadline is six months from the disaster declaration date."
+            },
+            {
+              "source_file": "fema-pappg-v5.0-amended-2025.pdf",
+              "page": 247,
+              "quote": "For most permanent work, the deadline is 18 months, except for category I projects"
+            },
+            {
+              "source_file": "fema-pappg-v5.0-amended-2025.pdf",
+              "page": 248,
+              "quote": "Recipients may extend emergency work up to an additional six months and permanent work up to 30 months on a project-by-project basis"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "collections",
+      "label": "Collections, records, and contents",
+      "audience": [
+        "homeowner",
+        "assessor"
+      ],
+      "owners": [
+        "nonprofit",
+        "government",
+        "school"
+      ],
+      "summary": "FEMA can help pay to stabilize damaged collections, but not to replace irreplaceable objects.",
+      "do": [
+        {
+          "text": "Move collections and other contents out of harm's way and store them safely. This counts as emergency work.",
+          "citations": [
+            {
+              "source_file": "fema-pappg-v5.0-amended-2025.pdf",
+              "page": 132,
+              "quote": "Removal and storage of contents from eligible facilities for the purpose of minimizing additional damage"
+            }
+          ]
+        },
+        {
+          "text": "FEMA can pay to stabilize damaged collections and objects, for example by controlling temperature and humidity, and by cleaning them to stop further damage.",
+          "citations": [
+            {
+              "source_file": "fema-pappg-v5.0-amended-2025.pdf",
+              "page": 197,
+              "quote": "Stabilization of damaged collections or individual objects is eligible."
+            },
+            {
+              "source_file": "fema-pappg-v5.0-amended-2025.pdf",
+              "page": 197,
+              "quote": "Treating damaged items utilizing environmental controls to achieve proper temperature and humidity"
+            }
+          ]
+        },
+        {
+          "text": "Hire a qualified conservator with the right specialty. Treatment needs to follow the American Institute for Conservation (AIC) Code of Ethics.",
+          "citations": [
+            {
+              "source_file": "fema-pappg-v5.0-amended-2025.pdf",
+              "page": 198,
+              "quote": "Treatment needs to be conducted by a qualified conservation professional with the appropriate specialty and in accordance with the American Institute for Conservation Code of Ethics and Guidelines for Practice."
+            }
+          ]
+        },
+        {
+          "text": "Contents damaged by the flood can be eligible even if the building itself isn't damaged, for example in a flooded basement.",
+          "citations": [
+            {
+              "source_file": "fema-pappg-v5.0-amended-2025.pdf",
+              "page": 196,
+              "quote": "Contents damaged as a result of the disaster are eligible even if the building housing the contents is not damaged (e.g. basement flooding which does not result in structural damage"
+            }
+          ]
+        },
+        {
+          "text": "Keep your accession records, catalogs, and inventories safe. They document what you had.",
+          "citations": [
+            {
+              "source_file": "fema-pappg-v5.0-amended-2025.pdf",
+              "page": 197,
+              "quote": "Documentation of collections and individual objects generally include accession, catalog, and inventories."
+            }
+          ]
+        },
+        {
+          "text": "Wet paper records can often be saved. Freeze-drying is one way FEMA can pay to stabilize them.",
+          "citations": [
+            {
+              "source_file": "fema-pappg-v5.0-amended-2025.pdf",
+              "page": 197,
+              "quote": "Recovery of damaged hard copies includes labor and materials, such as bags, boxes, and containers. Stabilizing damaged hard copies includes freeze-drying."
+            }
+          ]
+        }
+      ],
+      "dont": [
+        {
+          "text": "Don't count on FEMA to replace destroyed irreplaceable objects. Replacement isn't eligible. Rare books, manuscripts, and special library collections get treatment only.",
+          "citations": [
+            {
+              "source_file": "fema-pappg-v5.0-amended-2025.pdf",
+              "page": 198,
+              "quote": "Replacement of destroyed irreplaceable collections or objects is ineligible."
+            },
+            {
+              "source_file": "fema-pappg-v5.0-amended-2025.pdf",
+              "page": 197,
+              "quote": "special library collections, including rare books, manuscripts, and other fragile materials, are only eligible for treatment, not replacement."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "historic_exceptions",
+      "label": "Special rules for historic buildings",
+      "audience": [
+        "homeowner",
+        "assessor"
+      ],
+      "owners": [
+        "nonprofit",
+        "government",
+        "school"
+      ],
+      "summary": "Some FEMA rules have exceptions for buildings listed in, or eligible for, the National Register of Historic Places. Ask FEMA about them when your repairs are planned.",
+      "do": [
+        {
+          "text": "If FEMA's required building codes would harm a building that is listed in, or eligible for, the National Register, you can ask for a waiver. It needs approval from FEMA's Regional Administrator.",
+          "citations": [
+            {
+              "source_file": "fema-pappg-v5.0-amended-2025.pdf",
+              "page": 169,
+              "quote": "It would otherwise be inappropriate for the facility (such as adversely affecting a facility that is listed or is eligible to be listed on the National Register of Historic Places)."
+            },
+            {
+              "source_file": "fema-pappg-v5.0-amended-2025.pdf",
+              "page": 169,
+              "quote": "Applicants may request a waiver for the incorporation of codes, specifications, and standards with approval from the Regional Administrator."
+            }
+          ]
+        },
+        {
+          "text": "Normally, when repair would cost more than replacement, FEMA pays only the replacement cost. For a historic building, if a code or standard requires repair in a certain way, FEMA can pay for that work even when it costs more than replacing the building.",
+          "citations": [
+            {
+              "source_file": "fema-pappg-v5.0-amended-2025.pdf",
+              "page": 182,
+              "quote": "If the facility is listed in, or meets the criteria to be listed in, the National Register of Historic Places, and an applicable code or standard requires repair in a certain manner, costs associated with work to comply with that code or standard are eligible, even if repair costs exceed replacement costs."
+            },
+            {
+              "source_file": "fema-pappg-v5.0-amended-2025.pdf",
+              "page": 211,
+              "quote": "A historic facility is defined as one listed in, or eligible for listing in, the National Register of Historic Places."
+            }
+          ]
+        },
+        {
+          "text": "If local floodplain rules make you elevate or floodproof, FEMA usually limits the cost to what replacing the building would cost. Buildings listed in, or eligible for, the National Register are an exception.",
+          "citations": [
+            {
+              "source_file": "fema-pappg-v5.0-amended-2025.pdf",
+              "page": 217,
+              "quote": "Based on the floodplain ordinance, if the cost to repair a facility is greater than the cost to replace the facility, the eligible cost is capped at the replacement cost."
+            },
+            {
+              "source_file": "fema-pappg-v5.0-amended-2025.pdf",
+              "page": 217,
+              "quote": "There is an exception for facilities eligible for or on the National Register of Historic Places."
+            }
+          ]
+        }
+      ],
+      "dont": [
+        {
+          "text": "Don't assume your state's historic building code qualifies for these exceptions. FEMA says most state historic codes don't meet its rules.",
+          "citations": [
+            {
+              "source_file": "fema-pappg-v5.0-amended-2025.pdf",
+              "page": 182,
+              "quote": "Most state historic building codes and standards encourage code officials to allow less intrusive alternatives to requirements of the prevailing codes or standards, but do not require any particular work be performed. As a result, the codes and standards usually fail to meet the eligibility criteria."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "other_rules",
+      "label": "Other rules to know",
+      "audience": [
+        "homeowner",
+        "assessor"
+      ],
+      "owners": [
+        "nonprofit",
+        "government",
+        "school"
+      ],
+      "summary": "A few more rules that often affect historic buildings owned by nonprofits and governments.",
+      "do": [
+        {
+          "text": "If you test for mold, use an independent indoor environmental professional, not someone who works for the cleanup company.",
+          "citations": [
+            {
+              "source_file": "fema-pappg-v5.0-amended-2025.pdf",
+              "page": 163,
+              "quote": "The indoor environmental professional should not be employed by the remediation company to avoid a conflict of interest."
+            }
+          ]
+        },
+        {
+          "text": "Mixed-use buildings: more than half of the space has to be used for eligible services, like worship, a museum, or a library. FEMA then pays only for the eligible share.",
+          "owners": [
+            "nonprofit",
+            "school"
+          ],
+          "citations": [
+            {
+              "source_file": "fema-pappg-v5.0-amended-2025.pdf",
+              "page": 50,
+              "quote": "Primary use is the use for which more than 50 percent of the physical space in the facility is dedicated."
+            },
+            {
+              "source_file": "fema-pappg-v5.0-amended-2025.pdf",
+              "page": 50,
+              "quote": "If the facility is eligible, FEMA prorates funding based on the percentage of physical space dedicated to eligible services."
+            }
+          ]
+        }
+      ],
+      "dont": [
+        {
+          "text": "Vacant or unused buildings usually aren't eligible. The building must have been in active use when the disaster started, unless it was closed only for repairs, or you had approved plans or a budget to use it.",
+          "citations": [
+            {
+              "source_file": "fema-pappg-v5.0-amended-2025.pdf",
+              "page": 61,
+              "quote": "To be eligible, a facility must have been in active use at the start of the incident period."
+            },
+            {
+              "source_file": "fema-pappg-v5.0-amended-2025.pdf",
+              "page": 61,
+              "quote": "The facility was only temporarily inactive for repairs or remodeling"
+            },
+            {
+              "source_file": "fema-pappg-v5.0-amended-2025.pdf",
+              "page": 61,
+              "quote": "The applicant established future active use in an approved budget or plans"
+            }
+          ]
+        },
+        {
+          "text": "The grounds around museums and historic sites aren't eligible for nonprofit owners.",
+          "owners": [
+            "nonprofit"
+          ],
+          "citations": [
+            {
+              "source_file": "fema-pappg-v5.0-amended-2025.pdf",
+              "page": 57,
+              "quote": "Grounds at museums and historic sites; and, Open natural areas or features, or facilities that promote the preservation or conservation of such areas."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "help",
+      "label": "Get expert help",
+      "audience": [
+        "homeowner",
+        "assessor"
+      ],
+      "owners": [
+        "nonprofit",
+        "government",
+        "school"
+      ],
+      "summary": "Cultural heritage experts can help with damaged collections and historic buildings.",
+      "do": [
+        {
+          "text": "Ask your FEMA contact about the Heritage Emergency National Task Force (HENTF), a FEMA and Smithsonian partnership. HENTF helps FEMA with arts and culture applicants: finding resources, advising on conservators, and reviewing treatment plans for objects. You can email HENTF at culturalrescue@si.edu.",
+          "citations": [
+            {
+              "source_file": "fema-pappg-v5.0-amended-2025.pdf",
+              "page": 245,
+              "quote": "HENTF can serve as a technical assistance resource for field staff to address issues specific to applicants in the arts and culture sector, by identifying resources, advising on conservators and allied professionals, and evaluating scopes of work for treatment of objects."
+            },
+            {
+              "source_file": "thc-historic-property-owners-disaster-handbook-2023.pdf",
+              "page": 19,
+              "quote": "and address their aftermath; they can be contacted by email at culturalrescue@si.edu."
+            }
+          ]
+        },
+        {
+          "text": "For advice on damaged collections, contact the National Heritage Responders (American Institute for Conservation). Institutions can call 202.661.8068. Individuals can email NHRpublichelpline@culturalheritage.org.",
+          "citations": [
+            {
+              "source_file": "thc-historic-property-owners-disaster-handbook-2023.pdf",
+              "page": 19,
+              "quote": "The American Institute for Conservation also offers tip sheets, support, and assistance through their National Heritage Responder program"
+            },
+            {
+              "source_file": "thc-historic-property-owners-disaster-handbook-2023.pdf",
+              "page": 19,
+              "quote": "by individuals via email, NHRpublichelpline@culturalheritage.org, and by institutions via phone, (202) 661-8068."
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "notes": {
+    "age45_pa": {
+      "text": "In FEMA's Public Assistance program, work on buildings 45 years or older is on FEMA's list of work that may affect historic resources and needs a more detailed review. That is true even if the building isn't listed as historic. Plan for this review before permanent repairs, and talk to FEMA and your SHPO early.",
+      "citations": [
+        {
+          "source_file": "fema-pappg-v5.0-amended-2025.pdf",
+          "page": 237,
+          "quote": "Work affecting buildings, structures, sites, objects, or districts that are 45 years or older, historic landmarks of any age"
+        }
+      ]
+    },
+    "age45_private": {
+      "text": "Buildings this old may be historic even if they aren't listed. FEMA's Public Assistance rules (for nonprofits and governments) send work on buildings 45 years or older for a more detailed historic review. FEMA's household grants have their own rules, but they are also covered by historic preservation law. Ask your SHPO before removing historic material.",
+      "citations": [
+        {
+          "source_file": "fema-pappg-v5.0-amended-2025.pdf",
+          "page": 237,
+          "quote": "Work affecting buildings, structures, sites, objects, or districts that are 45 years or older, historic landmarks of any age"
+        },
+        {
+          "source_file": "fema-iappg-v1.1-amended-2025.pdf",
+          "page": 14,
+          "quote": "Federally-funded IA grants and programs are subject to compliance with EHP compliance requirements, including but not limited to, the National Environmental Policy Act; EO 11988 Floodplain Management; EO 11990, Protection of Wetlands; Endangered Species Act; and the National Historic Preservation Act."
+        }
+      ]
+    }
+  }
+}
