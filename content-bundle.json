@@ -4,8 +4,8 @@
   "generator": "pipeline/ (extract->retrieve->synthesize->verify_citations->directive_lint->entailment audit)",
   "provenance_note": "Every do/dont item carries >=1 citation whose verbatim quote was mechanically verified present in its cited docs/ source, and passed an independent LLM claim-entailment audit. Records are advisory preservation guidance, not a substitute for a professional assessment.",
   "verification": {
-    "citations_verified": 85,
-    "citations_total": 85,
+    "citations_verified": 87,
+    "citations_total": 87,
     "items": 76,
     "entailment_audited": true,
     "entailment_dropped": [
@@ -17,6 +17,9 @@
     "relevance_gate": "applied (inland-flood scope)",
     "relevance_removed": [
       "roof: 5/9 items wind/hail off-scope; corpus lacks flood roof guidance -> human authoring; app falls back to built-in"
+    ],
+    "hand_edits": [
+      "2026-10-02: siding and insulation fiberglass items hand-edited to remove-by-default (NTHP 'with few exceptions' rule; closed-cell board exception) so the bundle no longer contradicts itself; quotes verified verbatim, not yet re-run through the LLM entailment audit."
     ]
   },
   "categories": [
@@ -67,11 +70,19 @@
           ]
         },
         {
-          "text": "Evaluate insulation such as fiberglass battens on a case-by-case basis rather than automatically discarding it, since not all types need to come out.",
+          "text": "Plan to remove insulation that sat in floodwater: with few exceptions, it should come out. Closed-cell styrene or urethane board, which doesn't absorb water, can sometimes stay, but inspect it and remove it until everything dries if it holds moisture against wood, masonry, or steel fasteners.",
           "citations": [
             {
               "source_file": "nthp-treatment-flood-damaged-historic-buildings.pdf",
-              "quote": "Other types of insulation, such as fiberglass battens, must be evaluated on a case-by-case basis."
+              "quote": "With few exceptions, any insulation that has been immersed in water should be removed"
+            },
+            {
+              "source_file": "nthp-treatment-flood-damaged-historic-buildings.pdf",
+              "quote": "Some types of insulation may be left in place after water contact, such as closed-cell styrene and urethane board insulations that do not absorb water."
+            },
+            {
+              "source_file": "nthp-treatment-flood-damaged-historic-buildings.pdf",
+              "quote": "whether they hold moisture against wood or masonry materials or steel fasteners. If so, the insulation should be removed until all materials are dry."
             }
           ]
         },
@@ -353,11 +364,11 @@
           ]
         },
         {
-          "text": "Evaluate fiberglass batt insulation case-by-case rather than assuming it must be discarded, since glass fibers themselves are not water absorbent, though they may still need removal if they impede the wall's ability to dry out.",
+          "text": "Remove fiberglass batts along with other wet fibrous insulation. Glass fibers don't absorb water themselves, but batts that block airflow in the wall cavity slow the drying-out process.",
           "citations": [
             {
               "source_file": "nthp-treatment-flood-damaged-historic-buildings.pdf",
-              "quote": "Other types of insulation, such as fiberglass battens, must be evaluated on a case-by-case basis."
+              "quote": "Remove all wet fibrous insulation—even if wallboard appears to be dry."
             },
             {
               "source_file": "nthp-treatment-flood-damaged-historic-buildings.pdf",

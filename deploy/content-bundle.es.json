@@ -5,8 +5,8 @@
   "generator": "pipeline/ (extract->retrieve->synthesize->verify_citations->directive_lint->entailment audit)",
   "provenance_note": "Traducción al español del content-bundle.json original en inglés. Cada recomendación do/dont conserva sus citas originales en inglés, verificadas mecánicamente contra los documentos fuente. Esta traducción es orientación consultiva de preservación y no sustituye una evaluación profesional. Requiere revisión por SHPO/ICP antes de publicarse como guía oficial.",
   "verification": {
-    "citations_verified": 85,
-    "citations_total": 85,
+    "citations_verified": 87,
+    "citations_total": 87,
     "items": 76,
     "entailment_audited": false,
     "entailment_dropped": [
@@ -19,7 +19,10 @@
     "relevance_removed": [
       "roof: 5/9 items wind/hail off-scope; corpus lacks flood roof guidance -> human authoring; app falls back to built-in"
     ],
-    "entailment_note": "Spanish text has NOT been entailment-audited against English source quotes. Citations are carried from the verified English bundle. SHPO/ICP review required before publishing as authoritative guidance."
+    "entailment_note": "Spanish text has NOT been entailment-audited against English source quotes. Citations are carried from the verified English bundle. SHPO/ICP review required before publishing as authoritative guidance.",
+    "hand_edits": [
+      "2026-10-02: siding and insulation fiberglass items hand-edited to remove-by-default (NTHP 'with few exceptions' rule; closed-cell board exception) so the bundle no longer contradicts itself; quotes verified verbatim, not yet re-run through the LLM entailment audit."
+    ]
   },
   "categories": [
     "siding",
@@ -69,11 +72,19 @@
           ]
         },
         {
-          "text": "Evalúe el aislamiento, como las mantas de fibra de vidrio, caso por caso en lugar de descartarlo automáticamente, ya que no todos los tipos necesitan retirarse.",
+          "text": "Prevea retirar el aislamiento que estuvo bajo el agua de la inundación: salvo pocas excepciones, debe retirarse. Los paneles de espuma de celda cerrada (estireno o uretano), que no absorben agua, a veces pueden quedarse, pero inspecciónelos y retírelos hasta que todo se seque si retienen humedad contra la madera, la mampostería o los sujetadores de acero.",
           "citations": [
             {
               "source_file": "nthp-treatment-flood-damaged-historic-buildings.pdf",
-              "quote": "Other types of insulation, such as fiberglass battens, must be evaluated on a case-by-case basis."
+              "quote": "With few exceptions, any insulation that has been immersed in water should be removed"
+            },
+            {
+              "source_file": "nthp-treatment-flood-damaged-historic-buildings.pdf",
+              "quote": "Some types of insulation may be left in place after water contact, such as closed-cell styrene and urethane board insulations that do not absorb water."
+            },
+            {
+              "source_file": "nthp-treatment-flood-damaged-historic-buildings.pdf",
+              "quote": "whether they hold moisture against wood or masonry materials or steel fasteners. If so, the insulation should be removed until all materials are dry."
             }
           ]
         },
@@ -355,11 +366,11 @@
           ]
         },
         {
-          "text": "Evalúe el aislamiento de mantas de fibra de vidrio caso por caso en lugar de asumir que debe descartarse, ya que las fibras de vidrio en sí no absorben agua, aunque podrían necesitar retirarse si impiden la capacidad de la pared para secarse.",
+          "text": "Retire las mantas de fibra de vidrio junto con el resto del aislamiento fibroso mojado. Las fibras de vidrio en sí no absorben agua, pero las mantas que bloquean el flujo de aire en la cavidad de la pared retrasan el secado.",
           "citations": [
             {
               "source_file": "nthp-treatment-flood-damaged-historic-buildings.pdf",
-              "quote": "Other types of insulation, such as fiberglass battens, must be evaluated on a case-by-case basis."
+              "quote": "Remove all wet fibrous insulation—even if wallboard appears to be dry."
             },
             {
               "source_file": "nthp-treatment-flood-damaged-historic-buildings.pdf",
