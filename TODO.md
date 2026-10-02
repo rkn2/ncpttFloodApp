@@ -22,8 +22,8 @@
 - [ ] Fix 8 moderate/minor WCAG items (touch targets, fieldset/legend, autocomplete attrs, citation accessibility)
 - [ ] Add evaluation telemetry (after Becca decides what to capture)
 - [ ] Add more states/territories to `programs.json`
-- [ ] Render the `recovery_aid` bundle record in floodapp.html/deploy/index.html (it isn't a DAMAGE_CATEGORIES key, so nothing shows it yet), e.g. `${guidanceBodyHtml('recovery_aid')}` in the results insurance panel and a Guide topic; bump the service worker cache for the 2026-10-02 programs.json and bundle changes
-- [ ] `results_listed` (EN/ES) in floodapp.html still says listing "provides additional protections"; align with the Section 106 "review of effects" wording
+- [x] Render the `recovery_aid` bundle record (2026-10-02: insurance panel + "Common mistakes to avoid"); service worker cache bumped to v11
+- [x] `results_listed` (EN/ES) aligned with the Section 106 "review of effects" wording (2026-10-02)
 - [ ] EN bundle `provenance_note` says every item passed the entailment audit; no longer true for hand-edited items (`entailment_audited: false`). Re-run the audit or reword the note
 
 ## Done This Session (2026-08-31)

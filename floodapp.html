@@ -2099,6 +2099,7 @@ function showHwResults() {
     <div class="soi-note" style="margin-bottom:10px;">
       <strong>${t('ins_ord_title')}</strong> ${t('ins_ord_desc')}
     </div>
+    ${contentBundle['recovery_aid'] ? `<p style="font-size:0.85rem;font-weight:600;margin:12px 0 6px;">${tF(contentBundle['recovery_aid'], 'label')}</p>${guidanceBodyHtml('recovery_aid')}` : ''}
     <p style="font-size:0.8rem;margin-top:12px;text-align:right;">
       <a href="https://content.naic.org/sites/default/files/publication-post-disaster-claims-guide.pdf" target="_blank" rel="noopener">${t('ins_source')} <span class="sr-only">(opens in new tab)</span></a>
     </p>`;
@@ -3414,6 +3415,9 @@ const GUIDE_TOPICS = [
           allDonts.push({ label, text: item.text, citations: item.citations });
         });
       });
+      // recovery_aid (insurance / FEMA / SBA) isn't a damage category, so add its don'ts here too
+      const ra = contentBundle['recovery_aid'];
+      if (ra) (ra.dont || []).forEach(item => allDonts.push({ label: tF(ra, 'label'), text: item.text, citations: item.citations }));
       if (!allDonts.length) return '<p style="color:#767676;">No guidance loaded.</p>';
       return `<p style="font-size:0.85rem;color:#555;margin-bottom:12px;">These are the most important things to <strong>avoid</strong> after a flood in a historic building:</p>` +
         allDonts.map(d => {
