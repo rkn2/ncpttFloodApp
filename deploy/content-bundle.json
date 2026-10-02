@@ -4,9 +4,9 @@
   "generator": "pipeline/ (extract->retrieve->synthesize->verify_citations->directive_lint->entailment audit)",
   "provenance_note": "Every do/dont item carries >=1 citation whose verbatim quote was mechanically verified present in its cited docs/ source, and passed an independent LLM claim-entailment audit. Records are advisory preservation guidance, not a substitute for a professional assessment.",
   "verification": {
-    "citations_verified": 87,
-    "citations_total": 87,
-    "items": 76,
+    "citations_verified": 115,
+    "citations_total": 115,
+    "items": 87,
     "entailment_audited": true,
     "entailment_dropped": [
       "chimney: foundation-wall quote over-applied to chimney"
@@ -19,7 +19,8 @@
       "roof: 5/9 items wind/hail off-scope; corpus lacks flood roof guidance -> human authoring; app falls back to built-in"
     ],
     "hand_edits": [
-      "2026-10-02: siding and insulation fiberglass items hand-edited to remove-by-default (NTHP 'with few exceptions' rule; closed-cell board exception) so the bundle no longer contradicts itself; quotes verified verbatim, not yet re-run through the LLM entailment audit."
+      "2026-10-02: siding and insulation fiberglass items hand-edited to remove-by-default (NTHP 'with few exceptions' rule; closed-cell board exception) so the bundle no longer contradicts itself; quotes verified verbatim, not yet re-run through the LLM entailment audit.",
+      "2026-10-02: hand-authored homeowner aid items, quotes verified verbatim, not run through the LLM entailment audit (each new item carries entailment_audited: false): structural do + basement repair limits under FEMA IA (IAPPG v1.1 Amended pp.88-89); new record recovery_aid (7 do, 3 dont) on flood insurance exclusion, filing claims, documenting damage and pre-flood condition, FEMA records, the SFHA flood insurance requirement and its carry-over to later owners, and SBA-dependent assistance (IAPPG pp.46, 50, 64, 66-67, 75, 77, 86, 88-89, 166; NAIC post-disaster claims guide pp.3-4, 7, 9). Citation 'page' values are printed page numbers. recovery_aid is not a damage category, so floodapp.html must render it explicitly (not yet wired)."
     ]
   },
   "categories": [
@@ -31,7 +32,8 @@
     "structural",
     "electrical",
     "mold",
-    "roof"
+    "roof",
+    "recovery_aid"
   ],
   "guidance": [
     {
@@ -578,6 +580,37 @@
               "quote": "they should be inspected for missing mortar and repaired in the same manner as aboveground walls, unless there is reason to suspect a more serious structural problem created by the flooding"
             }
           ]
+        },
+        {
+          "text": "If FEMA helps with flood repairs, expect limited help for a basement (a floor below ground level on all sides). FEMA home repair in basements is limited to damage that affects the home's safety, sanitation, and functionality, such as the foundation and critical utilities like the furnace or water heater. Wet or moldy drywall, carpet, or cabinets in non-essential basement areas are covered for removal only.",
+          "citations": [
+            {
+              "source_file": "fema-iappg-v1.1-amended-2025.pdf",
+              "quote": "FEMA defines a basement as an area of the home with its floor below grade (below ground level) on all sides.",
+              "page": 88
+            },
+            {
+              "source_file": "fema-iappg-v1.1-amended-2025.pdf",
+              "quote": "Home Repair Assistance for flood-damaged real property in basements is limited to damaged items that result in living conditions affecting the safety, sanitation, and functionality of the home.",
+              "page": 88
+            },
+            {
+              "source_file": "fema-iappg-v1.1-amended-2025.pdf",
+              "quote": "Damage to the structural components (e.g., foundation) of the home",
+              "page": 89
+            },
+            {
+              "source_file": "fema-iappg-v1.1-amended-2025.pdf",
+              "quote": "Damage to critical utilities that support the overall function of the home (e.g., furnace, water heater)",
+              "page": 89
+            },
+            {
+              "source_file": "fema-iappg-v1.1-amended-2025.pdf",
+              "quote": "Damage presenting a hazard (e.g., wet or moldy drywall, carpet, or cabinets) in non-essential living areas (for removal only)",
+              "page": 89
+            }
+          ],
+          "entailment_audited": false
         }
       ],
       "dont": [
@@ -873,6 +906,193 @@
         }
       ],
       "call_a_pro": "If your roof has historic materials (slate, clay tile, wood shingle), contact your State Historic Preservation Office before replacing — compatible materials and techniques are required for historic properties."
+    },
+    {
+      "id": "recovery_aid",
+      "label": "Insurance, FEMA, and SBA",
+      "audience": [
+        "homeowner"
+      ],
+      "summary": "Steps for flood insurance claims, FEMA Individual Assistance, and SBA disaster loans after a flood.",
+      "do": [
+        {
+          "text": "Check whether you have a separate flood insurance policy. Most homeowner policies don't cover flood damage unless flood coverage was bought separately.",
+          "citations": [
+            {
+              "source_file": "post-disaster-claims-guide.pdf",
+              "quote": "most policies won't cover damage from floods or earthquakes unless you bought that coverage separately.",
+              "page": 3
+            }
+          ],
+          "entailment_audited": false
+        },
+        {
+          "text": "If you have insurance that covers the damage, file a claim. FEMA won't give home repair assistance for insured parts of the home if you don't file, and it needs your insurance settlement paperwork before it decides on help your insurance may cover.",
+          "citations": [
+            {
+              "source_file": "fema-iappg-v1.1-amended-2025.pdf",
+              "quote": "An applicant with insurance for a covered peril will be ineligible for Home Repair Assistance for insured real property components when the applicant fails to file a claim",
+              "page": 88
+            },
+            {
+              "source_file": "fema-iappg-v1.1-amended-2025.pdf",
+              "quote": "Insured applicants must provide documentation that identifies their insurance settlements or benefits before FEMA will consider their eligibility",
+              "page": 50
+            }
+          ],
+          "entailment_audited": false
+        },
+        {
+          "text": "Once it's safe to go inside, take photos or videos of the damaged areas and your belongings, and jot down notes about major damage. Keep all receipts for emergency repairs, and hotel receipts if you can't stay in your home.",
+          "citations": [
+            {
+              "source_file": "post-disaster-claims-guide.pdf",
+              "quote": "Take photos or videos of the damaged areas and personal property. You also can jot down notes about any significant damage you see.",
+              "page": 4
+            },
+            {
+              "source_file": "post-disaster-claims-guide.pdf",
+              "quote": "IMPORTANT: KEEP ALL RECEIPTS FOR EMERGENCY REPAIRS TO GIVE TO YOUR INSURANCE COMPANY.",
+              "page": 4
+            },
+            {
+              "source_file": "post-disaster-claims-guide.pdf",
+              "quote": "If you can't stay in your home, save any hotel receipts. Your insurance company will need the receipts to repay you.",
+              "page": 4
+            }
+          ],
+          "entailment_audited": false
+        },
+        {
+          "text": "Gather photos or videos of the house and your belongings from before the flood, including ones on your phone or from family and friends, and any receipts showing when you bought damaged items.",
+          "citations": [
+            {
+              "source_file": "post-disaster-claims-guide.pdf",
+              "quote": "Gather any photos or videos of your home and property before they were damaged or destroyed.",
+              "page": 9
+            },
+            {
+              "source_file": "post-disaster-claims-guide.pdf",
+              "quote": "Review photos, for example on your cell phone or from family or friends, taken inside your home.",
+              "page": 7
+            },
+            {
+              "source_file": "post-disaster-claims-guide.pdf",
+              "quote": "Include receipts from when you bought the damaged or destroyed items, if you have them.",
+              "page": 9
+            }
+          ],
+          "entailment_audited": false
+        },
+        {
+          "text": "Keep receipts, bills, and contractor estimates for disaster costs, since FEMA sometimes asks for them to verify losses. If you get FEMA money, keep records of how you spent it for at least three years.",
+          "citations": [
+            {
+              "source_file": "fema-iappg-v1.1-amended-2025.pdf",
+              "quote": "In some cases, FEMA needs documentation from applicants such as receipts, bills, or estimates to verify losses.",
+              "page": 75
+            },
+            {
+              "source_file": "fema-iappg-v1.1-amended-2025.pdf",
+              "quote": "Applicants should document how they used disaster funds and retain these records (e.g., receipts, invoices) for at least three years",
+              "page": 77
+            }
+          ],
+          "entailment_audited": false
+        },
+        {
+          "text": "If your home is in a FEMA Special Flood Hazard Area (a high-risk flood zone) and FEMA pays for home repair, home replacement, or personal property, you must buy and keep flood insurance (NFIP or private) for at least the amount of that aid. If you don't, you can't get FEMA help for flood damage in a future flood.",
+          "citations": [
+            {
+              "source_file": "fema-iappg-v1.1-amended-2025.pdf",
+              "quote": "applicants who live in a designated SFHA and receive IHP assistance for Home Repair Assistance, Home Replacement Assistance, PHC, or Personal Property Assistance must obtain and maintain flood insurance coverage for at least the amount of disaster assistance they receive",
+              "page": 64
+            },
+            {
+              "source_file": "fema-iappg-v1.1-amended-2025.pdf",
+              "quote": "Applicants may satisfy the insurance requirement by purchasing private insurance or a policy through the NFIP.",
+              "page": 64
+            },
+            {
+              "source_file": "fema-iappg-v1.1-amended-2025.pdf",
+              "quote": "Applicants who do not obtain and maintain flood insurance will be ineligible for IHP assistance for flood-damaged real or personal property in future disasters with flood-related damage.",
+              "page": 64
+            }
+          ],
+          "entailment_audited": false
+        },
+        {
+          "text": "The flood insurance requirement stays with the house: it must be kept up at that address, and if you sell the house, it passes to the next owner. If you don't want the requirement, you have 30 days from FEMA's award letter to return the assistance for flood-insurable property.",
+          "citations": [
+            {
+              "source_file": "fema-iappg-v1.1-amended-2025.pdf",
+              "quote": "Flood insurance coverage must be maintained at the address for as long as the address exists",
+              "page": 66
+            },
+            {
+              "source_file": "fema-iappg-v1.1-amended-2025.pdf",
+              "quote": "If the home is sold or otherwise becomes owned by someone else, the requirement to purchase and maintain flood insurance carries over to any subsequent owner.",
+              "page": 66
+            },
+            {
+              "source_file": "fema-iappg-v1.1-amended-2025.pdf",
+              "quote": "must return all disaster assistance they receive for NFIP-insurable real and personal property to FEMA no later than 30 days from the date of the award determination letter from FEMA.",
+              "page": 67
+            }
+          ],
+          "entailment_audited": false
+        }
+      ],
+      "dont": [
+        {
+          "text": "Don't make permanent repairs before talking with your insurance company. It may not pay for repairs it didn't authorize.",
+          "citations": [
+            {
+              "source_file": "post-disaster-claims-guide.pdf",
+              "quote": "Don't make permanent repairs before talking with your insurance agent or insurance company. Your company may not pay for repairs it didn't authorize.",
+              "page": 4
+            }
+          ],
+          "entailment_audited": false
+        },
+        {
+          "text": "Don't count on FEMA home repair money to restore historic materials. It is meant to make the home safe, sanitary, or functional, and it is priced at average quality.",
+          "citations": [
+            {
+              "source_file": "fema-iappg-v1.1-amended-2025.pdf",
+              "quote": "Home Repair Assistance is intended to make the damaged home safe, sanitary, or functional.",
+              "page": 86
+            },
+            {
+              "source_file": "fema-iappg-v1.1-amended-2025.pdf",
+              "quote": "Home Repair Assistance award amounts are based on repair or replacement of components that are of average quality, size, or capacity.",
+              "page": 89
+            }
+          ],
+          "entailment_audited": false
+        },
+        {
+          "text": "Don't withdraw from the SBA process or decline an SBA loan if you still need help with personal property, vehicles, or group flood insurance. FEMA only helps with those after SBA, and it won't take them back if you withdraw or decline.",
+          "citations": [
+            {
+              "source_file": "fema-iappg-v1.1-amended-2025.pdf",
+              "quote": "Only applicants who do not qualify for a loan from the SBA may be eligible for assistance for the SBA-dependent category.",
+              "page": 46
+            },
+            {
+              "source_file": "fema-iappg-v1.1-amended-2025.pdf",
+              "quote": "SBA-dependent ONA includes Personal Property Assistance, Transportation Assistance, and Group Flood Insurance Policy (GFIP).",
+              "page": 46
+            },
+            {
+              "source_file": "fema-iappg-v1.1-amended-2025.pdf",
+              "quote": "Applicants who withdraw from the process or decline a loan from the SBA will not be referred back to FEMA for assistance with SBA-Dependent ONA.",
+              "page": 166
+            }
+          ],
+          "entailment_audited": false
+        }
+      ]
     }
   ]
 }
