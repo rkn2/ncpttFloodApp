@@ -1099,7 +1099,9 @@ const I18N = {
     results_title: "Your Recovery Guidance",
     results_desc: "Based on your building's location and the damage you described. Expand each section for details.",
     results_listed: "Your building is listed on the National Register of Historic Places. This provides additional protections under Section 106 of the National Historic Preservation Act when federal funds are involved (including FEMA assistance). Notify FEMA and your SHPO early in the process.",
-    results_unlisted: "Tip: If your building is not yet formally designated, consider contacting your State Historic Preservation Office (SHPO). Designation can provide additional protections and access to preservation-specific programs.",
+    results_district: "Your building is a contributing structure in a historic district. If that district is listed on the National Register, a contributing building is treated as historic for federal review: when federal funds are involved (including FEMA assistance), Section 106 of the National Historic Preservation Act requires review of effects on it. A district designated only by your town or county may not count for federal review. Ask your State Historic Preservation Office (SHPO) to confirm your building's status, and notify FEMA and your SHPO early.",
+    results_local: "Local landmark designation by itself does not trigger federal review. Your building may still be eligible for the National Register, and eligible buildings get Section 106 review when federal funds are involved (including FEMA assistance). Before demolition or removal of historic material such as plaster, trim, windows, or flooring, ask your State Historic Preservation Office (SHPO) for an eligibility determination.",
+    results_eligible: "Even if your building is not listed on the National Register, it may still be eligible, and eligible buildings get the same Section 106 review as listed ones when federal funds are involved (including FEMA assistance). Before demolition or removal of historic material such as plaster, trim, windows, or flooring, ask your State Historic Preservation Office (SHPO) for an eligibility determination.",
     results_assist: "Assistance Programs",
     results_insurance: "Insurance Claims",
     results_repair: "Repair Guidance",
@@ -1236,7 +1238,9 @@ const I18N = {
     results_title: "Su Guía de Recuperación",
     results_desc: "Basado en la ubicación de su edificio y los daños que describió. Expanda cada sección para más detalles.",
     results_listed: "Su edificio está inscrito en el Registro Nacional de Lugares Históricos. Esto provee protecciones adicionales bajo la Sección 106 de la Ley Nacional de Preservación Histórica cuando se involucran fondos federales (incluyendo asistencia de FEMA). Notifique a FEMA y a su SHPO temprano en el proceso.",
-    results_unlisted: "Consejo: Si su edificio aún no tiene designación formal, considere contactar a su Oficina Estatal de Preservación Histórica (SHPO). La designación puede proveer protecciones adicionales y acceso a programas específicos de preservación.",
+    results_district: "Su edificio es una estructura contribuyente en un distrito histórico. Si ese distrito está inscrito en el Registro Nacional, un edificio contribuyente se considera histórico en la revisión federal: cuando se usan fondos federales (incluida la asistencia de FEMA), la Sección 106 de la Ley Nacional de Preservación Histórica exige revisar cómo le afectan los trabajos. Un distrito designado solo por su municipio o condado puede no contar para la revisión federal. Pida a su Oficina Estatal de Preservación Histórica (SHPO) que confirme la situación de su edificio, y notifique a FEMA y a su SHPO desde el principio.",
+    results_local: "La designación como monumento histórico local, por sí sola, no activa la revisión federal. Aun así, su edificio podría ser elegible para el Registro Nacional, y los edificios elegibles reciben la revisión de la Sección 106 cuando se usan fondos federales (incluida la asistencia de FEMA). Antes de demoler o retirar material histórico, como yeso, molduras, ventanas o pisos, pida a su Oficina Estatal de Preservación Histórica (SHPO) una determinación de elegibilidad.",
+    results_eligible: "Aunque su edificio no esté inscrito en el Registro Nacional, podría ser elegible, y los edificios elegibles reciben la misma revisión de la Sección 106 que los inscritos cuando se usan fondos federales (incluida la asistencia de FEMA). Antes de demoler o retirar material histórico, como yeso, molduras, ventanas o pisos, pida a su Oficina Estatal de Preservación Histórica (SHPO) una determinación de elegibilidad.",
     results_assist: "Programas de Asistencia",
     results_insurance: "Reclamaciones de Seguro",
     results_repair: "Guía de Reparación",
@@ -2036,10 +2040,17 @@ function showHwResults() {
       <a href="https://content.naic.org/sites/default/files/publication-post-disaster-claims-guide.pdf" target="_blank" rel="noopener">${t('ins_source')} <span class="sr-only">(opens in new tab)</span></a>
     </p>`;
 
-  const isListed = state.hw.designations.includes('Listed on the National Register of Historic Places');
-  const listedNote = isListed
+  // Section 106 applies to properties listed in OR eligible for the National Register when federal
+  // funds (e.g. FEMA) are involved. Designations are checkboxes, so pick the strongest status checked:
+  // NR listed > contributing in a district > local landmark only > not sure / nothing checked.
+  const desig = state.hw.designations;
+  const listedNote = desig.includes('Listed on the National Register of Historic Places')
     ? `<div class="info-box">${t('results_listed')}</div>`
-    : `<div class="warn-box">${t('results_unlisted')}</div>`;
+    : desig.includes('Contributing structure in a historic district')
+      ? `<div class="warn-box">${t('results_district')}</div>`
+      : desig.includes('Local historic landmark')
+        ? `<div class="warn-box">${t('results_local')}</div>`
+        : `<div class="warn-box">${t('results_eligible')}</div>`;
 
   screens().innerHTML = `
     ${card(`
