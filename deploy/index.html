@@ -428,6 +428,16 @@
     text-decoration: none;
   }
   .cite:hover { opacity: 1; }
+  /* Fieldsets styled like the other field groups (WCAG: radio groups need a fieldset + legend) */
+  fieldset.field-group { border: 0; padding: 0; margin: 0 0 20px; min-width: 0; }
+  fieldset.field-group legend { padding: 0; }
+  /* Public Assistance (nonprofit / public owner) guidance */
+  .pa-intro { font-size: 0.84rem; color: #444; line-height: 1.5; margin-bottom: 12px; }
+  .pa-summary { font-size: 0.84rem; color: #333; line-height: 1.5; margin-bottom: 10px; }
+  .pa-cite { font-size: 0.76rem; color: #444; margin: 2px 0 4px; }
+  .pa-cite summary { cursor: pointer; color: #1F4E79; display: inline-block; min-height: 24px; padding: 2px 0; }
+  .pa-cite summary:focus-visible { outline: 2px solid var(--hw-accent); outline-offset: 2px; }
+  .pa-cite blockquote { margin: 4px 0 6px; padding-left: 8px; border-left: 2px solid #999; font-style: italic; color: #333; }
   #lang-switcher { display: flex; gap: 2px; align-self: center; }
   #lang-switcher button {
     border: 1px solid rgba(255,255,255,0.5);
@@ -995,6 +1005,7 @@ let state = {
   // Homeowner
   hw: {
     state: "", address: "", buildingType: "", materials: [], age: "", designations: [],
+    owner: "", // '' | 'private' | 'nonprofit' | 'government' ('' = private: homeowner/IA path unchanged)
     affectedAreas: [], damage: {}, // { structural: 'minor'|'moderate'|'severe', ... }
     safetyChecked: {}, walkAnswers: {}, walkIdx: 0
   },
@@ -1085,6 +1096,15 @@ const I18N = {
     desig_local: "Local historic landmark",
     desig_district: "Contributing structure in a historic district",
     desig_unsure: "Not sure, but it may be historically significant",
+    owner_legend: "Who owns this building?",
+    owner_hint: "(optional) Nonprofits and governments use a different FEMA program.",
+    owner_private: "Me or my family, a landlord, or a business (a private owner)",
+    owner_nonprofit: "A nonprofit: house of worship, museum, library, community center, historical society, or similar",
+    owner_government: "A government: town, city, county, state, tribal, or territorial",
+    results_pa: "FEMA Public Assistance (nonprofit and public owners)",
+    results_pa_assist_note: "Some programs listed here are for individuals and households. As a nonprofit or public owner, start with FEMA Public Assistance above.",
+    pa_unavailable: "The Public Assistance guidance could not be loaded. Reconnect to the internet and reload this page.",
+    as_pa_intro: "Occupancy is {occ}. If a nonprofit or a government owns this building, FEMA help usually comes through Public Assistance (PA), not the household program. Confirm who owns it. These points come from FEMA's PA policy guide (PAPPG v5.0 Amended).",
     building_next: "Next: Walk me through the damage →",
     building_state_required: "Please select your state or territory.",
     locate_btn: "Use my location",
@@ -1224,6 +1244,15 @@ const I18N = {
     desig_local: "Monumento histórico local",
     desig_district: "Estructura contribuyente en un distrito histórico",
     desig_unsure: "No estoy seguro, pero puede tener importancia histórica",
+    owner_legend: "¿Quién es el dueño de este edificio?",
+    owner_hint: "(opcional) Las organizaciones sin fines de lucro y los gobiernos usan otro programa de FEMA.",
+    owner_private: "Yo o mi familia, un arrendador o un negocio (un dueño privado)",
+    owner_nonprofit: "Una organización sin fines de lucro: casa de culto, museo, biblioteca, centro comunitario, sociedad histórica o similar",
+    owner_government: "Un gobierno: pueblo, ciudad, condado, estado, gobierno tribal o territorial",
+    results_pa: "Asistencia Pública de FEMA (dueños sin fines de lucro y públicos)",
+    results_pa_assist_note: "Algunos programas de esta lista son para personas y hogares. Como dueño sin fines de lucro o público, empiece por la Asistencia Pública de FEMA, más arriba.",
+    pa_unavailable: "No se pudo cargar la guía de Asistencia Pública. Vuelva a conectarse a internet y recargue esta página.",
+    as_pa_intro: "La ocupación es {occ}. Si el dueño de este edificio es una organización sin fines de lucro o un gobierno, la ayuda de FEMA suele llegar por la Asistencia Pública (PA), no por el programa para hogares. Confirme quién es el dueño. Estos puntos vienen de la guía de políticas de PA de FEMA (PAPPG v5.0 enmendada).",
     building_next: "Siguiente: Guíame por los daños →",
     building_state_required: "Por favor seleccione su estado o territorio.",
     locate_btn: "Usar mi ubicación",
@@ -1322,6 +1351,7 @@ async function setLang(l) {
   try { localStorage.setItem('floodapp_lang', l); } catch (_) {}
   document.documentElement.lang = l;
   await loadContentBundle();
+  await loadPaGuidance();
   syncLangUI();
   renderCurrent();
 }
@@ -1723,6 +1753,14 @@ function showHwStep1() {
         ${usStates().map(s => `<option value="${s.v}" ${state.hw.state===s.v?'selected':''}>${s.l}</option>`).join('')}
       </select>
     </div>
+    <fieldset class="field-group">
+      <legend class="field-label">${t('owner_legend')} <span>${t('owner_hint')}</span></legend>
+      <div class="radio-group">
+        ${[['private','owner_private'],['nonprofit','owner_nonprofit'],['government','owner_government']].map(([v, k]) =>
+          `<label class="radio-item"><input type="radio" name="hw-owner" value="${v}" ${state.hw.owner===v?'checked':''}> ${t(k)}</label>`
+        ).join('')}
+      </div>
+    </fieldset>
     <div class="field-group">
       <label class="field-label">${t('building_material_label')} <span>${t('building_check_all')}</span></label>
       <div class="check-group inline">
@@ -1854,6 +1892,7 @@ function saveHwStep1() {
   state.hw.state = document.getElementById('hw-state').value;
   state.hw.materials = [...document.querySelectorAll('input[name="hw-mat"]:checked')].map(i=>i.value);
   state.hw.designations = [...document.querySelectorAll('input[name="hw-desig"]:checked')].map(i=>i.value);
+  state.hw.owner = document.querySelector('input[name="hw-owner"]:checked')?.value || '';
   if (!state.hw.state) { alert(t('building_state_required')); return; }
   state.hw.walkAnswers = state.hw.walkAnswers || {};
   state.hw.walkIdx = 0;
@@ -2052,11 +2091,26 @@ function showHwResults() {
         ? `<div class="warn-box">${t('results_local')}</div>`
         : `<div class="warn-box">${t('results_eligible')}</div>`;
 
+  // Nonprofit / government owners apply to FEMA Public Assistance (PA), not household IA.
+  // Unset or 'private' keeps the homeowner output exactly as before.
+  const paOwner = (state.hw.owner === 'nonprofit' || state.hw.owner === 'government') ? state.hw.owner : null;
+  const paPanel = paOwner ? `
+      <div class="result-panel" style="border:1.5px solid var(--hw-border);margin-bottom:12px;">
+        <div class="result-panel-header" style="background:var(--hw-light);" role="button" tabindex="0" onclick="togglePanel('panel-pa','toggle-pa')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();togglePanel('panel-pa','toggle-pa');}">
+          🏛️ ${t('results_pa')}
+          <span class="toggle" id="toggle-pa">${t('btn_show')}</span>
+        </div>
+        <div class="result-panel-body" id="panel-pa" style="display:none;padding:16px;">
+          <div data-pa-owner="${paOwner}" data-pa-intro="1">${paBodyHtml(paOwner, true)}</div>
+        </div>
+      </div>` : '';
+
   screens().innerHTML = `
     ${card(`
       <h2>${t('results_title')}</h2>
       <p class="section-desc">${t('results_desc')}</p>
       ${listedNote}
+      ${paPanel}
 
       <div class="result-panel" style="border:1.5px solid var(--hw-border);">
         <div class="result-panel-header" style="background:var(--hw-light);" role="button" tabindex="0" onclick="togglePanel('panel-assist','toggle-assist')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();togglePanel('panel-assist','toggle-assist');}">
@@ -2064,6 +2118,7 @@ function showHwResults() {
           <span class="toggle" id="toggle-assist">${t('btn_show')}</span>
         </div>
         <div class="result-panel-body" id="panel-assist" style="display:none;">
+          ${paOwner ? `<div class="info-box" style="margin:12px;">${t('results_pa_assist_note')}</div>` : ''}
           ${assistHtml}
         </div>
       </div>
@@ -2096,7 +2151,8 @@ function showHwResults() {
     `)}
   `;
 
-  // Auto-open both panels
+  // Auto-open both panels (and the Public Assistance panel for nonprofit / public owners)
+  if (paOwner) togglePanel('panel-pa','toggle-pa');
   togglePanel('panel-assist','toggle-assist');
   togglePanel('panel-repair','toggle-repair');
   // Auto-open first guidance card
@@ -2118,6 +2174,8 @@ function toggleGuidance(id) {
   if (!body) return;
   body.classList.toggle('open');
   if (btn) btn.textContent = body.classList.contains('open') ? t('btn_hide') : t('btn_show');
+  const hdr = document.querySelector(`[aria-controls="${id}"]`);
+  if (hdr) hdr.setAttribute('aria-expanded', body.classList.contains('open') ? 'true' : 'false');
 }
 
 // ── ASSESSOR ─────────────────────────────────
@@ -2560,6 +2618,8 @@ function showRapidResult() {
 
     ${damageRows ? `<div class="damage-section"><div class="damage-section-header">Damage by Category</div><table class="summary-table">${damageRows}</table></div>` : ''}
 
+    ${assessorPaSection(s)}
+
     ${s.triggerReasons.length > 0 ? `
       <div class="warn-box" style="margin-top:14px;">
         <strong>Full Assessment Triggers:</strong><br>
@@ -2978,6 +3038,8 @@ function showFullResult() {
       <div class="form-section-title">Recommendations</div>
       <p style="font-size:0.83rem;color:#333;line-height:1.6;">${s.recommendations}</p>` : ''}
 
+    ${assessorPaSection(s)}
+
     <div class="btn-row">
       <button class="btn btn-secondary" onclick="showFullForm()">← Back</button>
       <button class="btn btn-print" onclick="window.print()">🖨 Print / Save</button>
@@ -3041,6 +3103,73 @@ async function loadContentBundle() {
       (data.guidance || []).forEach(r => { contentBundle[r.id] = r; });
     }
   } catch (_) { /* fall back to built-in REPAIR_GUIDANCE */ }
+}
+
+// ── PUBLIC ASSISTANCE GUIDANCE (pa-guidance.json) ──
+// For buildings owned by private nonprofits or governments, which apply to FEMA Public Assistance
+// (PA) rather than household assistance. Content is data: every item carries citations whose quotes
+// pipeline/verify_pa_guidance.py checks verbatim and on the cited printed page. Records and items
+// may carry `owners` (nonprofit | government | school) to show only what applies to that owner.
+let paGuidance = null;
+let paLoadFailed = false;
+async function loadPaGuidance() {
+  try {
+    const resp = await fetch(LANG === 'es' ? 'pa-guidance.es.json' : 'pa-guidance.json');
+    if (resp.ok) { paGuidance = await resp.json(); paLoadFailed = false; }
+    else paLoadFailed = true;
+  } catch (_) { paLoadFailed = true; }
+  // Results can render before the file arrives (saved results, share links): fill them in place.
+  document.querySelectorAll('[data-pa-owner]').forEach(el => {
+    el.innerHTML = paBodyHtml(el.dataset.paOwner, el.dataset.paIntro === '1');
+  });
+}
+function paOwnerMatch(x, owner) { return !x.owners || x.owners.includes(owner); }
+// Visible, keyboard-reachable source line; the exact (English) quote opens on demand.
+function paCiteHtml(c) {
+  const src = (paGuidance.sources && paGuidance.sources[c.source_file]) || sourceLabel(c.source_file);
+  const pg = c.page ? `, ${paGuidance.label_page || 'p.'} ${c.page}` : '';
+  return `<details class="pa-cite"><summary>${escAttr(paGuidance.label_source || 'Source')}: ${escAttr(src)}${pg}</summary>` +
+    `<blockquote lang="en">“${escAttr(c.quote)}”</blockquote></details>`;
+}
+function paItemHtml(it) {
+  return `<li>${escAttr(it.text)}${(it.citations || []).map(paCiteHtml).join('')}</li>`;
+}
+function paBodyHtml(owner, withIntro) {
+  if (!paGuidance) return paLoadFailed ? `<p class="pa-intro">${t('pa_unavailable')}</p>` : '';
+  const list = items => (items || []).filter(it => paOwnerMatch(it, owner)).map(paItemHtml).join('');
+  const recs = (paGuidance.guidance || []).filter(r => paOwnerMatch(r, owner));
+  return (withIntro ? `<p class="pa-intro">${escAttr(paGuidance.panel_intro)}</p>` : '') + recs.map((r, i) => {
+    const id = 'pa-' + r.id, open = i < 2;
+    const doL = list(r.do), dontL = list(r.dont);
+    return `<div class="guidance-card">
+      <div class="guidance-card-header" role="button" tabindex="0" aria-expanded="${open}" aria-controls="${id}" onclick="toggleGuidance('${id}')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleGuidance('${id}');}">
+        ${escAttr(r.label)}
+        <span class="toggle" id="${id}-toggle">${open ? t('btn_hide') : t('btn_show')}</span>
+      </div>
+      <div class="guidance-card-body${open ? ' open' : ''}" id="${id}">
+        <p class="pa-summary">${escAttr(r.summary)}</p>
+        ${doL ? `<div class="guidance-do"><strong>${escAttr(paGuidance.label_do)}</strong><ul>${doL}</ul></div>` : ''}
+        ${dontL ? `<div class="guidance-dont"><strong>${escAttr(paGuidance.label_dont)}</strong><ul>${dontL}</ul></div>` : ''}
+      </div>
+    </div>`;
+  }).join('');
+}
+// Assessor occupancy -> PA owner type. Schools: public (government) or private (critical-service
+// PNP), neither needs the SBA step, so 'school' hides the SBA record.
+function paOwnerForOccupancy(occ) {
+  return ({ 'Museum / gallery': 'nonprofit', 'Religious': 'nonprofit', 'Government': 'government',
+            'School / education': 'school' })[occ] || null;
+}
+function assessorPaSection(s) {
+  const owner = paOwnerForOccupancy(s.occupancy);
+  if (!owner) return '';
+  return `<div class="damage-section" style="margin-top:14px;">
+      <div class="damage-section-header">🏛️ ${t('results_pa')}</div>
+      <div style="padding:12px 14px;">
+        <p class="pa-intro">${escAttr(t('as_pa_intro').replace('{occ}', s.occupancy))}</p>
+        <div data-pa-owner="${owner}" data-pa-intro="0">${paBodyHtml(owner, false)}</div>
+      </div>
+    </div>`;
 }
 
 function escAttr(s) {
@@ -3624,6 +3753,7 @@ if ('serviceWorker' in navigator) {
 }
 loadKB();
 loadContentBundle();
+loadPaGuidance();
 loadPrograms();
 document.documentElement.lang = LANG;
 syncLangUI();
