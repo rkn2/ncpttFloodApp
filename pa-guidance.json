@@ -5,9 +5,9 @@
   "generator": "hand-authored from docs/fema-pappg-v5.0-amended-2025.pdf (and two supporting docs) per docs/reviews/pappg-v5-cite-map.md; checked by pipeline/verify_pa_guidance.py",
   "provenance_note": "Public Assistance (PA) guidance for buildings owned by private nonprofits or governments. Every item carries at least one citation whose verbatim quote is mechanically verified present on the cited printed page of its docs/ source. Page numbers are printed (footer) page numbers. Advisory only, not a FEMA eligibility determination.",
   "verification": {
-    "citations_verified": 73,
-    "citations_total": 73,
-    "pages_verified": 73,
+    "citations_verified": 75,
+    "citations_total": 75,
+    "pages_verified": 75,
     "items": 46,
     "entailment_audited": false,
     "entailment_note": "Quotes are verified verbatim and on-page. The plain-language item text has NOT been through an independent entailment audit. Needs human (Becca / APTI DRI) review before it is reported as audited."
@@ -50,6 +50,11 @@
               "source_file": "fema-pappg-v5.0-amended-2025.pdf",
               "page": 45,
               "quote": "Private nonprofit (PNP) organizations, including houses of worship and other faith-based organizations."
+            },
+            {
+              "source_file": "fema-pappg-v5.0-amended-2025.pdf",
+              "page": 45,
+              "quote": "There are two types of applicants that may apply for the PA Program: State, local, Tribal Nation, and territorial (SLTT) entities"
             }
           ]
         },
@@ -281,6 +286,11 @@
               "source_file": "fema-pappg-v5.0-amended-2025.pdf",
               "page": 51,
               "quote": "PNPs that do not provide any critical services must also apply for a disaster loan from the SBA"
+            },
+            {
+              "source_file": "fema-pappg-v5.0-amended-2025.pdf",
+              "page": 51,
+              "quote": "and receive a determination for permanent work on facilities that"
             },
             {
               "source_file": "fema-pappg-v5.0-amended-2025.pdf",
