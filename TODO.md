@@ -6,6 +6,8 @@
 - [ ] **Publish Sheet for dashboard** — In that Sheet: File → Share → Publish to web → select "Rapid Triage" tab → CSV → Publish. Open https://rkn2.github.io/ncpttFloodApp/dashboard.html and paste the CSV URL
 - [ ] **Get PR SHPO/ICP review of Spanish translation** — `content-bundle.es.json` is marked `entailment_audited: false`. Spanish guidance text needs SHPO sign-off before reporting as authoritative
 - [ ] **Native-speaker/SHPO review of changed Spanish strings (2026-10-02)**: `floodapp.html` I18N.es `results_district`, `results_local`, `results_eligible` (new Section 106 messages, replacing `results_unlisted`); `content-bundle.es.json` siding `do` item on removing flooded insulation (closed-cell board exception) and insulation `do` item on fiberglass batts (now remove-by-default); mold carpeting item moved from `dont` to `do` (text unchanged)
+- [ ] **Native-speaker/SHPO review of new Spanish strings (2026-10-02, homeowner aid)**: `programs.json` national `desc_es`/`note_es` for FEMA IA (historic-home note, safe/sanitary/functional framing, $44,800 cap), SBA (loan limits; apply even if you don't want a loan) and NPS/SHPO (Section 106 listed-or-eligible wording); `content-bundle.es.json` structural `do` item on FEMA basement repair limits; new `recovery_aid` record (label "Seguro, FEMA y SBA", summary, 7 `do` and 3 `dont` items on flood insurance, claims, documenting damage, the SFHA flood insurance requirement and SBA)
+- [ ] **Decide on the IHP cap in `programs.json`** — FEMA IA desc says $44,800 for disasters declared on or after 2025-10-01 (Federal Register 2026-19854). A notice for disasters declared from 2026-10-01 could appear any time; update or drop the figure then
 - [ ] **Frame CV decision in next progress report** — Decided against with evidence (see `overnight/v3-cv-build/DECISION.md`). Explain as a reasoned scope decision, not a silent omission
 - [ ] **Design evaluation plan** — What should the PR PhD fieldwork measure? What feedback to capture? Once decided, telemetry can be wired into the app
 
@@ -14,6 +16,9 @@
 - [ ] Fix 8 moderate/minor WCAG items (touch targets, fieldset/legend, autocomplete attrs, citation accessibility)
 - [ ] Add evaluation telemetry (after Becca decides what to capture)
 - [ ] Add more states/territories to `programs.json`
+- [ ] Render the `recovery_aid` bundle record in floodapp.html/deploy/index.html (it isn't a DAMAGE_CATEGORIES key, so nothing shows it yet), e.g. `${guidanceBodyHtml('recovery_aid')}` in the results insurance panel and a Guide topic; bump the service worker cache for the 2026-10-02 programs.json and bundle changes
+- [ ] `results_listed` (EN/ES) in floodapp.html still says listing "provides additional protections"; align with the Section 106 "review of effects" wording
+- [ ] EN bundle `provenance_note` says every item passed the entailment audit; no longer true for hand-edited items (`entailment_audited: false`). Re-run the audit or reword the note
 
 ## Done This Session (2026-08-31)
 

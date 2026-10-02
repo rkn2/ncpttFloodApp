@@ -5,9 +5,9 @@
   "generator": "pipeline/ (extract->retrieve->synthesize->verify_citations->directive_lint->entailment audit)",
   "provenance_note": "Traducción al español del content-bundle.json original en inglés. Cada recomendación do/dont conserva sus citas originales en inglés, verificadas mecánicamente contra los documentos fuente. Esta traducción es orientación consultiva de preservación y no sustituye una evaluación profesional. Requiere revisión por SHPO/ICP antes de publicarse como guía oficial.",
   "verification": {
-    "citations_verified": 87,
-    "citations_total": 87,
-    "items": 76,
+    "citations_verified": 115,
+    "citations_total": 115,
+    "items": 87,
     "entailment_audited": false,
     "entailment_dropped": [
       "chimney: foundation-wall quote over-applied to chimney"
@@ -21,7 +21,8 @@
     ],
     "entailment_note": "Spanish text has NOT been entailment-audited against English source quotes. Citations are carried from the verified English bundle. SHPO/ICP review required before publishing as authoritative guidance.",
     "hand_edits": [
-      "2026-10-02: siding and insulation fiberglass items hand-edited to remove-by-default (NTHP 'with few exceptions' rule; closed-cell board exception) so the bundle no longer contradicts itself; quotes verified verbatim, not yet re-run through the LLM entailment audit."
+      "2026-10-02: siding and insulation fiberglass items hand-edited to remove-by-default (NTHP 'with few exceptions' rule; closed-cell board exception) so the bundle no longer contradicts itself; quotes verified verbatim, not yet re-run through the LLM entailment audit.",
+      "2026-10-02: Spanish mirror of the hand-authored homeowner aid items (structural basement repair limits; new record recovery_aid, 7 do / 3 dont). English citations carried unchanged and verified verbatim; Spanish text not entailment-audited and needs native-speaker/SHPO review (see TODO.md)."
     ]
   },
   "categories": [
@@ -33,7 +34,8 @@
     "structural",
     "electrical",
     "mold",
-    "roof"
+    "roof",
+    "recovery_aid"
   ],
   "guidance": [
     {
@@ -580,6 +582,37 @@
               "quote": "they should be inspected for missing mortar and repaired in the same manner as aboveground walls, unless there is reason to suspect a more serious structural problem created by the flooding"
             }
           ]
+        },
+        {
+          "text": "Si FEMA le ayuda con reparaciones por inundación, espere una ayuda limitada para un sótano (un piso que está bajo el nivel del suelo por todos sus lados). La reparación del hogar de FEMA en sótanos se limita a los daños que afectan la seguridad, la salubridad y la funcionalidad de la vivienda, como los cimientos y los servicios esenciales, por ejemplo la caldera o el calentador de agua. Los paneles de yeso, alfombras o gabinetes mojados o con moho en áreas no esenciales del sótano solo se cubren para retirarlos.",
+          "citations": [
+            {
+              "source_file": "fema-iappg-v1.1-amended-2025.pdf",
+              "quote": "FEMA defines a basement as an area of the home with its floor below grade (below ground level) on all sides.",
+              "page": 88
+            },
+            {
+              "source_file": "fema-iappg-v1.1-amended-2025.pdf",
+              "quote": "Home Repair Assistance for flood-damaged real property in basements is limited to damaged items that result in living conditions affecting the safety, sanitation, and functionality of the home.",
+              "page": 88
+            },
+            {
+              "source_file": "fema-iappg-v1.1-amended-2025.pdf",
+              "quote": "Damage to the structural components (e.g., foundation) of the home",
+              "page": 89
+            },
+            {
+              "source_file": "fema-iappg-v1.1-amended-2025.pdf",
+              "quote": "Damage to critical utilities that support the overall function of the home (e.g., furnace, water heater)",
+              "page": 89
+            },
+            {
+              "source_file": "fema-iappg-v1.1-amended-2025.pdf",
+              "quote": "Damage presenting a hazard (e.g., wet or moldy drywall, carpet, or cabinets) in non-essential living areas (for removal only)",
+              "page": 89
+            }
+          ],
+          "entailment_audited": false
         }
       ],
       "dont": [
@@ -875,6 +908,193 @@
         }
       ],
       "call_a_pro": "Si su techo tiene materiales históricos (pizarra, teja de barro, teja de madera), contacte a su Oficina Estatal de Preservación Histórica (SHPO) antes de reemplazar — se requieren materiales y técnicas compatibles para propiedades históricas."
+    },
+    {
+      "id": "recovery_aid",
+      "label": "Seguro, FEMA y SBA",
+      "audience": [
+        "homeowner"
+      ],
+      "summary": "Pasos para reclamaciones de seguro contra inundaciones, la Asistencia Individual de FEMA y los préstamos por desastre de la SBA después de una inundación.",
+      "do": [
+        {
+          "text": "Verifique si tiene una póliza de seguro contra inundaciones aparte. La mayoría de las pólizas de seguro de vivienda no cubren daños por inundación a menos que se haya comprado esa cobertura por separado.",
+          "citations": [
+            {
+              "source_file": "post-disaster-claims-guide.pdf",
+              "quote": "most policies won't cover damage from floods or earthquakes unless you bought that coverage separately.",
+              "page": 3
+            }
+          ],
+          "entailment_audited": false
+        },
+        {
+          "text": "Si tiene un seguro que cubre el daño, presente una reclamación. FEMA no da asistencia para reparación del hogar para las partes aseguradas de la vivienda si usted no presenta la reclamación, y necesita los documentos de la liquidación de su seguro antes de decidir sobre la ayuda que su seguro podría cubrir.",
+          "citations": [
+            {
+              "source_file": "fema-iappg-v1.1-amended-2025.pdf",
+              "quote": "An applicant with insurance for a covered peril will be ineligible for Home Repair Assistance for insured real property components when the applicant fails to file a claim",
+              "page": 88
+            },
+            {
+              "source_file": "fema-iappg-v1.1-amended-2025.pdf",
+              "quote": "Insured applicants must provide documentation that identifies their insurance settlements or benefits before FEMA will consider their eligibility",
+              "page": 50
+            }
+          ],
+          "entailment_audited": false
+        },
+        {
+          "text": "Cuando sea seguro entrar, tome fotos o videos de las áreas dañadas y de sus pertenencias, y anote los daños importantes. Guarde todos los recibos de reparaciones de emergencia, y los recibos de hotel si no puede quedarse en su casa.",
+          "citations": [
+            {
+              "source_file": "post-disaster-claims-guide.pdf",
+              "quote": "Take photos or videos of the damaged areas and personal property. You also can jot down notes about any significant damage you see.",
+              "page": 4
+            },
+            {
+              "source_file": "post-disaster-claims-guide.pdf",
+              "quote": "IMPORTANT: KEEP ALL RECEIPTS FOR EMERGENCY REPAIRS TO GIVE TO YOUR INSURANCE COMPANY.",
+              "page": 4
+            },
+            {
+              "source_file": "post-disaster-claims-guide.pdf",
+              "quote": "If you can't stay in your home, save any hotel receipts. Your insurance company will need the receipts to repay you.",
+              "page": 4
+            }
+          ],
+          "entailment_audited": false
+        },
+        {
+          "text": "Reúna fotos o videos de la casa y de sus pertenencias de antes de la inundación, incluidas las de su teléfono o las de familiares y amigos, y cualquier recibo que muestre cuándo compró los artículos dañados.",
+          "citations": [
+            {
+              "source_file": "post-disaster-claims-guide.pdf",
+              "quote": "Gather any photos or videos of your home and property before they were damaged or destroyed.",
+              "page": 9
+            },
+            {
+              "source_file": "post-disaster-claims-guide.pdf",
+              "quote": "Review photos, for example on your cell phone or from family or friends, taken inside your home.",
+              "page": 7
+            },
+            {
+              "source_file": "post-disaster-claims-guide.pdf",
+              "quote": "Include receipts from when you bought the damaged or destroyed items, if you have them.",
+              "page": 9
+            }
+          ],
+          "entailment_audited": false
+        },
+        {
+          "text": "Guarde los recibos, facturas y presupuestos de contratistas de los gastos del desastre, ya que FEMA a veces los pide para verificar las pérdidas. Si recibe dinero de FEMA, guarde durante al menos tres años los registros de cómo lo gastó.",
+          "citations": [
+            {
+              "source_file": "fema-iappg-v1.1-amended-2025.pdf",
+              "quote": "In some cases, FEMA needs documentation from applicants such as receipts, bills, or estimates to verify losses.",
+              "page": 75
+            },
+            {
+              "source_file": "fema-iappg-v1.1-amended-2025.pdf",
+              "quote": "Applicants should document how they used disaster funds and retain these records (e.g., receipts, invoices) for at least three years",
+              "page": 77
+            }
+          ],
+          "entailment_audited": false
+        },
+        {
+          "text": "Si su vivienda está en un Área Especial de Riesgo de Inundación de FEMA (una zona de alto riesgo de inundación) y FEMA paga reparación del hogar, reemplazo de la vivienda o bienes personales, debe comprar y mantener un seguro contra inundaciones (del NFIP o privado) por al menos el monto de esa ayuda. Si no lo hace, no podrá recibir ayuda de FEMA por daños de inundación en una inundación futura.",
+          "citations": [
+            {
+              "source_file": "fema-iappg-v1.1-amended-2025.pdf",
+              "quote": "applicants who live in a designated SFHA and receive IHP assistance for Home Repair Assistance, Home Replacement Assistance, PHC, or Personal Property Assistance must obtain and maintain flood insurance coverage for at least the amount of disaster assistance they receive",
+              "page": 64
+            },
+            {
+              "source_file": "fema-iappg-v1.1-amended-2025.pdf",
+              "quote": "Applicants may satisfy the insurance requirement by purchasing private insurance or a policy through the NFIP.",
+              "page": 64
+            },
+            {
+              "source_file": "fema-iappg-v1.1-amended-2025.pdf",
+              "quote": "Applicants who do not obtain and maintain flood insurance will be ineligible for IHP assistance for flood-damaged real or personal property in future disasters with flood-related damage.",
+              "page": 64
+            }
+          ],
+          "entailment_audited": false
+        },
+        {
+          "text": "El requisito del seguro contra inundaciones queda con la casa: debe mantenerse en esa dirección y, si vende la casa, pasa al siguiente dueño. Si no quiere el requisito, tiene 30 días desde la carta de adjudicación de FEMA para devolver la asistencia recibida por propiedad asegurable contra inundaciones.",
+          "citations": [
+            {
+              "source_file": "fema-iappg-v1.1-amended-2025.pdf",
+              "quote": "Flood insurance coverage must be maintained at the address for as long as the address exists",
+              "page": 66
+            },
+            {
+              "source_file": "fema-iappg-v1.1-amended-2025.pdf",
+              "quote": "If the home is sold or otherwise becomes owned by someone else, the requirement to purchase and maintain flood insurance carries over to any subsequent owner.",
+              "page": 66
+            },
+            {
+              "source_file": "fema-iappg-v1.1-amended-2025.pdf",
+              "quote": "must return all disaster assistance they receive for NFIP-insurable real and personal property to FEMA no later than 30 days from the date of the award determination letter from FEMA.",
+              "page": 67
+            }
+          ],
+          "entailment_audited": false
+        }
+      ],
+      "dont": [
+        {
+          "text": "No haga reparaciones permanentes antes de hablar con su compañía de seguros. Es posible que no pague reparaciones que no autorizó.",
+          "citations": [
+            {
+              "source_file": "post-disaster-claims-guide.pdf",
+              "quote": "Don't make permanent repairs before talking with your insurance agent or insurance company. Your company may not pay for repairs it didn't authorize.",
+              "page": 4
+            }
+          ],
+          "entailment_audited": false
+        },
+        {
+          "text": "No cuente con el dinero de FEMA para reparación del hogar para restaurar materiales históricos. Su propósito es dejar la vivienda segura, salubre o funcional, y se calcula con materiales de calidad promedio.",
+          "citations": [
+            {
+              "source_file": "fema-iappg-v1.1-amended-2025.pdf",
+              "quote": "Home Repair Assistance is intended to make the damaged home safe, sanitary, or functional.",
+              "page": 86
+            },
+            {
+              "source_file": "fema-iappg-v1.1-amended-2025.pdf",
+              "quote": "Home Repair Assistance award amounts are based on repair or replacement of components that are of average quality, size, or capacity.",
+              "page": 89
+            }
+          ],
+          "entailment_audited": false
+        },
+        {
+          "text": "No se retire del proceso de la SBA ni rechace un préstamo de la SBA si todavía necesita ayuda con bienes personales, vehículos o el seguro grupal contra inundaciones. FEMA solo ayuda con esas necesidades después de la SBA, y no volverá a considerarlas si usted se retira o rechaza el préstamo.",
+          "citations": [
+            {
+              "source_file": "fema-iappg-v1.1-amended-2025.pdf",
+              "quote": "Only applicants who do not qualify for a loan from the SBA may be eligible for assistance for the SBA-dependent category.",
+              "page": 46
+            },
+            {
+              "source_file": "fema-iappg-v1.1-amended-2025.pdf",
+              "quote": "SBA-dependent ONA includes Personal Property Assistance, Transportation Assistance, and Group Flood Insurance Policy (GFIP).",
+              "page": 46
+            },
+            {
+              "source_file": "fema-iappg-v1.1-amended-2025.pdf",
+              "quote": "Applicants who withdraw from the process or decline a loan from the SBA will not be referred back to FEMA for assistance with SBA-Dependent ONA.",
+              "page": 166
+            }
+          ],
+          "entailment_audited": false
+        }
+      ]
     }
   ]
 }
