@@ -53,6 +53,9 @@ Source: `docs/reviews/2026-10-02-pappg-v4-review.md` and `docs/reviews/pappg-v5-
 
 ## Code TODO (ask Claude)
 
+- [ ] **Header attribution (wait for Simeon's answer).** The header reads "National Park Service • Preservation Assistance", which presents the tool as an NPS product. Default fix: "Developed by Penn State with support from the National Park Service's National Center for Preservation Technology and Training". Change the EN and ES strings in `floodapp.html` and `deploy/index.html`, using whatever wording/logo/disclaimer NCPTT prefers (asked 2026-10-16)
+- [ ] **Source labels on repair cards.** The footer of each guidance card builds titles from file names ("Nthp Treatment Flood Damaged Historic Buildings; Fema Iappg V1.1 Amended 2025"). Map each `docs/` source to its proper title (e.g. National Trust, *Treatment of Flood-Damaged Older and Historic Buildings*; FEMA *Individual Assistance Program and Policy Guide* v1.1). The flaw shows in the Oct 2026 PPR Figure 2a. Do it in the next website update
+
 - [ ] Fix 8 moderate/minor WCAG items (touch targets, fieldset/legend, autocomplete attrs, citation accessibility)
 - [ ] Add evaluation telemetry (after Becca decides what to capture)
 - [ ] Add more states/territories to `programs.json`
