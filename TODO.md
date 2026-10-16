@@ -53,6 +53,8 @@ Source: `docs/reviews/2026-10-02-pappg-v4-review.md` and `docs/reviews/pappg-v5-
 
 ## Code TODO (ask Claude)
 
+- [ ] **Install prompt + QR code.** Decided 2026-10-16 to stay a web app (PWA), not an app-store app, at least through field testing. Add an "Install this app" banner with iPhone steps (Share → Add to Home Screen) and Android install, plus a printable QR code for SHPO flyers. Ask field testers whether they'd want a store version
+
 - [ ] **Header attribution (wait for Simeon's answer).** The header reads "National Park Service • Preservation Assistance", which presents the tool as an NPS product. Default fix: "Developed by Penn State with support from the National Park Service's National Center for Preservation Technology and Training". Change the EN and ES strings in `floodapp.html` and `deploy/index.html`, using whatever wording/logo/disclaimer NCPTT prefers (asked 2026-10-16)
 - [ ] **Source labels on repair cards.** The footer of each guidance card builds titles from file names ("Nthp Treatment Flood Damaged Historic Buildings; Fema Iappg V1.1 Amended 2025"). Map each `docs/` source to its proper title (e.g. National Trust, *Treatment of Flood-Damaged Older and Historic Buildings*; FEMA *Individual Assistance Program and Policy Guide* v1.1). The flaw shows in the Oct 2026 PPR Figure 2a. Do it in the next website update
 
