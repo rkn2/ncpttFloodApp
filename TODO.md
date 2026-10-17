@@ -1,5 +1,12 @@
 # FloodApp — Remaining TODO
 
+## ▶ Pick up here (left 2026-10-17, resume the week of 2026-10-19)
+The SHPO maps are built, reviewed and hardened (commits `2390857` → `05d436c`); nothing server-side has run yet.
+1. **Becca, at a computer:** do `sync/README.md` step 0 (check that PSU Google allows anonymous web apps and sharing outside psu.edu), then step 1 (intake, incl. a `FOLDER_ID` folder shared with no one) and step 2 (map, incl. pasting `sync/shpo-map.appsscript.json`). On the outside-account test the permission screen should ask only to *view* Sheets.
+2. **Claude:** put the intake URL in `SYNC_ENDPOINT` (`floodapp.html` + `deploy/index.html`), bump `deploy/sw.js` (v23 → v24), push. Then send one test entry from a phone and check it lands in *Unassigned* or the right disaster Sheet, and that re-tagging it moves the row.
+3. **Claude:** read `~/Library/Logs/floodapp-hentf/` for the first launchd runs (from 2026-10-18 07:15): did the push, the vault task write and the notification work under launchd?
+4. Remaining review items: the open boxes under "Adversarial review of the SHPO-map work" below.
+
 ## Done 2026-10-17 (commits `90ff453` → this one)
 - [x] Source labels: card footers and quote markers show publication titles (`SOURCE_TITLES` in `floodapp.html`), not file names
 - [x] Vermont `programs.json` entry reworded to the listed-or-eligible Section 106 wording
