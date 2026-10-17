@@ -2,7 +2,7 @@
   "schema_version": "1.0",
   "built_at": "2026-07-09",
   "generator": "pipeline/ (extract->retrieve->synthesize->verify_citations->directive_lint->entailment audit)",
-  "provenance_note": "Every do/dont item carries >=1 citation whose verbatim quote was mechanically verified present in its cited docs/ source, and passed an independent LLM claim-entailment audit. Records are advisory preservation guidance, not a substitute for a professional assessment.",
+  "provenance_note": "Every do/dont item carries >=1 citation whose verbatim quote was mechanically verified present in its cited docs/ source. Items built by the pipeline also passed an independent LLM claim-entailment audit; items hand-edited or added later carry entailment_audited: false and have not yet been through that audit. Records are advisory preservation guidance, not a substitute for a professional assessment.",
   "verification": {
     "citations_verified": 115,
     "citations_total": 115,
@@ -20,7 +20,7 @@
     ],
     "hand_edits": [
       "2026-10-02: siding and insulation fiberglass items hand-edited to remove-by-default (NTHP 'with few exceptions' rule; closed-cell board exception) so the bundle no longer contradicts itself; quotes verified verbatim, not yet re-run through the LLM entailment audit.",
-      "2026-10-02: hand-authored homeowner aid items, quotes verified verbatim, not run through the LLM entailment audit (each new item carries entailment_audited: false): structural do + basement repair limits under FEMA IA (IAPPG v1.1 Amended pp.88-89); new record recovery_aid (7 do, 3 dont) on flood insurance exclusion, filing claims, documenting damage and pre-flood condition, FEMA records, the SFHA flood insurance requirement and its carry-over to later owners, and SBA-dependent assistance (IAPPG pp.46, 50, 64, 66-67, 75, 77, 86, 88-89, 166; NAIC post-disaster claims guide pp.3-4, 7, 9). Citation 'page' values are printed page numbers. recovery_aid is not a damage category, so floodapp.html must render it explicitly (not yet wired)."
+      "2026-10-02: hand-authored homeowner aid items, quotes verified verbatim, not run through the LLM entailment audit (each new item carries entailment_audited: false): structural do + basement repair limits under FEMA IA (IAPPG v1.1 Amended pp.88-89); new record recovery_aid (7 do, 3 dont) on flood insurance exclusion, filing claims, documenting damage and pre-flood condition, FEMA records, the SFHA flood insurance requirement and its carry-over to later owners, and SBA-dependent assistance (IAPPG pp.46, 50, 64, 66-67, 75, 77, 86, 88-89, 166; NAIC post-disaster claims guide pp.3-4, 7, 9). Citation 'page' values are printed page numbers. recovery_aid is not a damage category, so floodapp.html renders it explicitly (wired 2026-10-02 in the insurance panel and the common-mistakes list)."
     ]
   },
   "categories": [

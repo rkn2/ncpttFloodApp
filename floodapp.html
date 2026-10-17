@@ -3217,8 +3217,28 @@ function assessorPaSection(s) {
 function escAttr(s) {
   return String(s).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
 }
+// Proper titles for the docs/ sources (publication titles, so not translated). Two files are
+// copies of the same NTHP booklet and share a title, so the card footer lists it once.
+const SOURCE_TITLES = {
+  'nthp-treatment-flood-damaged-historic-buildings.pdf': 'National Trust for Historic Preservation, Treatment of Flood-Damaged Older and Historic Buildings',
+  'treatment of flood damaged hist buildings.pdf': 'National Trust for Historic Preservation, Treatment of Flood-Damaged Older and Historic Buildings',
+  'nps-flood-adaptation-guidelines-2021.pdf': "National Park Service, The Secretary of the Interior's Standards for Rehabilitation & Guidelines on Flood Adaptation for Rehabilitating Historic Buildings (2021)",
+  'secretary for interior.pdf': "National Park Service, The Secretary of the Interior's Standards for Rehabilitation & Guidelines on Flood Adaptation for Rehabilitating Historic Buildings (2021)",
+  'nps-preservation-brief-39-moisture-control.pdf': 'National Park Service, Preservation Brief 39: Holding the Line: Controlling Unwanted Moisture in Historic Buildings',
+  'nps-before-after-disasters-shpo-guide.pdf': 'National Park Service, Before and After Disasters: Guidance for State and Tribal Historic Preservation Leaders',
+  'fema-iappg-v1.1-amended-2025.pdf': 'FEMA, Individual Assistance Program and Policy Guide (IAPPG) v1.1 Amended (2025)',
+  'fema-pappg-v5.0-amended-2025.pdf': 'FEMA, Public Assistance Program and Policy Guide (PAPPG) v5.0 Amended (2025)',
+  'fema-p467-historic-structures-floodplain.pdf': 'FEMA P-467-2, NFIP Floodplain Management Bulletin: Historic Structures (2008)',
+  'fema-386-6-historic-property-hazard-mitigation.pdf': 'FEMA 386-6, Integrating Historic Property and Cultural Resource Considerations into Hazard Mitigation Planning (2005)',
+  'historic-england-flooding-and-historic-buildings.pdf': 'Historic England, Flooding and Historic Buildings',
+  'louisiana-resilient-heritage-homeowner-guide.pdf': 'Louisiana Division of Historic Preservation, Resilient Heritage: Protecting Your Historic Home from Natural Disasters',
+  'post-disaster-claims-guide.pdf': 'National Association of Insurance Commissioners (NAIC), Post-Disaster Claims Guide (2022)',
+  'thc-historic-property-owners-disaster-handbook-2023.pdf': "Texas Historical Commission, Historic Property Owners' Disaster Handbook (2023)",
+  'thc-local-government-disaster-planning-2023.pdf': 'Texas Historical Commission, Local Government Disaster Planning (2023)',
+  'nc-historic-resilience-community-planning-2023.pdf': 'North Carolina, A Handbook for Historic Resilience Community Planning (2023)',
+};
 function sourceLabel(fn) {
-  return fn.replace(/\.pdf$/i,'').replace(/[-_]/g,' ')
+  return SOURCE_TITLES[fn] || fn.replace(/\.pdf$/i,'').replace(/[-_]/g,' ')
            .replace(/\b\w/g, c => c.toUpperCase()).slice(0, 60);
 }
 // Render one cited do/dont item. The 📄 tooltip shows the verbatim source quote — the provenance.
@@ -3243,7 +3263,7 @@ function guidanceBodyHtml(catKey) {
         <strong>${t('guidance_dont')}</strong>
         <ul>${(cb.dont||[]).map(citedItemHtml).join('')}</ul>
       </div>
-      <div class="soi-note">📚 ${t('guidance_sources')} ${srcs.join('; ')}.</div>`;
+      <div class="soi-note">📚 ${t('guidance_sources')} ${srcs.map(escAttr).join('; ')}.</div>`;
   }
   const g = REPAIR_GUIDANCE[catKey];
   if (!g) return '';

@@ -39,7 +39,7 @@
   ],
   "states": {
     "VT": [
-      { "name": "Vermont Division for Historic Preservation", "tag": "grant", "desc": "Vermont SHPO can connect you with state preservation programs and FEMA-related historic building assistance. Eligible listed and contributing structures may qualify for additional review support.", "url": "https://accd.vermont.gov/historic-preservation", "apply": "Contact Vermont SHPO" },
+      { "name": "Vermont Division for Historic Preservation", "tag": "grant", "desc": "Vermont SHPO can connect you with state preservation programs and FEMA-related historic building assistance. Your building doesn't have to be listed: when federal funds are involved (including FEMA assistance), Section 106 review covers buildings listed in or eligible for the National Register of Historic Places, and the SHPO can tell you whether yours is eligible.", "url": "https://accd.vermont.gov/historic-preservation", "apply": "Contact Vermont SHPO" },
       { "name": "Vermont Emergency Relief and Assistance Fund (ERAF)", "tag": "grant", "desc": "State fund that can supplement FEMA assistance for eligible Vermonters. Contact Vermont Emergency Management for current disaster declaration status.", "url": "https://vem.vermont.gov", "apply": "Vermont Emergency Management" }
     ],
     "NC": [
