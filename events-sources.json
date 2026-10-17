@@ -1,0 +1,87 @@
+{
+  "_about": "Disasters the app tracks, each with the FEMA-HENTF notice that added it. Maintained by pipeline/hentf_inbox.py; read by pipeline/build_events.py.",
+  "disasters": [
+    {
+      "disasterNumber": 4898,
+      "notice": {
+        "subject": "ACTION REQUESTED: Major Disaster Declarations TN & MS",
+        "email_date": "2026-02-16",
+        "forwarded_by": "Napolitano, Rebecca",
+        "states_named": [
+          "MS",
+          "TN"
+        ]
+      }
+    },
+    {
+      "disasterNumber": 4899,
+      "notice": {
+        "subject": "ACTION REQUESTED: Major Disaster Declarations TN & MS",
+        "email_date": "2026-02-16",
+        "forwarded_by": "Napolitano, Rebecca",
+        "states_named": [
+          "MS",
+          "TN"
+        ]
+      }
+    },
+    {
+      "disasterNumber": 4900,
+      "notice": {
+        "subject": "ACTION REQUESTED: Major Disaster Declaration LA",
+        "email_date": "2026-02-20",
+        "forwarded_by": "Napolitano, Rebecca",
+        "states_named": [
+          "LA"
+        ]
+      }
+    },
+    {
+      "disasterNumber": 4932,
+      "notice": {
+        "subject": "ACTION REQUESTED: Major Disaster Declaration Approvals WV & CNMI",
+        "email_date": "2026-08-05",
+        "forwarded_by": "Patricia Lowe Smith",
+        "states_named": [
+          "MP",
+          "WV"
+        ]
+      }
+    },
+    {
+      "disasterNumber": 4931,
+      "notice": {
+        "subject": "ACTION REQUESTED: Major Disaster Declaration Approvals WV & CNMI",
+        "email_date": "2026-08-05",
+        "forwarded_by": "Patricia Lowe Smith",
+        "states_named": [
+          "MP",
+          "WV"
+        ]
+      }
+    },
+    {
+      "disasterNumber": 4391,
+      "notice": {
+        "subject": "ACTION REQUESTED: Major Disaster Declaration Approvals WV & CNMI",
+        "email_date": "2026-08-05",
+        "forwarded_by": "Patricia Lowe Smith",
+        "states_named": [
+          "MP",
+          "WV"
+        ]
+      }
+    },
+    {
+      "disasterNumber": 4933,
+      "notice": {
+        "subject": "ACTION REQUESTED: Indiana Major Disaster Declaration DR-4933-IN",
+        "email_date": "2026-08-27",
+        "forwarded_by": "Patricia Lowe Smith",
+        "states_named": [
+          "IN"
+        ]
+      }
+    }
+  ]
+}

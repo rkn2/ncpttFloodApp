@@ -7,7 +7,7 @@
  * CACHE_VERSION MUST be bumped on every deploy — otherwise returning users are stranded on the
  * old cached app forever. This is the #1 hand-written-SW failure mode.
  */
-const CACHE_VERSION = 'flood-recovery-v18';   // ⬅ bump this string on every deploy
+const CACHE_VERSION = 'flood-recovery-v19';   // ⬅ bump this string on every deploy
 const SHELL = [
   './',
   './index.html',
@@ -16,6 +16,7 @@ const SHELL = [
   './pa-guidance.json',
   './pa-guidance.es.json',
   './programs.json',
+  './events.json',
   './manifest.webmanifest',
   './icon.svg',
   './icon-180.png',
@@ -46,6 +47,24 @@ self.addEventListener('fetch', (event) => {
   // Only handle same-origin GETs.
   if (req.method !== 'GET' || url.origin !== self.location.origin) {
     return; // default browser handling (network)
+  }
+
+  // Network-first for the declared-disasters list: the daily HENTF job adds disasters and counties
+  // without bumping CACHE_VERSION, so installed apps pick them up whenever they're online and fall
+  // back to the cached copy offline.
+  if (url.pathname.endsWith('/events.json')) {
+    event.respondWith(
+      fetch(req)
+        .then((resp) => {
+          if (resp && resp.ok) {
+            const copy = resp.clone();
+            caches.open(CACHE_VERSION).then((c) => c.put('./events.json', copy));
+          }
+          return resp;
+        })
+        .catch(() => caches.match('./events.json'))
+    );
+    return;
   }
 
   // Cache-first for the app shell + assets.
