@@ -1,7 +1,7 @@
 # SHPO sync: one private map per disaster
 
 ```
-FEMA-HENTF email (forwarded by Trish/Adam)
+FEMA-HENTF email (forwarded by DRI colleagues)
   └─ pipeline/hentf_inbox.py (daily, launchd)  → events-sources.json
        └─ pipeline/build_events.py (OpenFEMA counties + Census shapes) → events.json (published with the app)
 Field app entry (assessor, or homeowner who checked "share")

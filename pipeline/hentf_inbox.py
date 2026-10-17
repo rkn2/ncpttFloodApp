@@ -3,7 +3,7 @@
 hentf_inbox.py — add disasters to events-sources.json from FEMA-HENTF declaration emails.
 
 FEMA-HENTF emails ("ACTION REQUESTED: Major Disaster Declaration ...", "UPDATE: Additional Counties
-Added for DR-####-XX") reach Becca forwarded by Trish or Adam. Each new DR number found in one becomes
+Added for DR-####-XX") reach Becca forwarded by DRI colleagues. Each new DR number found in one becomes
 an entry in events-sources.json with the notice it came from; build_events.py then pulls the
 counties from OpenFEMA and validates the number (typos such as "DR-4391-MP" are dropped there).
 
@@ -81,7 +81,7 @@ def hentf_notices(tok):
     h = {'Authorization': f'Bearer {tok}', 'ConsistencyLevel': 'eventual',
          'Prefer': 'outlook.body-content-type="text"'}
     url = f'{GRAPH}/me/messages'
-    params = {'$search': '"fema-hentf"', '$top': 50, '$select': 'subject,receivedDateTime,body,from'}
+    params = {'$search': '"fema-hentf"', '$top': 50, '$select': 'subject,receivedDateTime,body'}
     out = []
     while url:
         r = requests.get(url, headers=h, params=params, timeout=60)
@@ -91,8 +91,8 @@ def hentf_notices(tok):
         for m in d['value']:
             body = m['body']['content']
             if HENTF_ADDR in body.lower() and SUBJECT_RE.search(m['subject']):
-                out.append({'subject': m['subject'], 'date': m['receivedDateTime'][:10], 'body': body,
-                            'from': m['from']['emailAddress']['name']})
+                # No sender names: events-sources.json is committed to a public repo.
+                out.append({'subject': m['subject'], 'date': m['receivedDateTime'][:10], 'body': body})
         url, params = d.get('@odata.nextLink'), None
     return sorted(out, key=lambda m: m['date'])
 
@@ -111,7 +111,7 @@ def main():
             known.add(num)
             entry = {'disasterNumber': num, 'notice': {
                 'subject': re.sub(r'^(?:(?:re|fw|fwd)\s*:\s*)+', '', n['subject'], flags=re.I).strip(),
-                'email_date': n['date'], 'forwarded_by': n['from'],
+                'email_date': n['date'],
                 'states_named': states_named(n['subject'], n['body'])}}
             doc['disasters'].append(entry)
             added.append(entry)

@@ -3,7 +3,7 @@
 build_events.py — build events.json (declared disasters + their counties) for the field app.
 
 Which disasters: the ones listed in events-sources.json. Each entry records the HENTF notice that
-put it there (pipeline/hentf_inbox.py adds them from FEMA-HENTF emails Trish forwards).
+put it there (pipeline/hentf_inbox.py adds them from forwarded FEMA-HENTF emails).
 What counties: FEMA's OpenFEMA DisasterDeclarationsSummaries v2 (the authoritative designations;
 it matched the DR-4933-IN HENTF email exactly). County shapes: Census cartographic boundary file
 (cb_<year>_us_county_5m), simplified, so the app can match a GPS point to a county offline.
