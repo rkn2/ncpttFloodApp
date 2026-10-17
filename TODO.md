@@ -18,8 +18,8 @@
 
 ## Adversarial review of the SHPO-map work (2026-10-17 evening)
 Fixed: sync loop no longer loses entries queued or edited mid-sync; queue key is address + building name; intake rejects `constructor`-style event ids; re-tagging an entry's disaster removes its old row; only the active mode's data is sent; homeowner consent resets on a new walkthrough; storage-full is reported, not swallowed; old queue entries re-keyed; job refuses to push when a listed disaster disappears (`ALLOW_REMOVED=1` to accept); HENTF search skips Sent Items and Drafts. Becca: no history rewrite for the old `forwarded_by` names.
-- [ ] Before deploying `sync/shpo-map.gs`: add an `appsscript.json` limiting it to `spreadsheets.readonly` + `userinfo.email` (it currently asks SHPO viewers for full Sheets access)
-- [ ] README: warn that disaster Sheets inherit `FOLDER_ID`'s sharing; list the Unassigned Sheet under "never share"; note an anonymous endpoint means anyone can add rows and anyone who sees an Entry ID can overwrite it
+- [x] Before deploying `sync/shpo-map.gs`: add an `appsscript.json` (done: `sync/shpo-map.appsscript.json`, README step 2) limiting it to `spreadsheets.readonly` + `userinfo.email` (it currently asks SHPO viewers for full Sheets access)
+- [x] README: warn that disaster Sheets inherit `FOLDER_ID`'s sharing; list the Unassigned Sheet under "never share"; note an anonymous endpoint means anyone can add rows and anyone who sees an Entry ID can overwrite it
 - [ ] Job: a failed push leaves a local commit that later runs report as "no changes", and that run's new-disaster tasks are never filed; a rebase conflict leaves the bot clone stuck
 - [ ] Check ~/Library/Logs/floodapp-hentf on 2026-10-18: first launchd run (push credentials, iCloud vault write, notifications untested under launchd)
 - [ ] `share_queued` says answers go "next time you're online", which is only true once `SYNC_ENDPOINT` is set
