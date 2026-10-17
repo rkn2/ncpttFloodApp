@@ -22,7 +22,7 @@ Source: `docs/reviews/2026-10-17-entailment-review.md`, which has the item, quot
 - [ ] **Photos** (`document.do[0]`): first sentence (photograph damage before cleanup) needs its own citation
 - [ ] **Bundle `recovery_aid` do[5]**: "can't get FEMA help in a future flood" → household aid for NFIP-insurable items only
 - [x] **Household-program items hidden from nonprofit/government owners** (2026-10-17): the 7 bundle items citing the IAPPG (structural basement limits; 5 `recovery_aid` do + 2 dont on FEMA home repair, SFHA insurance, SBA) carry `owners: ["private"]` and are hidden on the homeowner path when the owner is nonprofit or government. General claims/documentation items still show
-- [ ] 7 items are true but cite nearby text; add the citations the report lists (all pre-checked with the verifier)
+- [x] 7 context items: citations added 2026-10-17 (EN + ES, 82/82 quotes verified). Still open: `historic_exceptions.do[1]` wording drops "when a facility is eligible for replacement" (suggested reword in the report); `pa_start.do[2]` could add "(in effect on the declaration date)"
 
 ## NEXT UP: from the FEMA PAPPG review (2026-10-02)
 
