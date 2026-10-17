@@ -18,6 +18,7 @@ import math
 import re
 import subprocess
 import sys
+import unicodedata
 from datetime import datetime
 from pathlib import Path
 
@@ -26,6 +27,18 @@ OUTPUT          = Path('knowledge-base.json')
 CHUNK_SIZE      = 800   # characters
 OVERLAP         = 150   # characters of overlap between chunks
 CID_THRESHOLD   = 0.03  # fraction of (cid:…) sequences that triggers OCR fallback
+DUP_THRESHOLD   = 0.8   # word-shingle overlap above which a doc is a duplicate of an earlier one
+
+
+def normalize(text):
+    """NFKC folds typographic ligatures (ﬂ -> fl, ﬁ -> fi) so a search for "flood" matches
+    PDFs that encode it with a ligature glyph. Soft hyphens are dropped."""
+    return unicodedata.normalize('NFKC', text).replace('\u00ad', '')
+
+
+def _shingles(text, n=8):
+    words = tokenize(text)
+    return {' '.join(words[i:i + n]) for i in range(0, max(len(words) - n + 1, 0))}
 
 
 def _pdftotext(path, first_page=None, last_page=None):
@@ -148,7 +161,7 @@ def main():
         print(f"No documents found in {DOCS_DIR}/. Add .pdf, .txt, or .docx files and re-run.")
         sys.exit(0)
 
-    chunks = []
+    chunks, kept, skipped = [], [], []   # kept: (name, shingles) of docs already in the KB
     for path in docs:
         print(f"  {path.name} ...", end=' ', flush=True)
         suffix = path.suffix.lower()
@@ -159,9 +172,21 @@ def main():
         else:
             text = extract_text(path)
 
+        text = normalize(text)
         if not text.strip():
             print("no text extracted")
             continue
+
+        # Two copies of the same publication (e.g. different downloads of one booklet) would
+        # double its weight in retrieval. Files are sorted, so the first name seen is kept.
+        sh = _shingles(text)
+        dup_of = next((name for name, other in kept
+                       if sh and other and len(sh & other) / min(len(sh), len(other)) > DUP_THRESHOLD), None)
+        if dup_of:
+            print(f"duplicate of {dup_of}, skipped")
+            skipped.append(path.name)
+            continue
+        kept.append((path.name, sh))
 
         file_chunks = chunk(text)
         for i, c in enumerate(file_chunks):
@@ -185,14 +210,16 @@ def main():
 
     kb = {
         'built_at':      datetime.now().isoformat(),
-        'doc_count':     len(docs),
+        'doc_count':     len(kept),
+        'skipped_duplicates': skipped,
         'chunk_count':   len(chunks),
         'avg_chunk_len': avg_chunk_len,
         'idf':           idf,
         'chunks':        chunks,
     }
     OUTPUT.write_text(json.dumps(kb, indent=2, ensure_ascii=False))
-    print(f"\nWrote {OUTPUT}  ({len(chunks)} chunks from {len(docs)} documents, {len(idf)} IDF terms)")
+    print(f"\nWrote {OUTPUT}  ({len(chunks)} chunks from {len(kept)} documents, {len(idf)} IDF terms; "
+          f"{len(skipped)} duplicates skipped)")
 
 
 if __name__ == '__main__':
