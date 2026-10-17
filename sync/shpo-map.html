@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<base target="_top">
+<meta charset="UTF-8">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<style>
+  :root { --ink: #1B3A5C; --muted: #4A5A68; --line: #D6DEE6; --bg: #F4F6F8; --card: #fff;
+          --unsafe: #B22222; --restricted: #C25400; --inspected: #2E7D32; --home: #2E6DA4; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: var(--bg); color: #222; }
+  header { background: var(--ink); color: #fff; padding: 14px 16px; }
+  header h1 { font-size: 1.1rem; }
+  header .sub { font-size: 0.8rem; opacity: 0.85; margin-top: 2px; }
+  .confidential { background: #FFF4E5; border-bottom: 1px solid #F0C080; color: #6B3E00; font-size: 0.8rem; padding: 8px 16px; }
+  .bar { display: flex; flex-wrap: wrap; gap: 12px 20px; align-items: flex-end; padding: 12px 16px; background: var(--card); border-bottom: 1px solid var(--line); }
+  .bar label { display: block; font-size: 0.72rem; font-weight: 600; color: var(--muted); margin-bottom: 3px; }
+  .bar select, .bar input { font: inherit; font-size: 0.85rem; padding: 6px 8px; border: 1px solid var(--line); border-radius: 6px; min-height: 36px; }
+  .stats { display: flex; gap: 18px; margin-left: auto; }
+  .stat { text-align: center; } .stat b { display: block; font-size: 1.3rem; } .stat span { font-size: 0.68rem; color: var(--muted); text-transform: uppercase; }
+  #map { height: 52vh; min-height: 320px; }
+  .legend { background: #fff; padding: 8px 10px; border-radius: 6px; font-size: 0.75rem; line-height: 1.6; box-shadow: 0 1px 4px rgba(0,0,0,.2); }
+  .sw { display: inline-block; width: 12px; height: 12px; border-radius: 2px; vertical-align: -1px; margin-right: 5px; }
+  .dot { display: inline-block; width: 11px; height: 11px; border-radius: 50%; vertical-align: -1px; margin-right: 5px; border: 2px solid #fff; box-shadow: 0 0 0 1px #999; }
+  main { padding: 12px 16px 32px; }
+  .actions { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 10px; }
+  .actions a, .actions button { font: inherit; font-size: 0.82rem; font-weight: 600; padding: 8px 12px; border-radius: 6px; border: 1px solid var(--line); background: #fff; color: var(--ink); cursor: pointer; text-decoration: none; min-height: 36px; }
+  .table-wrap { overflow-x: auto; background: #fff; border: 1px solid var(--line); border-radius: 8px; }
+  table { border-collapse: collapse; width: 100%; font-size: 0.8rem; }
+  th, td { text-align: left; padding: 7px 10px; border-bottom: 1px solid #EEF1F4; white-space: nowrap; }
+  th { background: #F7F9FB; font-size: 0.72rem; color: var(--muted); }
+  .tag { font-size: 0.68rem; font-weight: 700; text-transform: uppercase; padding: 2px 6px; border-radius: 4px; }
+  .t-unsafe { background: #FDECEC; color: var(--unsafe); } .t-restricted { background: #FFF1E3; color: var(--restricted); }
+  .t-inspected { background: #E8F5E9; color: var(--inspected); } .t-home { background: #E7F0F9; color: var(--home); }
+  .empty { padding: 24px; text-align: center; color: var(--muted); font-size: 0.85rem; }
+  @media (max-width: 640px) { .stats { margin-left: 0; } #map { height: 45vh; } }
+</style>
+</head>
+<body>
+<header>
+  <h1 id="title">Disaster map</h1>
+  <div class="sub" id="sub"></div>
+</header>
+<div class="confidential" id="confidential">Confidential: locations of damaged historic buildings. Don't forward this link or publish the data.</div>
+<div class="bar">
+  <div><label for="f-type">Entries</label>
+    <select id="f-type"><option value="all">All</option><option value="rapid">Rapid triage</option><option value="full">Full assessments</option><option value="homeowner">Homeowner reports</option></select></div>
+  <div><label for="f-posting">Posting</label>
+    <select id="f-posting"><option value="all">All</option><option>Unsafe</option><option>Restricted Use</option><option>Inspected</option></select></div>
+  <div><label for="f-search">Search</label><input id="f-search" placeholder="Address, building, inspector"></div>
+  <div class="stats">
+    <div class="stat"><b id="s-total">0</b><span>Entries</span></div>
+    <div class="stat"><b id="s-unsafe" style="color:var(--unsafe)">0</b><span>Unsafe</span></div>
+    <div class="stat"><b id="s-restricted" style="color:var(--restricted)">0</b><span>Restricted</span></div>
+    <div class="stat"><b id="s-home" style="color:var(--home)">0</b><span>Homeowner</span></div>
+  </div>
+</div>
+<div id="map" role="region" aria-label="Map of entries and declared counties"></div>
+<main>
+  <div class="actions">
+    <button type="button" id="dl">Download CSV (filtered)</button>
+    <a id="sheet-link" target="_blank" rel="noopener">Open the Sheet</a>
+  </div>
+  <div class="table-wrap"><table><thead><tr>
+    <th>Date</th><th>Type</th><th>Building / address</th><th>Posting</th><th>Damage</th><th>Inspector</th><th>GPS</th>
+  </tr></thead><tbody id="rows"></tbody></table></div>
+</main>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+const DATA = <?!= data ?>;
+const EVENTS_URL = 'https://rkn2.github.io/ncpttFloodApp/events.json';
+const esc = s => String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/"/g, '&quot;');
+
+// Normalize the three tabs into one list of entries.
+const entries = [];
+(DATA.tabs.rapid || []).forEach(r => entries.push({ type: 'rapid', label: 'Rapid triage', date: r['Submitted'], name: r['Building Name'], address: r['Address'],
+  posting: r['Posting'], damage: r['Overall Damage'], inspector: r['Inspector'], gps: r['GPS'], raw: r }));
+(DATA.tabs.full || []).forEach(r => entries.push({ type: 'full', label: 'Full assessment', date: r['Submitted'], name: r['Building Name'], address: r['Address'],
+  posting: r['Final Posting'], damage: '', inspector: r['Inspector'], gps: r['GPS'], raw: r }));
+(DATA.tabs.homeowner || []).forEach(r => entries.push({ type: 'homeowner', label: 'Homeowner report', date: r['Submitted'], name: '', address: r['Address'],
+  posting: '', damage: ['Structural', 'Roof', 'Interior', 'Mold'].map(k => r['Damage: ' + k] ? k + ': ' + r['Damage: ' + k] : '').filter(Boolean).join(', '),
+  inspector: '', gps: r['GPS'], raw: r }));
+entries.forEach(e => {
+  const m = String(e.gps || '').match(/(-?\d+(?:\.\d+)?)\s*[,; ]\s*(-?\d+(?:\.\d+)?)/);
+  e.ll = m ? [parseFloat(m[1]), parseFloat(m[2])] : null;
+});
+
+const about = DATA.about || {};
+document.getElementById('title').textContent = (about['Event ID'] || 'Disaster') + (about['Title'] ? ': ' + about['Title'] : '');
+document.getElementById('sub').textContent = [about['State'], about['Declared'] ? 'declared ' + about['Declared'] : '', DATA.viewer ? 'signed in as ' + DATA.viewer : ''].filter(Boolean).join(' · ');
+document.getElementById('sheet-link').href = DATA.sheetUrl;
+
+const map = L.map('map').setView([39.8, -86], 6);
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { attribution: '© OpenStreetMap contributors', maxZoom: 18 }).addTo(map);
+const countyLayer = L.layerGroup().addTo(map), markerLayer = L.layerGroup().addTo(map);
+let countyBounds = null;
+
+// Declared counties for this disaster, shaded by program (public FEMA designations).
+fetch(EVENTS_URL).then(r => r.json()).then(d => {
+  const ev = (d.events || []).find(e => e.id === about['Event ID']);
+  if (!ev) return;
+  ev.counties.forEach(c => {
+    const shape = d.county_shapes[c.fips];
+    if (!shape) return;
+    const color = c.pa && c.ia ? '#5B3F8C' : c.ia ? '#2E6DA4' : '#8C6D3F';
+    const poly = L.polygon(shape.map(ring => ring.map(([x, y]) => [y, x])), { color, weight: 1, fillOpacity: 0.12 })
+      .bindTooltip(`${esc(c.name)}: ${[c.ia ? 'Individual Assistance' : '', c.pa ? 'Public Assistance' : ''].filter(Boolean).join(' + ')}`);
+    countyLayer.addLayer(poly);
+    countyBounds = countyBounds ? countyBounds.extend(poly.getBounds()) : poly.getBounds();
+  });
+  if (!visible().some(e => e.ll) && countyBounds) map.fitBounds(countyBounds);
+}).catch(err => console.error('events.json', err));
+
+const legend = L.control({ position: 'bottomright' });
+legend.onAdd = () => { const div = L.DomUtil.create('div', 'legend'); div.innerHTML =
+  '<span class="dot" style="background:var(--unsafe)"></span>Unsafe<br><span class="dot" style="background:var(--restricted)"></span>Restricted use<br>' +
+  '<span class="dot" style="background:var(--inspected)"></span>Inspected / other<br><span class="dot" style="background:var(--home)"></span>Homeowner report<br>' +
+  '<span class="sw" style="background:#5B3F8C55;border:1px solid #5B3F8C"></span>IA + PA county<br><span class="sw" style="background:#2E6DA455;border:1px solid #2E6DA4"></span>IA only<br>' +
+  '<span class="sw" style="background:#8C6D3F55;border:1px solid #8C6D3F"></span>PA only'; return div; };
+legend.addTo(map);
+
+function postingClass(e) {
+  if (e.type === 'homeowner') return 'home';
+  return e.posting === 'Unsafe' ? 'unsafe' : e.posting === 'Restricted Use' ? 'restricted' : 'inspected';
+}
+function visible() {
+  const type = document.getElementById('f-type').value, posting = document.getElementById('f-posting').value;
+  const q = document.getElementById('f-search').value.toLowerCase();
+  return entries.filter(e => (type === 'all' || e.type === type) && (posting === 'all' || e.posting === posting) &&
+    (!q || [e.name, e.address, e.inspector].join(' ').toLowerCase().includes(q)));
+}
+function render() {
+  const v = visible();
+  document.getElementById('s-total').textContent = v.length;
+  document.getElementById('s-unsafe').textContent = v.filter(e => e.posting === 'Unsafe').length;
+  document.getElementById('s-restricted').textContent = v.filter(e => e.posting === 'Restricted Use').length;
+  document.getElementById('s-home').textContent = v.filter(e => e.type === 'homeowner').length;
+  markerLayer.clearLayers();
+  const pts = [];
+  v.forEach(e => {
+    if (!e.ll) return;
+    const color = getComputedStyle(document.documentElement).getPropertyValue('--' + postingClass(e)).trim();
+    L.circleMarker(e.ll, { radius: 8, fillColor: color, fillOpacity: 0.85, color: '#fff', weight: 2 })
+      .bindPopup(`<strong>${esc(e.name || e.address || e.label)}</strong><br>${esc(e.address)}<br>${esc(e.label)}` +
+        (e.posting ? `<br><span class="tag t-${postingClass(e)}">${esc(e.posting)}</span>` : '') +
+        (e.damage ? `<br>Damage: ${esc(e.damage)}` : '') + (e.inspector ? `<br>Inspector: ${esc(e.inspector)}` : ''))
+      .addTo(markerLayer);
+    pts.push(e.ll);
+  });
+  if (pts.length) map.fitBounds(pts, { padding: [30, 30], maxZoom: 14 });
+  document.getElementById('rows').innerHTML = v.length ? v.map(e => `<tr>
+      <td>${esc(String(e.date).slice(0, 10))}</td><td>${esc(e.label)}</td><td>${esc(e.name ? e.name + ' — ' : '')}${esc(e.address)}</td>
+      <td>${e.posting ? `<span class="tag t-${postingClass(e)}">${esc(e.posting)}</span>` : ''}</td><td>${esc(e.damage)}</td>
+      <td>${esc(e.inspector)}</td><td>${e.ll ? esc(e.gps) : '<em>none</em>'}</td></tr>`).join('')
+    : `<tr><td colspan="7" class="empty">No entries yet${entries.length ? ' match these filters' : ''}.</td></tr>`;
+}
+document.getElementById('dl').onclick = () => {
+  const v = visible();
+  const cols = [...new Set(v.flatMap(e => Object.keys(e.raw)))];
+  const q = s => '"' + String(s == null ? '' : s).replace(/"/g, '""') + '"';
+  const csv = ['Type,' + cols.map(q).join(',')].concat(v.map(e => q(e.label) + ',' + cols.map(c => q(e.raw[c])).join(','))).join('\n');
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([csv], { type: 'text/csv' }));
+  a.download = (about['Event ID'] || 'disaster') + '-entries.csv';
+  a.click();
+};
+['f-type', 'f-posting'].forEach(id => document.getElementById(id).onchange = render);
+document.getElementById('f-search').oninput = render;
+render();
+</script>
+</body>
+</html>

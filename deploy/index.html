@@ -3940,7 +3940,7 @@ function checkShareHash() {
 // Offline-first assessment sync queue. Completed assessments are queued in localStorage.
 // When connectivity returns, the queue drains to the Google Sheet via Apps Script.
 // Submission is never blocking — the field user always succeeds locally.
-// To set up: deploy sync/google-apps-script.js to a Google Sheet and paste the URL below.
+// To set up: deploy sync/intake.gs (see sync/README.md) and paste its web app URL below.
 const SYNC_ENDPOINT = ''; // ← paste your Google Apps Script web app URL here
 const LS_SYNC_KEY = 'floodapp_sync_queue';
 
