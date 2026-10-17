@@ -610,7 +610,10 @@
               "page": 89
             }
           ],
-          "entailment_audited": false
+          "entailment_audited": false,
+          "owners": [
+            "private"
+          ]
         }
       ],
       "dont": [
@@ -940,7 +943,10 @@
               "page": 50
             }
           ],
-          "entailment_audited": false
+          "entailment_audited": false,
+          "owners": [
+            "private"
+          ]
         },
         {
           "text": "Once it's safe to go inside, take photos or videos of the damaged areas and your belongings, and jot down notes about major damage. Keep all receipts for emergency repairs, and hotel receipts if you can't stay in your home.",
@@ -998,7 +1004,10 @@
               "page": 77
             }
           ],
-          "entailment_audited": false
+          "entailment_audited": false,
+          "owners": [
+            "private"
+          ]
         },
         {
           "text": "If your home is in a FEMA Special Flood Hazard Area (a high-risk flood zone) and FEMA pays for home repair, home replacement, or personal property, you must buy and keep flood insurance (NFIP or private) for at least the amount of that aid. If you don't, you can't get FEMA help for flood damage in a future flood.",
@@ -1019,7 +1028,10 @@
               "page": 64
             }
           ],
-          "entailment_audited": false
+          "entailment_audited": false,
+          "owners": [
+            "private"
+          ]
         },
         {
           "text": "The flood insurance requirement stays with the house: it must be kept up at that address, and if you sell the house, it passes to the next owner. If you don't want the requirement, you have 30 days from FEMA's award letter to return the assistance for flood-insurable property.",
@@ -1040,7 +1052,10 @@
               "page": 67
             }
           ],
-          "entailment_audited": false
+          "entailment_audited": false,
+          "owners": [
+            "private"
+          ]
         }
       ],
       "dont": [
@@ -1069,7 +1084,10 @@
               "page": 89
             }
           ],
-          "entailment_audited": false
+          "entailment_audited": false,
+          "owners": [
+            "private"
+          ]
         },
         {
           "text": "Don't withdraw from the SBA process or decline an SBA loan if you still need help with personal property, vehicles, or group flood insurance. FEMA only helps with those after SBA, and it won't consider them again if you withdraw or decline.",
@@ -1090,7 +1108,10 @@
               "page": 166
             }
           ],
-          "entailment_audited": false
+          "entailment_audited": false,
+          "owners": [
+            "private"
+          ]
         }
       ]
     }

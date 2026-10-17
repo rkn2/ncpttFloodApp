@@ -21,7 +21,7 @@ Source: `docs/reviews/2026-10-17-entailment-review.md`, which has the item, quot
 - [ ] **SBA** (`sba.summary`, `sba.do[0]`): "community centers" / "most other nonprofits" unsupported; the rule is per facility
 - [ ] **Photos** (`document.do[0]`): first sentence (photograph damage before cleanup) needs its own citation
 - [ ] **Bundle `recovery_aid` do[5]**: "can't get FEMA help in a future flood" → household aid for NFIP-insurable items only
-- [ ] **`structural` record has no owner filter**: nonprofit/government owners may see household-program basement rules. Check and filter if so
+- [x] **Household-program items hidden from nonprofit/government owners** (2026-10-17): the 7 bundle items citing the IAPPG (structural basement limits; 5 `recovery_aid` do + 2 dont on FEMA home repair, SFHA insurance, SBA) carry `owners: ["private"]` and are hidden on the homeowner path when the owner is nonprofit or government. General claims/documentation items still show
 - [ ] 7 items are true but cite nearby text; add the citations the report lists (all pre-checked with the verifier)
 
 ## NEXT UP: from the FEMA PAPPG review (2026-10-02)

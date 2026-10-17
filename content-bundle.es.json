@@ -612,7 +612,10 @@
               "page": 89
             }
           ],
-          "entailment_audited": false
+          "entailment_audited": false,
+          "owners": [
+            "private"
+          ]
         }
       ],
       "dont": [
@@ -942,7 +945,10 @@
               "page": 50
             }
           ],
-          "entailment_audited": false
+          "entailment_audited": false,
+          "owners": [
+            "private"
+          ]
         },
         {
           "text": "Cuando sea seguro entrar, tome fotos o videos de las áreas dañadas y de sus pertenencias, y anote los daños importantes. Guarde todos los recibos de reparaciones de emergencia, y los recibos de hotel si no puede quedarse en su casa.",
@@ -1000,7 +1006,10 @@
               "page": 77
             }
           ],
-          "entailment_audited": false
+          "entailment_audited": false,
+          "owners": [
+            "private"
+          ]
         },
         {
           "text": "Si su vivienda está en un Área Especial de Riesgo de Inundación de FEMA (una zona de alto riesgo de inundación) y FEMA paga reparación del hogar, reemplazo de la vivienda o bienes personales, debe comprar y mantener un seguro contra inundaciones (del NFIP o privado) por al menos el monto de esa ayuda. Si no lo hace, no podrá recibir ayuda de FEMA por daños de inundación en una inundación futura.",
@@ -1021,7 +1030,10 @@
               "page": 64
             }
           ],
-          "entailment_audited": false
+          "entailment_audited": false,
+          "owners": [
+            "private"
+          ]
         },
         {
           "text": "El requisito del seguro contra inundaciones queda con la casa: debe mantenerse en esa dirección y, si vende la casa, pasa al siguiente dueño. Si no quiere el requisito, tiene 30 días desde la carta de adjudicación de FEMA para devolver la asistencia recibida por propiedad asegurable contra inundaciones.",
@@ -1042,7 +1054,10 @@
               "page": 67
             }
           ],
-          "entailment_audited": false
+          "entailment_audited": false,
+          "owners": [
+            "private"
+          ]
         }
       ],
       "dont": [
@@ -1071,7 +1086,10 @@
               "page": 89
             }
           ],
-          "entailment_audited": false
+          "entailment_audited": false,
+          "owners": [
+            "private"
+          ]
         },
         {
           "text": "No se retire del proceso de la SBA ni rechace un préstamo de la SBA si todavía necesita ayuda con bienes personales, vehículos o el seguro grupal contra inundaciones. FEMA solo ayuda con esas necesidades después de la SBA, y no volverá a considerarlas si usted se retira o rechaza el préstamo.",
@@ -1092,7 +1110,10 @@
               "page": 166
             }
           ],
-          "entailment_audited": false
+          "entailment_audited": false,
+          "owners": [
+            "private"
+          ]
         }
       ]
     }
