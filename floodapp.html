@@ -435,6 +435,8 @@
   .cite-quote { display: block; margin: 4px 0 6px; padding-left: 8px; border-left: 2px solid #999;
     font-size: 0.76rem; font-style: italic; color: #333; }
   .cite-quote[hidden] { display: none; }
+  .event-hint { font-size: 0.78rem; color: #4A5A68; margin-top: 4px; }
+  .event-hint:empty { display: none; }
   .field-error { color: var(--danger); font-size: 0.8rem; font-weight: 600; margin-top: 4px; }
   .print-only { display: none; }
   /* Fieldsets styled like the other field groups (WCAG: radio groups need a fieldset + legend) */
@@ -837,6 +839,74 @@ async function loadPrograms() {
   } catch (_) { /* offline fallback: programs stay empty until cached */ }
 }
 
+// Declared disasters (events.json, built by pipeline/build_events.py from HENTF notices + OpenFEMA).
+// Used only to tag entries and route them to the right SHPO; never shown as guidance.
+let EVENTS = [], COUNTY_SHAPES = {};
+async function loadEvents() {
+  try {
+    const resp = await fetch('events.json');
+    if (resp.ok) { const d = await resp.json(); EVENTS = d.events || []; COUNTY_SHAPES = d.county_shapes || {}; }
+  } catch (_) { /* offline before first load: the disaster picker stays empty, entries go to Unassigned */ }
+}
+function pointInRings(lon, lat, rings) {
+  // Even-odd over all rings, so holes (and multi-part counties) work without telling them apart.
+  let inside = false;
+  for (const ring of rings) {
+    for (let i = 0, j = ring.length - 1; i < ring.length; j = i++) {
+      const [xi, yi] = ring[i], [xj, yj] = ring[j];
+      if ((yi > lat) !== (yj > lat) && lon < (xj - xi) * (lat - yi) / (yj - yi) + xi) inside = !inside;
+    }
+  }
+  return inside;
+}
+// [{ event, county }] for every listed disaster whose declared area contains the point.
+// Statewide/tribal designations have no county shape, so they match on the state code if known.
+function eventsAtPoint(lat, lon, stateCode) {
+  const hits = [];
+  for (const ev of EVENTS) {
+    for (const c of ev.counties) {
+      if (c.statewide ? stateCode === ev.state : (COUNTY_SHAPES[c.fips] && pointInRings(lon, lat, COUNTY_SHAPES[c.fips]))) {
+        hits.push({ event: ev, county: c }); break;
+      }
+    }
+  }
+  return hits;
+}
+function parseLatLon(v) {
+  const m = String(v || '').match(/(-?\d+(?:\.\d+)?)\s*[,; ]\s*(-?\d+(?:\.\d+)?)/);
+  if (!m) return null;
+  const lat = parseFloat(m[1]), lon = parseFloat(m[2]);
+  return Math.abs(lat) <= 90 && Math.abs(lon) <= 180 ? [lat, lon] : null;
+}
+function eventLabel(ev) {
+  const d = new Date(ev.declarationDate + 'T12:00:00').toLocaleDateString(LANG === 'es' ? 'es' : 'en-US', { month: 'short', year: 'numeric' });
+  return `${ev.id}: ${ev.title} (${ev.stateName}, ${d})`;
+}
+// Disaster picker. Assessor forms pass English labels; the homeowner path passes t() strings.
+function eventFieldHtml(id, cur, label, chooseText, notListedText) {
+  return `<div class="field-group">
+      <label class="field-label">${label}</label>
+      <select id="${id}">
+        <option value="">${chooseText}</option>
+        ${EVENTS.map(ev => `<option value="${ev.id}" ${cur === ev.id ? 'selected' : ''}>${escAttr(eventLabel(ev))}</option>`).join('')}
+        <option value="none" ${cur === 'none' ? 'selected' : ''}>${notListedText}</option>
+      </select>
+      <div id="${id}-hint" class="event-hint" role="status"></div>
+    </div>`;
+}
+// After a GPS fix: name the county's disaster(s) and preselect one if nothing is chosen yet.
+function suggestEvent(lat, lon, selectId, stateCode) {
+  const sel = document.getElementById(selectId), hint = document.getElementById(selectId + '-hint');
+  if (!sel || !EVENTS.length) return;
+  const hits = eventsAtPoint(lat, lon, stateCode);
+  if (hits.length) {
+    if (!sel.value) sel.value = hits[0].event.id;
+    if (hint) hint.textContent = t('event_hint_match').replace('{county}', hits[0].county.name).replace('{ids}', hits.map(h => h.event.id).join(', '));
+  } else if (hint) {
+    hint.textContent = t('event_hint_none');
+  }
+}
+
 const REPAIR_GUIDANCE = {
   structural: {
     icon: "🏗️",
@@ -1050,6 +1120,7 @@ let state = {
     overallDamage: "", posting: "", recommendFull: false, triggerReasons: [], notes: "",
     // full fields
     gps: ["","","","",""],
+    event: "", // declared-disaster id from events.json, e.g. 'DR-4933-IN' ('' = not chosen, 'none' = not listed)
     hazards: [],
     sigOlder: "", sigCraftsman: "", sigStyle: "", sigSetting: "", sigRare: "", sigPersons: "",
     archStyle: "",
@@ -1085,6 +1156,18 @@ const I18N = {
     install_ios: "<strong>Install this app</strong> so it works without internet: tap the Share button <span aria-hidden=\"true\">(□↑)</span>, then <strong>Add to Home Screen</strong>.",
     install_btn: "Install",
     cite_show: "Show source quote",
+    event_hint_match: "{county} is declared in {ids}.",
+    event_hint_none: "This location isn't in a declared area of any listed disaster.",
+    event_label: "Which disaster damaged the building?",
+    event_choose: "Choose the disaster",
+    event_not_listed: "Not listed / not sure",
+    share_title: "Share with your State Historic Preservation Office",
+    share_desc: "Your State Historic Preservation Office (SHPO) keeps track of damage to older and historic buildings after a disaster, so it knows where help is needed. If you choose, this app will send them your answers: the address, location, building details and the damage you reported. Nothing is sent unless you check the box.",
+    share_consent: "Yes, share my answers with the State Historic Preservation Office.",
+    share_btn: "Share",
+    share_need_consent: "Check the box first if you want to share your answers.",
+    share_queued: "Thank you. Your answers will be sent the next time you're online.",
+    share_done: "Shared on {date}. Thank you.",
     print_assessed: "Printed",
     install_dismiss: "Not now",
     badge_homeowner: "Homeowner",
@@ -1246,6 +1329,18 @@ const I18N = {
     install_ios: "<strong>Instale esta aplicación</strong> para usarla sin internet: toque el botón Compartir <span aria-hidden=\"true\">(□↑)</span> y luego <strong>Agregar a pantalla de inicio</strong>.",
     install_btn: "Instalar",
     cite_show: "Mostrar la cita de la fuente",
+    event_hint_match: "{county} está en la zona declarada de {ids}.",
+    event_hint_none: "Esta ubicación no está en una zona declarada de ningún desastre de la lista.",
+    event_label: "¿Qué desastre dañó el edificio?",
+    event_choose: "Elija el desastre",
+    event_not_listed: "No aparece / no estoy seguro",
+    share_title: "Compartir con su Oficina Estatal de Preservación Histórica",
+    share_desc: "Su Oficina Estatal de Preservación Histórica (SHPO) lleva un registro de los daños a edificios antiguos e históricos después de un desastre, para saber dónde se necesita ayuda. Si usted lo decide, esta aplicación les enviará sus respuestas: la dirección, la ubicación, los datos del edificio y los daños que reportó. No se envía nada a menos que marque la casilla.",
+    share_consent: "Sí, compartan mis respuestas con la Oficina Estatal de Preservación Histórica.",
+    share_btn: "Compartir",
+    share_need_consent: "Marque la casilla primero si quiere compartir sus respuestas.",
+    share_queued: "Gracias. Sus respuestas se enviarán la próxima vez que tenga conexión a internet.",
+    share_done: "Compartido el {date}. Gracias.",
     print_assessed: "Impreso",
     install_dismiss: "Ahora no",
     badge_homeowner: "Propietario",
@@ -1909,6 +2004,7 @@ function useMyLocation() {
       const lat = pos.coords.latitude.toFixed(6);
       const lon = pos.coords.longitude.toFixed(6);
       state.hw.gps = [lat, lon];
+      suggestEvent(+lat, +lon, 'hw-event', state.hw.state);
       if (navigator.onLine) {
         fetch(`https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lon}&format=json&addressdetails=1`)
           .then(r => r.json())
@@ -1951,10 +2047,14 @@ function useMyLocation() {
 }
 
 function useAssessorLocation() {
-  const statusEl = document.getElementById('as-locate-status');
-  const btn = document.getElementById('as-locate-btn');
-  const addrInput = document.getElementById('f-addr');
-  const gpsInput = document.getElementById('f-gps-0');
+  locateAssessor('f-addr', 'f-gps-0', 'as-locate-btn', 'as-locate-status', 'f-event');
+}
+// GPS fix -> GPS field, reverse-geocoded address (online only), and a disaster suggestion (offline OK).
+function locateAssessor(addrId, gpsId, btnId, statusId, eventId) {
+  const statusEl = document.getElementById(statusId);
+  const btn = document.getElementById(btnId);
+  const addrInput = document.getElementById(addrId);
+  const gpsInput = document.getElementById(gpsId);
   if (!navigator.geolocation) {
     statusEl.textContent = t('locate_unavail');
     statusEl.style.display = '';
@@ -1968,13 +2068,14 @@ function useAssessorLocation() {
       const lat = pos.coords.latitude.toFixed(6);
       const lon = pos.coords.longitude.toFixed(6);
       gpsInput.value = `${lat}, ${lon}`;
+      suggestEvent(+lat, +lon, eventId);
       if (navigator.onLine) {
         fetch(`https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lon}&format=json&addressdetails=1`)
           .then(r => r.json())
           .then(data => {
             const a = data.address || {};
             const parts = [a.house_number, a.road, a.city || a.town || a.village, a.state, a.postcode].filter(Boolean);
-            addrInput.value = parts.join(', ') || data.display_name || '';
+            if (!addrInput.value) addrInput.value = parts.join(', ') || data.display_name || '';
             statusEl.style.display = 'none';
             btn.disabled = false;
           })
@@ -1993,6 +2094,11 @@ function useAssessorLocation() {
     },
     { enableHighAccuracy: true, timeout: 15000 }
   );
+}
+// Typed GPS: suggest a disaster the same way a fix does.
+function gpsTyped(input, eventId) {
+  const ll = parseLatLon(input.value);
+  if (ll) suggestEvent(ll[0], ll[1], eventId);
 }
 
 function saveHwStep1() {
@@ -2254,6 +2360,8 @@ function showHwResults() {
         </div>
       </div>
 
+      ${shareShpoHtml()}
+
       <div class="btn-row">
         <button class="btn btn-secondary" onclick="state.hw.walkIdx = WALKTHROUGH_QUESTIONS.length - 1; showWalkQuestion()">${t('btn_back')}</button>
         <button class="btn btn-print" onclick="window.print()">${t('btn_print')}</button>
@@ -2268,6 +2376,37 @@ function showHwResults() {
   togglePanel('panel-repair','toggle-repair');
   // Auto-open first guidance card
   if (damaged.length > 0) toggleGuidance('g-' + damaged[0].key);
+  const ll = parseLatLon((state.hw.gps || []).join(','));
+  if (ll && !state.hw.shareConsent) suggestEvent(ll[0], ll[1], 'hw-event', state.hw.state);
+}
+// ── HOMEOWNER OPT-IN SHARING ──────────────
+// Homeowner answers go to the SHPO only if the owner checks the box. The consent (time, wording
+// version, language) travels with the entry, and the intake script rejects homeowner rows without it.
+const SHARE_CONSENT_VERSION = 'shpo-share-v1-2026-10-17';
+function shareShpoHtml() {
+  const c = state.hw.shareConsent;
+  const body = c
+    ? `<p class="pa-intro" role="status">${escAttr(t('share_done').replace('{date}', new Date(c.at).toLocaleDateString(LANG === 'es' ? 'es' : 'en-US')))}</p>`
+    : `<p class="pa-intro">${t('share_desc')}</p>
+       ${eventFieldHtml('hw-event', state.hw.event || '', t('event_label'), t('event_choose'), t('event_not_listed'))}
+       <label class="check-item" style="margin:8px 0 12px;"><input type="checkbox" id="hw-share-consent"> ${t('share_consent')}</label>
+       <button class="btn btn-primary" type="button" onclick="shareWithShpo()">${t('share_btn')}</button>
+       <div id="hw-share-status" class="pa-intro" role="status" style="margin-top:8px;"></div>`;
+  return `<div class="result-panel" style="border:1.5px solid var(--hw-border);margin-top:12px;">
+      <div class="result-panel-header" style="background:var(--hw-light);cursor:default;">🏛️ ${t('share_title')}</div>
+      <div class="result-panel-body" style="padding:16px;">${body}</div>
+    </div>`;
+}
+function shareWithShpo() {
+  const box = document.getElementById('hw-share-consent');
+  const status = document.getElementById('hw-share-status');
+  if (!box.checked) { status.textContent = t('share_need_consent'); box.focus(); return; }
+  state.hw.event = document.getElementById('hw-event').value;
+  state.hw.shareConsent = { at: new Date().toISOString(), version: SHARE_CONSENT_VERSION, lang: LANG };
+  queueForSync(currentStateData(), state.hw.address || 'Homeowner report');
+  status.textContent = t('share_queued');
+  box.disabled = true;
+  attemptSync();
 }
 
 function togglePanel(bodyId, toggleId) {
@@ -2383,8 +2522,17 @@ function showRapidStep0() {
     </div>
     <div class="field-group">
       <label class="field-label">Address</label>
-      <input type="text" id="as-addr" autocomplete="street-address" value="${s.address}" placeholder="Street address, city, state, ZIP">
+      <div style="display:flex;gap:8px;align-items:stretch;">
+        <input type="text" id="as-addr" autocomplete="street-address" value="${s.address}" placeholder="Street address, city, state, ZIP" style="flex:1;">
+        <button type="button" id="r-locate-btn" onclick="locateAssessor('as-addr','as-gps','r-locate-btn','r-locate-status','as-event')" style="background:var(--as-accent);color:#fff;border:none;border-radius:8px;padding:0 12px;font-size:0.78rem;font-weight:600;cursor:pointer;white-space:nowrap;">📍 ${t('locate_btn')}</button>
+      </div>
+      <div id="r-locate-status" style="font-size:0.75rem;color:#767676;margin-top:4px;display:none;"></div>
     </div>
+    <div class="field-group">
+      <label class="field-label">GPS <span style="font-weight:400;font-size:0.75rem;">(from the location button, or enter manually; needed for the SHPO map)</span></label>
+      <input type="text" id="as-gps" value="${(s.gps || [])[0] || ''}" placeholder="e.g. 39.8289, -84.8902" onchange="gpsTyped(this,'as-event')">
+    </div>
+    ${eventFieldHtml('as-event', s.event, 'Disaster <span>(routes this entry to the right SHPO)</span>', 'Choose the disaster', 'Not listed / not sure')}
     <div class="two-col">
       <div class="field-group">
         <label class="field-label">Number of Stories</label>
@@ -2486,6 +2634,8 @@ function saveRapidStep0() {
   s.area = document.getElementById('as-area').value;
   s.buildingName = document.getElementById('as-bname').value;
   s.address = document.getElementById('as-addr').value;
+  s.gps = [document.getElementById('as-gps').value.trim()];
+  s.event = document.getElementById('as-event').value;
   s.stories = document.getElementById('as-stories').value;
   s.footprint = document.getElementById('as-footprint').value;
   s.units = document.getElementById('as-units').value;
@@ -2822,8 +2972,9 @@ function showFullForm() {
     </div>
     <div class="field-group">
       <label class="field-label">GPS <span style="font-weight:400;font-size:0.75rem;">(auto-filled from location, or enter manually)</span></label>
-      <input type="text" id="f-gps-0" value="${s.gps[0]||''}" placeholder="e.g. 44.2601, -72.5754">
+      <input type="text" id="f-gps-0" value="${s.gps[0]||''}" placeholder="e.g. 44.2601, -72.5754" onchange="gpsTyped(this,'f-event')">
     </div>
+    ${eventFieldHtml('f-event', s.event, 'Disaster <span>(routes this entry to the right SHPO)</span>', 'Choose the disaster', 'Not listed / not sure')}
 
     <div class="form-section-title">Building Description</div>
     <div class="two-col">
@@ -3053,6 +3204,7 @@ function saveFullForm() {
   s.buildingName = document.getElementById('f-bname').value || s.buildingName;
   s.address = document.getElementById('f-addr').value || s.address;
   s.gps = [document.getElementById('f-gps-0')?.value || ''];
+  s.event = document.getElementById('f-event')?.value || s.event;
   s.stories = document.getElementById('f-stories').value || s.stories;
   s.age = document.getElementById('f-age').value || s.age;
   s.constructionType = document.getElementById('f-construction').value || s.constructionType;
@@ -3867,6 +4019,8 @@ function showSyncPanel() {
           <div style="font-weight:600;font-size:0.85rem;">${escAttr(e.name)}</div>
           <div style="font-size:0.75rem;color:#767676;">${dt.toLocaleDateString(loc, {month:'short',day:'numeric'})} ${dt.toLocaleTimeString(loc, {hour:'numeric',minute:'2-digit'})}</div>
           <span style="font-size:0.7rem;font-weight:600;color:${statusColor};text-transform:uppercase;">${statusLabel}</span>
+          ${e.lastError ? `<div style="font-size:0.72rem;color:#B71C1C;margin-top:2px;">Last try failed: ${escAttr(e.lastError)}</div>` : ''}
+          ${e.data && (e.data.as?.event || e.data.hw?.event) ? `<div style="font-size:0.72rem;color:#4A5A68;">${escAttr(e.data.as?.event || e.data.hw?.event)}</div>` : ''}
         </div>
         <button onclick="deleteSyncEntry('${escAttr(e.id)}')" style="background:none;border:none;color:#B71C1C;font-size:0.78rem;cursor:pointer;min-height:32px;padding:6px 10px;">${t('saves_delete')}</button>
       </div>`;
@@ -3883,19 +4037,30 @@ async function attemptSync() {
   const queue = getSyncQueue();
   const pending = queue.filter(e => e.status === 'pending');
   if (!pending.length) return;
+  // text/plain keeps this a "simple" request (no CORS preflight, which Apps Script can't answer);
+  // the Apps Script reply is readable JSON. Only {status:'ok'} counts as synced. Anything else
+  // stays pending with its error recorded (shown in the sync panel) and retries next time.
   for (const entry of pending) {
     try {
       const resp = await fetch(SYNC_ENDPOINT, {
         method: 'POST',
-        headers: { 'Content-Type': 'text/plain' },
-        body: JSON.stringify(entry),
-        mode: 'no-cors'
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        body: JSON.stringify(entry)
       });
-      entry.status = 'synced';
-      entry.syncedAt = new Date().toISOString();
-    } catch (_) {
-      // Will retry next time we're online
+      let out = null;
+      try { out = await resp.json(); } catch (_) {}
+      if (resp.ok && out && out.status === 'ok') {
+        entry.status = 'synced';
+        entry.syncedAt = new Date().toISOString();
+        entry.routedTo = out.routedTo || '';
+        delete entry.lastError;
+      } else {
+        entry.lastError = (out && out.message) || `HTTP ${resp.status}`;
+      }
+    } catch (e) {
+      entry.lastError = String((e && e.message) || e);
     }
+    entry.lastAttempt = new Date().toISOString();
   }
   try { localStorage.setItem(LS_SYNC_KEY, JSON.stringify(queue)); } catch (_) {}
   updateSyncBadge();
@@ -3980,6 +4145,7 @@ loadKB();
 loadContentBundle();
 loadPaGuidance();
 loadPrograms();
+loadEvents();
 document.documentElement.lang = LANG;
 syncLangUI();
 updateSyncBadge();
