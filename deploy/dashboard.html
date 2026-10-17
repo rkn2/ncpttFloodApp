@@ -191,16 +191,17 @@
     <h1>SHPO Assessment Dashboard</h1>
     <div class="sub">Historic Flood Recovery Tool — Aggregated Field Assessments</div>
   </div>
-  <button class="refresh-btn" onclick="loadData()">↻ Refresh</button>
+  <label class="refresh-btn" for="csv-file" style="cursor:pointer;">📂 Open CSV</label>
 </header>
 
 <div id="setup-banner" class="setup-banner" style="display:none;">
-  <strong>Setup needed:</strong> Paste your Google Sheet's published CSV URL below.
-  <br>Go to your Sheet → File → Share → Publish to web → select the tab (e.g. "Rapid Triage") → CSV → Publish.
-  <br>Then paste the URL here:
-  <div style="margin-top:8px;display:flex;gap:8px;">
-    <input type="text" id="sheet-url" placeholder="https://docs.google.com/spreadsheets/d/.../pub?gid=...&single=true&output=csv" style="flex:1;padding:8px;font-size:0.82rem;">
-    <button class="refresh-btn" onclick="saveSheetUrl()">Save & Load</button>
+  <strong>Offline viewer.</strong> The usual way to see a disaster is its private map link (ask the
+  sender). This page is for a CSV you already have: in the disaster's Sheet, open the tab
+  (e.g. "Rapid Triage") → File → Download → CSV, or use "Download CSV" on the map page, then open it here.
+  The file is read in your browser and never uploaded.
+  <br><strong>Never use "Publish to web"</strong> on a disaster Sheet: it makes damaged-building locations public.
+  <div style="margin-top:8px;">
+    <input type="file" id="csv-file" accept=".csv,text/csv" onchange="loadFile(this.files[0])">
   </div>
 </div>
 
@@ -272,40 +273,24 @@ function init() {
     maxZoom: 18
   }).addTo(map);
 
-  const url = localStorage.getItem(LS_SHEET_URL);
-  if (url) {
-    loadData();
-  } else {
-    document.getElementById('setup-banner').style.display = '';
-    document.getElementById('map').style.display = 'none';
-  }
+  // Older versions stored a published-to-web CSV URL; drop it so the page never fetches public data.
+  try { localStorage.removeItem(LS_SHEET_URL); } catch (_) {}
+  document.getElementById('setup-banner').style.display = '';
 }
 
-function saveSheetUrl() {
-  const url = document.getElementById('sheet-url').value.trim();
-  if (!url) return;
-  localStorage.setItem(LS_SHEET_URL, url);
-  document.getElementById('setup-banner').style.display = 'none';
-  document.getElementById('map').style.display = '';
-  loadData();
-}
-
-async function loadData() {
-  const url = localStorage.getItem(LS_SHEET_URL);
-  if (!url) {
-    document.getElementById('setup-banner').style.display = '';
-    return;
-  }
-  try {
-    const resp = await fetch(url);
-    const text = await resp.text();
-    allRows = parseCSV(text);
+// Read a downloaded CSV locally (FileReader): nothing leaves the browser.
+function loadFile(file) {
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = () => {
+    allRows = parseCSV(String(reader.result));
     applyFilters();
     document.getElementById('controls').style.display = '';
-  } catch (e) {
-    document.getElementById('setup-banner').style.display = '';
-    document.getElementById('setup-banner').innerHTML = `<strong style="color:#B22222;">Error loading sheet:</strong> ${e.message}. Check the published CSV URL.`;
-  }
+  };
+  reader.onerror = () => {
+    document.getElementById('setup-banner').insertAdjacentHTML('beforeend', `<div style="color:#B22222;margin-top:6px;"><strong>Couldn't read the file:</strong> ${reader.error && reader.error.message}</div>`);
+  };
+  reader.readAsText(file);
 }
 
 function parseCSV(text) {
