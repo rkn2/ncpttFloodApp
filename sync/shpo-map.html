@@ -157,7 +157,8 @@ function render() {
 document.getElementById('dl').onclick = () => {
   const v = visible();
   const cols = [...new Set(v.flatMap(e => Object.keys(e.raw)))];
-  const q = s => '"' + String(s == null ? '' : s).replace(/"/g, '""') + '"';
+  // Cells starting with = + - @ would run as formulas when the CSV is opened in Excel/Sheets.
+  const q = s => { let t = String(s == null ? '' : s); if (/^[=+\-@\t\r]/.test(t)) t = "'" + t; return '"' + t.replace(/"/g, '""') + '"'; };
   const csv = ['Type,' + cols.map(q).join(',')].concat(v.map(e => q(e.label) + ',' + cols.map(c => q(e.raw[c])).join(','))).join('\n');
   const a = document.createElement('a');
   a.href = URL.createObjectURL(new Blob([csv], { type: 'text/csv' }));

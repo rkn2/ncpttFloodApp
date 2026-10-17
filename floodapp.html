@@ -3950,26 +3950,27 @@ function getSyncQueue() {
 
 function queueForSync(assessmentData, name) {
   const queue = getSyncQueue();
-  const stableKey = (assessmentData.as?.address || assessmentData.as?.buildingName || assessmentData.hw?.address || '').trim();
-  if (stableKey) {
-    const existing = queue.findIndex(e => e.stableKey === stableKey && e.status === 'pending');
-    if (existing >= 0) {
-      queue[existing].data = assessmentData;
-      queue[existing].queuedAt = new Date().toISOString();
-      queue[existing].name = name || queue[existing].name;
-      try { localStorage.setItem(LS_SYNC_KEY, JSON.stringify(queue)); } catch (_) {}
-      updateSyncBadge();
-      return;
-    }
+  // One queue entry (and so one Entry ID, one Sheet row) per building per mode. Re-queuing after an
+  // edit, a language switch or reopening results, even after a successful sync, reuses the entry
+  // and sets it back to pending, so the intake replaces the row instead of adding a duplicate.
+  const mode = assessmentData.mode || '';
+  const src = mode === 'homeowner' ? assessmentData.hw : assessmentData.as;
+  const addr = ((src && (src.address || src.buildingName)) || '').trim();
+  const stableKey = addr ? mode + ':' + addr : '';
+  const existing = stableKey ? queue.findIndex(e => e.stableKey === stableKey) : -1;
+  if (existing >= 0) {
+    Object.assign(queue[existing], { data: assessmentData, queuedAt: new Date().toISOString(),
+      name: name || queue[existing].name, status: 'pending' });
+  } else {
+    queue.push({
+      id: Date.now().toString(36) + Math.random().toString(36).slice(2, 6),
+      stableKey: stableKey,
+      queuedAt: new Date().toISOString(),
+      name: name || addr || 'assessment',
+      status: 'pending',
+      data: assessmentData
+    });
   }
-  queue.push({
-    id: Date.now().toString(36) + Math.random().toString(36).slice(2, 6),
-    stableKey: stableKey,
-    queuedAt: new Date().toISOString(),
-    name: name || assessmentData.as?.buildingName || assessmentData.hw?.address || 'assessment',
-    status: 'pending',
-    data: assessmentData
-  });
   try { localStorage.setItem(LS_SYNC_KEY, JSON.stringify(queue)); } catch (_) {}
   updateSyncBadge();
 }

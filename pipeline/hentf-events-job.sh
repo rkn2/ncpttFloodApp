@@ -6,7 +6,9 @@
 # 1. pull; 2. look for new DR numbers in FEMA-HENTF emails (silent Graph token only);
 # 3. rebuild events.json from OpenFEMA (also picks up counties added to known disasters);
 # 4. commit + push ONLY events-sources.json / events.json / deploy/events.json;
-# 5. leave Becca a vault task for each newly added disaster (sharing its Sheet with the SHPO is hers).
+# 5. leave Becca a vault task for each disaster that newly appears in events.json (sharing its
+#    Sheet with the SHPO is hers). Compared before/after the build, so a DR number OpenFEMA hadn't
+#    loaded yet on the day of the notice still gets its task on the day it validates.
 # The service worker serves events.json network-first, so no cache bump is needed.
 set -uo pipefail
 CLONE="$HOME/.local/share/floodapp-bot/ncpttFloodApp"
@@ -26,15 +28,19 @@ git pull -q --rebase || fail "git pull"
 
 out=$("$UV" run -q --with requests --with msal python3 pipeline/hentf_inbox.py) || { echo "$out"; fail "inbox check"; }
 echo "$out"
-added=$(echo "$out" | sed -n 's/^ADDED //p')
 
+ids() { python3 -c 'import json; print(" ".join(str(e["disasterNumber"]) for e in json.load(open("events.json"))["events"]))'; }
+before=" $(ids) "
 "$UV" run -q --with pyshp python3 pipeline/build_events.py || fail "build_events"
+new_events=""
+for n in $(ids); do case "$before" in *" $n "*) ;; *) new_events="$new_events $n" ;; esac; done
+new_events="${new_events# }"
 
 other=$(git status --porcelain | cut -c4- | grep -v -x -E "events-sources\.json|events\.json|deploy/events\.json" || true)
 [ -z "$other" ] || fail "unexpected changes, not committing: $other"
 if [ -n "$(git status --porcelain -- "${FILES[@]}")" ]; then
   msg="events: update declared disasters from HENTF notices and OpenFEMA"
-  [ -n "$added" ] && msg="events: add DR-${added// /, DR-} from HENTF notices"
+  [ -n "$new_events" ] && msg="events: add DR-${new_events// /, DR-} from HENTF notices"
   git add -- "${FILES[@]}" && git commit -q -m "$msg
 
 Automated by pipeline/hentf-events-job.sh (launchd com.becca.floodapp-hentf-events)." || fail "commit"
@@ -44,8 +50,8 @@ else
   echo "no changes"
 fi
 
-# A task for each new disaster that survived validation.
-for dr in $added; do
+# A task for each disaster new to events.json (validated by build_events.py).
+for dr in $new_events; do
   line=$(python3 - "$dr" <<'EOF'
 import json, sys
 d = json.load(open('events.json'))

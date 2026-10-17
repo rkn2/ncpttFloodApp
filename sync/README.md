@@ -27,6 +27,9 @@ limits ("Anyone" web-app access, or sharing outside psu.edu). Before anything el
 2. After step 2, share any test Sheet with a non-PSU address you control and open
    `<map URL>?sheet=<that Sheet's ID>` from that account. If sharing outside psu.edu is blocked,
    SHPO staff can't get in from a Penn State account either.
+3. The first time any account opens the map, Google asks it to allow the script to read Sheets,
+   probably with a **"Google hasn't verified this app"** warning (Advanced → Go to Flood app SHPO map).
+   The outside-account test must get past that screen. Warn SHPO staff to expect it once.
 
 ## Step 1: intake (once)
 

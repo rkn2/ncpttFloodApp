@@ -108,7 +108,7 @@ function eventSpreadsheet(eventId, ev) {
 // One row per field entry: a re-sent (edited) entry replaces its earlier row, matched on Entry ID.
 function upsert(ss, tab, headers, values, entryId) {
   headers = ['Entry ID'].concat(headers);
-  values = [entryId].concat(values);
+  values = [entryId].concat(values).map(cellSafe);
   let sheet = ss.getSheetByName(tab);
   if (!sheet) {
     sheet = ss.insertSheet(tab);
@@ -123,6 +123,14 @@ function upsert(ss, tab, headers, values, entryId) {
     }
   }
   sheet.appendRow(values);
+}
+
+// The endpoint is anonymous, so any field could carry a formula (e.g. =IMPORTDATA(...)) that
+// would run inside a Sheet shared with SHPO staff. A leading apostrophe makes Sheets store it as text.
+function cellSafe(v) {
+  if (v === null || v === undefined) return '';
+  const s = typeof v === 'string' ? v : String(v);
+  return /^[=+\-@\t\r]/.test(s) ? "'" + s : s;
 }
 
 function rapidRow(payload, as) {
