@@ -35,6 +35,16 @@ before=" $(ids) "
 new_events=""
 for n in $(ids); do case "$before" in *" $n "*) ;; *) new_events="$new_events $n" ;; esac; done
 new_events="${new_events# }"
+# A disaster that was listed and now isn't is far more likely an OpenFEMA hiccup (empty or partial
+# reply) than a real removal, and pushing it would silently stop field entries being tagged with it.
+# Refuse, restore the files, and notify. To accept a real removal: ALLOW_REMOVED=1 pipeline/hentf-events-job.sh
+after=" $(ids) "
+removed=""
+for n in $before; do case "$after" in *" $n "*) ;; *) removed="$removed DR-$n" ;; esac; done
+if [ -n "$removed" ] && [ "${ALLOW_REMOVED:-0}" != 1 ]; then
+  git checkout -- "${FILES[@]}"
+  fail "build dropped already-listed disaster(s):$removed (see DROPPED lines above); not pushing"
+fi
 
 other=$(git status --porcelain | cut -c4- | grep -v -x -E "events-sources\.json|events\.json|deploy/events\.json" || true)
 [ -z "$other" ] || fail "unexpected changes, not committing: $other"

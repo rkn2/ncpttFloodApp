@@ -1312,6 +1312,7 @@ const I18N = {
     // ── Sync ──
     sync_queued: "Queued for sync",
     sync_pending: "{n} assessment(s) pending sync",
+    sync_save_failed: "This entry could not be saved for sending: the phone's storage for this app may be full. Export or delete old saved assessments, then try again.",
     sync_none: "All synced",
   },
   es: {
@@ -1485,6 +1486,7 @@ const I18N = {
     // ── Sync ──
     sync_queued: "En cola para sincronizar",
     sync_pending: "{n} evaluación(es) pendiente(s) de sincronizar",
+    sync_save_failed: "No se pudo guardar esta entrada para enviarla: es posible que el almacenamiento del teléfono para esta aplicación esté lleno. Exporte o elimine evaluaciones guardadas antiguas y vuelva a intentarlo.",
     sync_none: "Todo sincronizado",
   },
 };
@@ -1687,6 +1689,8 @@ function showModeSelect() {
 
 function startHomeowner() {
   state.mode = 'homeowner'; state.step = 0;
+  // A new walkthrough (e.g. the next resident on a shared phone) must give its own consent.
+  delete state.hw.shareConsent;
   setChatVisible(true);
   badgeHtml('homeowner');
   showHwStep0();
@@ -2403,7 +2407,11 @@ function shareWithShpo() {
   if (!box.checked) { status.textContent = t('share_need_consent'); box.focus(); return; }
   state.hw.event = document.getElementById('hw-event').value;
   state.hw.shareConsent = { at: new Date().toISOString(), version: SHARE_CONSENT_VERSION, lang: LANG };
-  queueForSync(currentStateData(), state.hw.address || 'Homeowner report');
+  if (!queueForSync(currentStateData(), state.hw.address || 'Homeowner report')) {
+    delete state.hw.shareConsent;
+    status.textContent = t('sync_save_failed');
+    return;
+  }
   status.textContent = t('share_queued');
   box.disabled = true;
   attemptSync();
@@ -3204,7 +3212,7 @@ function saveFullForm() {
   s.buildingName = document.getElementById('f-bname').value || s.buildingName;
   s.address = document.getElementById('f-addr').value || s.address;
   s.gps = [document.getElementById('f-gps-0')?.value || ''];
-  s.event = document.getElementById('f-event')?.value || s.event;
+  s.event = document.getElementById('f-event')?.value ?? s.event;   // '' (Choose) clears it
   s.stories = document.getElementById('f-stories').value || s.stories;
   s.age = document.getElementById('f-age').value || s.age;
   s.constructionType = document.getElementById('f-construction').value || s.constructionType;
@@ -3944,35 +3952,76 @@ function checkShareHash() {
 const SYNC_ENDPOINT = ''; // ← paste your Google Apps Script web app URL here
 const LS_SYNC_KEY = 'floodapp_sync_queue';
 
+let syncRunning = false, syncAgain = false;   // see attemptSync
+
+// Only the active mode's answers leave the device: an assessor entry must not carry a homeowner's
+// address, GPS or answers left in memory from an earlier walkthrough, and vice versa.
+function syncPayload(data) {
+  const out = { mode: data.mode, step: data.step };
+  if (data.mode === 'homeowner') out.hw = data.hw; else out.as = data.as;
+  return out;
+}
+
+// One queue entry (one Entry ID, one Sheet row) per building per mode. Address AND building name,
+// so two buildings at one campus or church address get separate rows.
+function syncKey(data) {
+  const mode = data.mode || '';
+  const src = (mode === 'homeowner' ? data.hw : data.as) || {};
+  const addr = (src.address || '').trim(), bname = (src.buildingName || '').trim();
+  return addr || bname ? mode + ':' + addr + '|' + bname : '';
+}
+
 function getSyncQueue() {
-  try { return JSON.parse(localStorage.getItem(LS_SYNC_KEY) || '[]'); } catch { return []; }
+  let queue;
+  try { queue = JSON.parse(localStorage.getItem(LS_SYNC_KEY) || '[]'); } catch (e) {
+    console.error('Sync queue unreadable', e); return [];
+  }
+  // Entries queued by earlier versions: re-key them the current way (so a re-queue finds them
+  // instead of minting a second Entry ID) and drop the other mode's data they carried.
+  queue.forEach(e => {
+    if (!e.data) return;
+    e.data = syncPayload(e.data);
+    const key = syncKey(e.data);
+    if (key) e.stableKey = key;
+  });
+  return queue;
+}
+
+// Returns false (and tells the user) if the queue couldn't be written, e.g. storage full.
+function saveSyncQueue(queue) {
+  try { localStorage.setItem(LS_SYNC_KEY, JSON.stringify(queue)); return true; } catch (e) {
+    console.error('Sync queue not saved', e);
+    alert(t('sync_save_failed') + '\n\n' + String((e && e.message) || e));
+    return false;
+  }
 }
 
 function queueForSync(assessmentData, name) {
   const queue = getSyncQueue();
-  // One queue entry (and so one Entry ID, one Sheet row) per building per mode. Re-queuing after an
-  // edit, a language switch or reopening results, even after a successful sync, reuses the entry
-  // and sets it back to pending, so the intake replaces the row instead of adding a duplicate.
-  const mode = assessmentData.mode || '';
-  const src = mode === 'homeowner' ? assessmentData.hw : assessmentData.as;
-  const addr = ((src && (src.address || src.buildingName)) || '').trim();
-  const stableKey = addr ? mode + ':' + addr : '';
+  // Re-queuing after an edit, a language switch or reopening results, even after a successful
+  // sync, reuses the entry and sets it back to pending, so the intake replaces the row instead of
+  // adding a duplicate. queuedAt is the entry's version: attemptSync only marks it synced if it
+  // wasn't re-queued while its POST was in flight.
+  const data = syncPayload(assessmentData);
+  const stableKey = syncKey(data);
   const existing = stableKey ? queue.findIndex(e => e.stableKey === stableKey) : -1;
   if (existing >= 0) {
-    Object.assign(queue[existing], { data: assessmentData, queuedAt: new Date().toISOString(),
+    Object.assign(queue[existing], { data, queuedAt: new Date().toISOString(),
       name: name || queue[existing].name, status: 'pending' });
   } else {
     queue.push({
       id: Date.now().toString(36) + Math.random().toString(36).slice(2, 6),
       stableKey: stableKey,
       queuedAt: new Date().toISOString(),
-      name: name || addr || 'assessment',
+      name: name || stableKey.split(':').slice(1).join(':') || 'assessment',
       status: 'pending',
-      data: assessmentData
+      data
     });
   }
-  try { localStorage.setItem(LS_SYNC_KEY, JSON.stringify(queue)); } catch (_) {}
+  const saved = saveSyncQueue(queue);
+  if (syncRunning) syncAgain = true;   // a sync in progress picks this up in its next pass
   updateSyncBadge();
+  return saved;
 }
 
 function updateSyncBadge() {
@@ -3995,7 +4044,7 @@ function updateSyncBadge() {
 
 function deleteSyncEntry(id) {
   const queue = getSyncQueue().filter(e => e.id !== id);
-  try { localStorage.setItem(LS_SYNC_KEY, JSON.stringify(queue)); } catch (_) {}
+  saveSyncQueue(queue);
   updateSyncBadge();
   document.querySelector('[data-sync-panel]')?.remove();
   if (queue.length) showSyncPanel();
@@ -4035,36 +4084,54 @@ function showSyncPanel() {
 
 async function attemptSync() {
   if (!SYNC_ENDPOINT || !navigator.onLine) return;
-  const queue = getSyncQueue();
-  const pending = queue.filter(e => e.status === 'pending');
-  if (!pending.length) return;
-  // text/plain keeps this a "simple" request (no CORS preflight, which Apps Script can't answer);
-  // the Apps Script reply is readable JSON. Only {status:'ok'} counts as synced. Anything else
-  // stays pending with its error recorded (shown in the sync panel) and retries next time.
-  for (const entry of pending) {
-    try {
-      const resp = await fetch(SYNC_ENDPOINT, {
-        method: 'POST',
-        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-        body: JSON.stringify(entry)
-      });
-      let out = null;
-      try { out = await resp.json(); } catch (_) {}
-      if (resp.ok && out && out.status === 'ok') {
-        entry.status = 'synced';
-        entry.syncedAt = new Date().toISOString();
-        entry.routedTo = out.routedTo || '';
-        delete entry.lastError;
-      } else {
-        entry.lastError = (out && out.message) || `HTTP ${resp.status}`;
+  // One sync at a time (startup, 'online' and the share button can all fire); a request that
+  // arrives mid-sync runs another pass afterwards so nothing queued meanwhile waits for a reload.
+  if (syncRunning) { syncAgain = true; return; }
+  syncRunning = true;
+  try {
+    do {
+      syncAgain = false;
+      const pending = getSyncQueue().filter(e => e.status === 'pending');
+      // text/plain keeps this a "simple" request (no CORS preflight, which Apps Script can't answer);
+      // the Apps Script reply is readable JSON. Only {status:'ok'} counts as synced. Anything else
+      // stays pending with its error recorded (shown in the sync panel) and retries next time.
+      for (const sent of pending) {
+        const result = {};
+        try {
+          const resp = await fetch(SYNC_ENDPOINT, {
+            method: 'POST',
+            headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+            body: JSON.stringify(sent)
+          });
+          const text = await resp.text();
+          let out = null;
+          try { out = JSON.parse(text); } catch (_) { /* not JSON: reported below with the body */ }
+          if (resp.ok && out && out.status === 'ok') result.ok = out;
+          else result.error = (out && out.message) || `HTTP ${resp.status}: ${text.slice(0, 200)}`;
+        } catch (e) {
+          result.error = String((e && e.message) || e);
+        }
+        // Write back into the queue as it is NOW, not the copy read before the await: entries
+        // queued, edited or deleted while this POST was in flight must survive.
+        const queue = getSyncQueue();
+        const entry = queue.find(e => e.id === sent.id);
+        if (!entry) continue;   // deleted meanwhile
+        entry.lastAttempt = new Date().toISOString();
+        if (result.ok) {
+          entry.routedTo = result.ok.routedTo || '';
+          delete entry.lastError;
+          // Re-queued during the POST: the Sheet has the older version, so keep it pending.
+          if (entry.queuedAt === sent.queuedAt) { entry.status = 'synced'; entry.syncedAt = entry.lastAttempt; }
+        } else {
+          entry.lastError = result.error;
+        }
+        saveSyncQueue(queue);
       }
-    } catch (e) {
-      entry.lastError = String((e && e.message) || e);
-    }
-    entry.lastAttempt = new Date().toISOString();
+    } while (syncAgain);
+  } finally {
+    syncRunning = false;
+    updateSyncBadge();
   }
-  try { localStorage.setItem(LS_SYNC_KEY, JSON.stringify(queue)); } catch (_) {}
-  updateSyncBadge();
 }
 
 window.addEventListener('online', attemptSync);

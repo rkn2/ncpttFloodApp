@@ -81,7 +81,14 @@ def hentf_notices(tok):
     h = {'Authorization': f'Bearer {tok}', 'ConsistencyLevel': 'eventual',
          'Prefer': 'outlook.body-content-type="text"'}
     url = f'{GRAPH}/me/messages'
-    params = {'$search': '"fema-hentf"', '$top': 50, '$select': 'subject,receivedDateTime,body'}
+    params = {'$search': '"fema-hentf"', '$top': 50, '$select': 'subject,receivedDateTime,body,parentFolderId'}
+    # Skip Becca's own replies and drafts in a HENTF thread: their subjects would be published.
+    skip = set()
+    for folder in ('sentitems', 'drafts'):
+        r = requests.get(f'{GRAPH}/me/mailFolders/{folder}', headers=h, params={'$select': 'id'}, timeout=60)
+        if r.status_code != 200:
+            sys.exit(f'Graph folder lookup ({folder}) failed: {r.status_code} {r.text}')
+        skip.add(r.json()['id'])
     out = []
     while url:
         r = requests.get(url, headers=h, params=params, timeout=60)
@@ -89,6 +96,8 @@ def hentf_notices(tok):
             sys.exit(f'Graph search failed: {r.status_code} {r.text}')
         d = r.json()
         for m in d['value']:
+            if m.get('parentFolderId') in skip:
+                continue
             body = m['body']['content']
             if HENTF_ADDR in body.lower() and SUBJECT_RE.search(m['subject']):
                 # No sender names: events-sources.json is committed to a public repo.

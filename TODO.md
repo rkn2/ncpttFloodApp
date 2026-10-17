@@ -16,6 +16,14 @@
 - [x] `sync/intake.gs` (per-disaster Sheets, registry, consent check, upsert) and `sync/shpo-map.*` (private map per disaster). Tested with fakes and sample data only; nothing server-side has run until Becca deploys it
 - [x] Daily job `com.becca.floodapp-hentf-events` (see `pipeline/hentf-events-job.sh`)
 
+## Adversarial review of the SHPO-map work (2026-10-17 evening)
+Fixed: sync loop no longer loses entries queued or edited mid-sync; queue key is address + building name; intake rejects `constructor`-style event ids; re-tagging an entry's disaster removes its old row; only the active mode's data is sent; homeowner consent resets on a new walkthrough; storage-full is reported, not swallowed; old queue entries re-keyed; job refuses to push when a listed disaster disappears (`ALLOW_REMOVED=1` to accept); HENTF search skips Sent Items and Drafts. Becca: no history rewrite for the old `forwarded_by` names.
+- [ ] Before deploying `sync/shpo-map.gs`: add an `appsscript.json` limiting it to `spreadsheets.readonly` + `userinfo.email` (it currently asks SHPO viewers for full Sheets access)
+- [ ] README: warn that disaster Sheets inherit `FOLDER_ID`'s sharing; list the Unassigned Sheet under "never share"; note an anonymous endpoint means anyone can add rows and anyone who sees an Entry ID can overwrite it
+- [ ] Job: a failed push leaves a local commit that later runs report as "no changes", and that run's new-disaster tasks are never filed; a rebase conflict leaves the bot clone stuck
+- [ ] Check ~/Library/Logs/floodapp-hentf on 2026-10-18: first launchd run (push credentials, iCloud vault write, notifications untested under launchd)
+- [ ] `share_queued` says answers go "next time you're online", which is only true once `SYNC_ENDPOINT` is set
+
 ## Decisions from the 2026-10-17 entailment review (Becca)
 Source: `docs/reviews/2026-10-17-entailment-review.md`, which has the item, quote, problem and a suggested rewording for each. `pa-guidance.json`: 29 of 56 items fully supported; `content-bundle.json` unaudited items: 9 of 11. Any rewording must be mirrored in the `.es.json` file with identical citations.
 - [ ] **SHPO advice** in `ehp_first.summary`, `ehp_first.do[0]`, `notes.age45_pa`, `notes.age45_private`: no cited quote tells owners to contact the SHPO (FEMA consults the SHPO). Also `age45_pa` "need" → "may need" (in-kind repair gets streamlined review regardless of age)

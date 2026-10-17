@@ -31,14 +31,21 @@ function doPost(e) {
     }
 
     const wanted = (kind === 'homeowner' ? hw.event : as.event) || '';
-    const ev = listedEvents()[wanted];
+    // own-property check: a plain object also answers to 'constructor', 'toString', '__proto__'...
+    const listed = listedEvents();
+    const ev = Object.prototype.hasOwnProperty.call(listed, wanted) ? listed[wanted] : null;
     const lock = LockService.getScriptLock();
     lock.waitLock(20000);   // find-or-create + upsert must not interleave
     try {
-      const ss = eventSpreadsheet(ev ? wanted : UNASSIGNED, ev);
+      const target = ev ? wanted : UNASSIGNED;
+      const ss = eventSpreadsheet(target, ev);
       const row = kind === 'rapid' ? rapidRow(payload, as) : kind === 'full' ? fullRow(payload, as) : homeownerRow(payload, hw);
       upsert(ss, row.tab, row.headers, row.values, payload.id || '');
-      return reply({ status: 'ok', routedTo: ev ? wanted : UNASSIGNED });
+      // The entry's disaster changed since its last sync (Unassigned -> a DR, or a wrong DR fixed):
+      // remove its old row so another state's SHPO isn't left holding a copy.
+      const moved = payload.routedTo && payload.routedTo !== target && payload.id
+        ? removeEntry(String(payload.routedTo), String(payload.id)) : 0;
+      return reply({ status: 'ok', routedTo: target, removedFromPrevious: moved });
     } finally {
       lock.releaseLock();
     }
@@ -103,6 +110,26 @@ function eventSpreadsheet(eventId, ev) {
                  ss.getUrl(), ss.getId(), new Date().toISOString(),
                  mapBase ? mapBase + '?sheet=' + ss.getId() : '(set MAP_URL script property)', '']);
   return ss;
+}
+
+// Delete an entry's rows from a disaster Sheet it was filed in before. Only looks the Sheet up in
+// the registry; never creates one. Returns the number of rows removed.
+function removeEntry(eventId, entryId) {
+  const reg = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(REGISTRY_TAB);
+  if (!reg || !entryId) return 0;
+  const rows = reg.getDataRange().getValues();
+  let removed = 0;
+  for (let i = 1; i < rows.length; i++) {
+    if (rows[i][0] !== eventId) continue;
+    SpreadsheetApp.openById(rows[i][5]).getSheets().forEach(sheet => {
+      if (sheet.getName() === 'About' || sheet.getLastRow() < 2) return;
+      const ids = sheet.getRange(2, 1, sheet.getLastRow() - 1, 1).getValues();
+      for (let r = ids.length - 1; r >= 0; r--) {
+        if (ids[r][0] === entryId) { sheet.deleteRow(r + 2); removed++; }
+      }
+    });
+  }
+  return removed;
 }
 
 // One row per field entry: a re-sent (edited) entry replaces its earlier row, matched on Entry ID.
