@@ -224,23 +224,24 @@
   .sev-btn {
     border: 1.5px solid #CCC;
     border-radius: 4px;
-    padding: 3px 8px;
+    padding: 6px 10px;
+    min-height: 32px;
     font-size: 0.72rem;
     font-weight: 600;
     cursor: pointer;
     background: #FFF;
-    color: #666;
+    color: #595959;
     transition: all 0.1s;
   }
   .sev-btn.sel-none { border-color: #9E9E9E; background: #F5F5F5; color: #424242; }
   .sev-btn.sel-minor { border-color: #4CAF50; background: #E8F5E9; color: #2E7D32; }
-  .sev-btn.sel-moderate { border-color: #FF9800; background: #FFF3E0; color: #E65100; }
+  .sev-btn.sel-moderate { border-color: #FF9800; background: #FFF3E0; color: #A63C00; }
   .sev-btn.sel-severe { border-color: #F44336; background: #FFEBEE; color: #B71C1C; }
 
   @media (max-width: 480px) {
     .damage-row { flex-direction: column; align-items: stretch; }
     .severity-btns { width: 100%; }
-    .sev-btn { flex: 1; padding: 8px 4px; font-size: 0.75rem; }
+    .sev-btn { flex: 1; padding: 8px 4px; min-height: 44px; font-size: 0.75rem; }
   }
 
   /* ── Severity info modal ── */
@@ -336,7 +337,7 @@
     cursor: pointer;
     user-select: none;
   }
-  .result-panel-header .toggle { margin-left: auto; font-size: 0.8rem; color: #767676; }
+  .result-panel-header .toggle { margin-left: auto; font-size: 0.8rem; color: #595959; }
   .result-panel-body { padding: 0 16px 16px; }
 
   .assistance-card {
@@ -345,7 +346,7 @@
     padding: 14px;
     margin-bottom: 12px;
   }
-  .assistance-card h4 { font-size: 0.88rem; font-weight: 700; margin-bottom: 4px; }
+  .assistance-card h4, .assistance-card .assistance-name { font-size: 0.88rem; font-weight: 700; margin-bottom: 4px; }
   .assistance-card .tag {
     display: inline-block;
     font-size: 0.68rem;
@@ -387,7 +388,7 @@
     align-items: center;
     gap: 8px;
   }
-  .guidance-card-header .toggle { margin-left: auto; font-size: 0.8rem; color: #767676; }
+  .guidance-card-header .toggle { margin-left: auto; font-size: 0.8rem; color: #595959; }
   .guidance-card-body { padding: 14px; display: none; }
   .guidance-card-body.open { display: block; }
 
@@ -421,13 +422,21 @@
     font-style: italic;
   }
   .cite {
-    cursor: help;
+    cursor: pointer;
     font-size: 0.82em;
-    opacity: 0.65;
+    opacity: 0.75;
     margin-left: 2px;
     text-decoration: none;
+    background: none; border: none; padding: 2px 4px; min-width: 24px; min-height: 24px;
+    font-family: inherit; line-height: 1;
   }
-  .cite:hover { opacity: 1; }
+  .cite:hover, .cite[aria-expanded="true"] { opacity: 1; }
+  .cite:focus-visible { outline: 2px solid var(--hw-accent); outline-offset: 1px; }
+  .cite-quote { display: block; margin: 4px 0 6px; padding-left: 8px; border-left: 2px solid #999;
+    font-size: 0.76rem; font-style: italic; color: #333; }
+  .cite-quote[hidden] { display: none; }
+  .field-error { color: var(--danger); font-size: 0.8rem; font-weight: 600; margin-top: 4px; }
+  .print-only { display: none; }
   /* Fieldsets styled like the other field groups (WCAG: radio groups need a fieldset + legend) */
   fieldset.field-group { border: 0; padding: 0; margin: 0 0 20px; min-width: 0; }
   fieldset.field-group legend { padding: 0; }
@@ -451,7 +460,7 @@
   #lang-switcher button {
     border: 1px solid rgba(255,255,255,0.5);
     background: transparent; color: inherit;
-    font-size: 0.72rem; font-weight: 600; padding: 3px 8px;
+    font-size: 0.72rem; font-weight: 600; padding: 6px 10px; min-height: 32px; min-width: 36px;
     cursor: pointer; border-radius: 4px;
   }
   #lang-switcher button.lang-active { background: rgba(255,255,255,0.85); color: #2E5A6E; }
@@ -688,7 +697,7 @@
   .save-item-meta { font-size: 0.72rem; color: #767676; margin-bottom: 4px; }
   .save-item-actions { display: flex; gap: 8px; }
   .save-item-actions button {
-    font-size: 0.75rem; padding: 3px 10px;
+    font-size: 0.75rem; padding: 6px 12px; min-height: 32px;
     border: 1px solid #D0D5DD; border-radius: 6px;
     background: #F7F8FA; cursor: pointer; font-family: inherit;
   }
@@ -717,6 +726,8 @@
     .card { box-shadow: none; margin: 0; border: none; }
     .guidance-card-body { display: block !important; }
     .result-panel-body { display: block !important; }
+    .print-only { display: block !important; margin-bottom: 12px; font-size: 0.85rem; }
+    .print-only strong { font-size: 1rem; }
   }
   .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
   .skip-link { position: absolute; left: -9999px; top: auto; width: 1px; height: 1px; overflow: hidden; z-index: 9999; }
@@ -752,14 +763,14 @@
 
 <!-- Saves panel -->
 <button id="saves-btn" onclick="toggleSavesPanel()">💾 Saves</button>
-<div id="saves-panel">
+<div id="saves-panel" role="complementary" aria-label="Saved assessments">
   <div id="saves-header">
     💾 Saved Assessments
     <button onclick="toggleSavesPanel()" style="background:none;border:none;color:#FFF;font-size:1.1rem;cursor:pointer;line-height:1;">✕</button>
   </div>
   <div id="saves-body">
     <div id="saves-name-row">
-      <input id="saves-name-input" type="text" placeholder="Name this assessment…">
+      <input id="saves-name-input" type="text" placeholder="Name this assessment…" aria-label="Name this assessment">
       <button onclick="saveAssessment(document.getElementById('saves-name-input').value)" style="background:#2E6DA4;color:#FFF;border:none;border-radius:8px;padding:0 14px;font-size:0.8rem;font-weight:600;cursor:pointer;white-space:nowrap;">Save</button>
     </div>
     <div id="saves-list"></div>
@@ -772,7 +783,7 @@
 
 <!-- Guided Q&A panel -->
 <button id="guide-btn" onclick="toggleGuide()" style="display:none">❓ Quick Answers</button>
-<div id="guide-panel">
+<div id="guide-panel" role="complementary" aria-label="Quick answers">
   <div id="guide-header">
     <div>
       <div id="guide-title">What do you need help with?</div>
@@ -800,8 +811,9 @@
   <button id="install-dismiss" type="button" onclick="dismissInstall()"></button>
 </div>
 <div id="progress-bar"><div id="progress-fill" style="width:0%"></div></div>
-<div id="step-indicator"></div>
+<div id="step-indicator" role="region" aria-label="Progress"></div>
 
+<div id="print-context" class="print-only"></div>
 <div id="screens" role="main" aria-live="polite"></div>
 
 <script>
@@ -1072,6 +1084,8 @@ const I18N = {
     install_android: "<strong>Install this app</strong> so it opens from your home screen and works without internet after a flood.",
     install_ios: "<strong>Install this app</strong> so it works without internet: tap the Share button <span aria-hidden=\"true\">(□↑)</span>, then <strong>Add to Home Screen</strong>.",
     install_btn: "Install",
+    cite_show: "Show source quote",
+    print_assessed: "Printed",
     install_dismiss: "Not now",
     badge_homeowner: "Homeowner",
     badge_assessor: "Assessor",
@@ -1178,7 +1192,7 @@ const I18N = {
     guidance_do: "✔ Do This",
     guidance_dont: "✖ Do NOT Do This",
     guidance_pro: "⚠ Call a Professional",
-    guidance_sources: "Every recommendation above is sourced from authoritative preservation and disaster-recovery documents (hover 📄 for the exact quote). Sources:",
+    guidance_sources: "Every recommendation above is sourced from authoritative preservation and disaster-recovery documents (tap 📄 for the exact quote). Sources:",
     // ── Severity modal ──
     sev_title: "What do the damage levels mean?",
     sev_none: "None",
@@ -1231,6 +1245,8 @@ const I18N = {
     install_android: "<strong>Instale esta aplicación</strong> para abrirla desde su pantalla de inicio y usarla sin internet después de una inundación.",
     install_ios: "<strong>Instale esta aplicación</strong> para usarla sin internet: toque el botón Compartir <span aria-hidden=\"true\">(□↑)</span> y luego <strong>Agregar a pantalla de inicio</strong>.",
     install_btn: "Instalar",
+    cite_show: "Mostrar la cita de la fuente",
+    print_assessed: "Impreso",
     install_dismiss: "Ahora no",
     badge_homeowner: "Propietario",
     badge_assessor: "Evaluador",
@@ -1337,7 +1353,7 @@ const I18N = {
     guidance_do: "✔ Haga Esto",
     guidance_dont: "✖ NO Haga Esto",
     guidance_pro: "⚠ Llame a un Profesional",
-    guidance_sources: "Cada recomendación anterior proviene de documentos autorizados de preservación y recuperación ante desastres (pase el cursor sobre 📄 para la cita exacta). Fuentes:",
+    guidance_sources: "Cada recomendación anterior proviene de documentos autorizados de preservación y recuperación ante desastres (toque 📄 para ver la cita exacta). Fuentes:",
     // ── Severity modal ──
     sev_title: "¿Qué significan los niveles de daño?",
     sev_none: "Ninguno",
@@ -1418,7 +1434,7 @@ function syncLangUI() {
   const savesHeader = document.getElementById('saves-header');
   if (savesHeader) savesHeader.firstChild.textContent = '💾 ' + t('saves_title') + ' ';
   const savesInput = document.getElementById('saves-name-input');
-  if (savesInput) savesInput.placeholder = t('saves_ph');
+  if (savesInput) { savesInput.placeholder = t('saves_ph'); savesInput.setAttribute('aria-label', t('saves_ph').replace(/…$/, '')); }
   const saveBtn = document.querySelector('#saves-name-row button');
   if (saveBtn) saveBtn.textContent = t('saves_btn');
   const exportBtn = document.querySelector('#saves-export-row button:first-child');
@@ -1825,14 +1841,14 @@ function showHwStep1() {
     <div class="field-group">
       <label class="field-label">${t('building_address_label')} <span>${t('building_address_hint')}</span></label>
       <div style="display:flex;gap:8px;align-items:stretch;">
-        <input type="text" id="hw-address" value="${state.hw.address}" placeholder="${t('building_address_ph')}" style="flex:1;">
+        <input type="text" id="hw-address" autocomplete="street-address" value="${state.hw.address}" placeholder="${t('building_address_ph')}" style="flex:1;">
         <button type="button" id="locate-btn" onclick="useMyLocation()" style="background:var(--hw-accent);color:#fff;border:none;border-radius:8px;padding:0 12px;font-size:0.78rem;font-weight:600;cursor:pointer;white-space:nowrap;">📍 ${t('locate_btn')}</button>
       </div>
       <div id="locate-status" style="font-size:0.75rem;color:#767676;margin-top:4px;display:none;"></div>
     </div>
     <div class="field-group">
       <label class="field-label">${t('building_state_label')}</label>
-      <select id="hw-state">
+      <select id="hw-state" autocomplete="address-level1">
         <option value="">${t('building_state_select')}</option>
         ${usStates().map(s => `<option value="${s.v}" ${state.hw.state===s.v?'selected':''}>${s.l}</option>`).join('')}
       </select>
@@ -1986,7 +2002,7 @@ function saveHwStep1() {
   state.hw.designations = [...document.querySelectorAll('input[name="hw-desig"]:checked')].map(i=>i.value);
   state.hw.owner = document.querySelector('input[name="hw-owner"]:checked')?.value || '';
   state.hw.age = document.querySelector('input[name="hw-age"]:checked')?.value || '';
-  if (!state.hw.state) { alert(t('building_state_required')); return; }
+  if (!state.hw.state) { fieldError('hw-state', t('building_state_required')); return; }
   state.hw.walkAnswers = state.hw.walkAnswers || {};
   state.hw.walkIdx = 0;
   showWalkQuestion();
@@ -2113,7 +2129,7 @@ function showHwResults() {
     const tagLabel = p.tag === 'grant' ? t('tag_grant') : p.tag === 'loan' ? t('tag_loan') : p.tag === 'fema' ? t('tag_fema') : t('tag_local');
     return `<div class="assistance-card">
       <span class="tag ${tagCls}">${tagLabel}</span>
-      <h4>${tF(p, 'name')}</h4>
+      <h3 class="assistance-name">${tF(p, 'name')}</h3>
       <p>${tF(p, 'desc')}</p>
       ${p.note ? `<p style="color:#666;font-style:italic;font-size:0.79rem;">${tF(p, 'note')}</p>` : ''}
       <a href="${p.url}" target="_blank" rel="noopener">${t('apply_learn')} <span class="sr-only">(opens in new tab)</span></a>
@@ -2338,11 +2354,11 @@ function showRapidStep0() {
     <div class="two-col">
       <div class="field-group">
         <label class="field-label">Inspector Name</label>
-        <input type="text" id="as-inspector" value="${s.inspector}" placeholder="Full name">
+        <input type="text" id="as-inspector" autocomplete="name" value="${s.inspector}" placeholder="Full name">
       </div>
       <div class="field-group">
         <label class="field-label">Affiliation / Organization</label>
-        <input type="text" id="as-affiliation" value="${s.affiliation}" placeholder="e.g. VT SHPO, FEMA, AmeriCorps">
+        <input type="text" id="as-affiliation" autocomplete="organization" value="${s.affiliation}" placeholder="e.g. VT SHPO, FEMA, AmeriCorps">
       </div>
     </div>
     <div class="two-col">
@@ -2367,7 +2383,7 @@ function showRapidStep0() {
     </div>
     <div class="field-group">
       <label class="field-label">Address</label>
-      <input type="text" id="as-addr" value="${s.address}" placeholder="Street address, city, state, ZIP">
+      <input type="text" id="as-addr" autocomplete="street-address" value="${s.address}" placeholder="Street address, city, state, ZIP">
     </div>
     <div class="two-col">
       <div class="field-group">
@@ -2481,7 +2497,7 @@ function saveRapidStep0() {
   s.occupancy = document.getElementById('as-occupancy').value;
   s.wallFinish = document.getElementById('as-wallfinish').value;
   s.historicStatus = [...document.querySelectorAll('input[name="as-hist"]:checked')].map(i=>i.value);
-  if (!s.address) { alert('Please enter a building address.'); return; }
+  if (!s.address) { fieldError(document.getElementById('as-addr') ? 'as-addr' : 'f-addr', 'Please enter a building address.'); return; }
   showRapidStep1();
 }
 
@@ -2785,7 +2801,7 @@ function showFullForm() {
     <div class="two-col">
       <div class="field-group">
         <label class="field-label">Inspector Name</label>
-        <input type="text" id="f-inspector" value="${s.inspector}" placeholder="Full name">
+        <input type="text" id="f-inspector" autocomplete="name" value="${s.inspector}" placeholder="Full name">
       </div>
       <div class="field-group">
         <label class="field-label">Date</label>
@@ -2799,7 +2815,7 @@ function showFullForm() {
     <div class="field-group">
       <label class="field-label">Address</label>
       <div style="display:flex;gap:8px;align-items:stretch;">
-        <input type="text" id="f-addr" value="${s.address}" placeholder="Full address" style="flex:1;">
+        <input type="text" id="f-addr" autocomplete="street-address" value="${s.address}" placeholder="Full address" style="flex:1;">
         <button type="button" id="as-locate-btn" onclick="useAssessorLocation()" style="background:var(--as-accent);color:#fff;border:none;border-radius:8px;padding:0 12px;font-size:0.78rem;font-weight:600;cursor:pointer;white-space:nowrap;">📍 ${t('locate_btn')}</button>
       </div>
       <div id="as-locate-status" style="font-size:0.75rem;color:#767676;margin-top:4px;display:none;"></div>
@@ -3055,7 +3071,7 @@ function saveFullForm() {
   s.contentsCond = document.querySelector('input[name="f-ccond"]:checked')?.value || '';
   s.finalPosting = document.querySelector('input[name="f-post"]:checked')?.value || '';
   s.recommendations = document.getElementById('f-recs').value;
-  if (!s.address) { alert('Please enter a building address.'); return; }
+  if (!s.address) { fieldError(document.getElementById('as-addr') ? 'as-addr' : 'f-addr', 'Please enter a building address.'); return; }
   showFullResult();
 }
 
@@ -3310,12 +3326,22 @@ function sourceLabel(fn) {
   return SOURCE_TITLES[fn] || fn.replace(/\.pdf$/i,'').replace(/[-_]/g,' ')
            .replace(/\b\w/g, c => c.toUpperCase()).slice(0, 60);
 }
-// Render one cited do/dont item. The 📄 tooltip shows the verbatim source quote — the provenance.
+// 📄 citation marker: a button that reveals the verbatim source quote (the provenance) on tap or
+// keyboard, since hover-only title tooltips don't work on phones or with screen readers.
+function citeHtml(c) {
+  const q = '“' + c.quote + '” — ' + sourceLabel(c.source_file);
+  return `<button type="button" class="cite" aria-expanded="false" aria-label="${escAttr(t('cite_show'))}" title="${escAttr(q)}" onclick="toggleCite(this)">📄</button>` +
+    `<span class="cite-quote" lang="en" hidden>${escAttr(q)}</span>`;
+}
+function toggleCite(btn) {
+  const quote = btn.nextElementSibling;
+  const open = btn.getAttribute('aria-expanded') !== 'true';
+  btn.setAttribute('aria-expanded', open);
+  if (quote) quote.hidden = !open;
+}
+// Render one cited do/dont item.
 function citedItemHtml(item) {
-  const cites = (item.citations || []).map(c =>
-    `<span class="cite" title="${escAttr('“'+c.quote+'” — '+sourceLabel(c.source_file))}">📄</span>`
-  ).join('');
-  return `<li>${item.text} ${cites}</li>`;
+  return `<li>${item.text} ${(item.citations || []).map(citeHtml).join('')}</li>`;
 }
 // Guidance-card body: prefer the compiled cited bundle; fall back to the built-in guidance.
 function guidanceBodyHtml(catKey) {
@@ -3510,9 +3536,7 @@ const GUIDE_TOPICS = [
       if (!allDonts.length) return '<p style="color:#767676;">No guidance loaded.</p>';
       return `<p style="font-size:0.85rem;color:#555;margin-bottom:12px;">These are the most important things to <strong>avoid</strong> after a flood in a historic building:</p>` +
         allDonts.map(d => {
-          const cites = (d.citations || []).map(c =>
-            `<span class="cite" title="${escAttr('"'+c.quote+'" — '+sourceLabel(c.source_file))}">📄</span>`
-          ).join('');
+          const cites = (d.citations || []).map(citeHtml).join('');
           return `<div style="background:#FFEBEE;border-left:3px solid var(--danger);border-radius:6px;padding:8px 12px;margin-bottom:6px;font-size:0.82rem;line-height:1.5;">
             <span style="font-size:0.7rem;font-weight:600;color:#767676;text-transform:uppercase;">${d.label}</span><br>
             ${d.text} ${cites}
@@ -3819,9 +3843,9 @@ function deleteSyncEntry(id) {
 function showSyncPanel() {
   document.querySelector('[data-sync-panel]')?.remove();
   const queue = getSyncQueue();
-  let html = `<div data-sync-panel style="position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.4);z-index:2000;display:flex;align-items:center;justify-content:center;" onclick="if(event.target===this)this.remove()">
-    <div style="background:#fff;border-radius:12px;padding:20px;max-width:400px;width:90%;max-height:70vh;overflow-y:auto;" onclick="event.stopPropagation()">
-      <h3 style="margin-bottom:12px;">SHPO Sync</h3>`;
+  let html = `<div data-sync-panel style="position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.4);z-index:2000;display:flex;align-items:center;justify-content:center;" onclick="if(event.target===this)this.remove()" onkeydown="if(event.key==='Escape')this.remove()">
+    <div role="dialog" aria-modal="true" aria-labelledby="sync-title" style="background:#fff;border-radius:12px;padding:20px;max-width:400px;width:90%;max-height:70vh;overflow-y:auto;" onclick="event.stopPropagation()">
+      <h3 id="sync-title" tabindex="-1" style="margin-bottom:12px;">SHPO Sync</h3>`;
   if (!queue.length) {
     html += `<p style="color:#767676;font-size:0.85rem;">${t('sync_none')}</p>`;
   } else {
@@ -3836,13 +3860,14 @@ function showSyncPanel() {
           <div style="font-size:0.75rem;color:#767676;">${dt.toLocaleDateString(loc, {month:'short',day:'numeric'})} ${dt.toLocaleTimeString(loc, {hour:'numeric',minute:'2-digit'})}</div>
           <span style="font-size:0.7rem;font-weight:600;color:${statusColor};text-transform:uppercase;">${statusLabel}</span>
         </div>
-        <button onclick="deleteSyncEntry('${escAttr(e.id)}')" style="background:none;border:none;color:#B71C1C;font-size:0.78rem;cursor:pointer;">${t('saves_delete')}</button>
+        <button onclick="deleteSyncEntry('${escAttr(e.id)}')" style="background:none;border:none;color:#B71C1C;font-size:0.78rem;cursor:pointer;min-height:32px;padding:6px 10px;">${t('saves_delete')}</button>
       </div>`;
     });
   }
   html += `<button onclick="this.closest('[data-sync-panel]').remove()" style="margin-top:8px;background:#2E6DA4;color:#fff;border:none;border-radius:8px;padding:8px 16px;font-size:0.85rem;cursor:pointer;width:100%;">OK</button>
     </div></div>`;
   document.body.insertAdjacentHTML('beforeend', html);
+  document.getElementById('sync-title').focus();
 }
 
 async function attemptSync() {
@@ -3876,6 +3901,64 @@ function autoQueueIfAssessor() {
     queueForSync(currentStateData(), state.as.buildingName || state.as.address);
   }
 }
+
+// ── FORM ACCESSIBILITY ──────────────────────
+// Screens are rendered from template strings with <label class="field-label"> above each control.
+// After every render: point single-control labels at their control (for=), and turn checkbox /
+// radio groups into labelled groups (role=group + aria-labelledby), the ARIA equivalent of
+// fieldset/legend, so screen readers announce the question with each option.
+let labelSeq = 0;
+function wireFieldLabels(root) {
+  root.querySelectorAll('.field-group > label.field-label:not([data-wired])').forEach(label => {
+    label.dataset.wired = '1';
+    const group = label.parentElement;
+    const options = group.querySelector('.radio-group, .check-group');
+    if (options) {
+      if (!label.id) label.id = 'fl-' + (++labelSeq);
+      options.setAttribute('role', options.classList.contains('radio-group') ? 'radiogroup' : 'group');
+      options.setAttribute('aria-labelledby', label.id);
+      return;
+    }
+    const ctl = group.querySelector('input:not([type=hidden]):not([type=checkbox]):not([type=radio]), select, textarea');
+    if (!ctl) return;
+    if (!ctl.id) ctl.id = 'fc-' + (++labelSeq);
+    label.htmlFor = ctl.id;
+  });
+}
+// Inline, announced error next to a required field (replaces alert()).
+function fieldError(id, msg) {
+  const ctl = document.getElementById(id);
+  if (!ctl) return;
+  const group = ctl.closest('.field-group') || ctl.parentElement;
+  let err = document.getElementById(id + '-err');
+  if (!err) {
+    err = document.createElement('div');
+    err.id = id + '-err'; err.className = 'field-error'; err.setAttribute('role', 'alert');
+    group.appendChild(err);
+    ctl.addEventListener('input', () => clearFieldError(id), { once: true });
+    ctl.addEventListener('change', () => clearFieldError(id), { once: true });
+  }
+  err.textContent = msg;
+  ctl.setAttribute('aria-invalid', 'true');
+  ctl.setAttribute('aria-describedby', err.id);
+  ctl.focus();
+}
+function clearFieldError(id) {
+  const ctl = document.getElementById(id), err = document.getElementById(id + '-err');
+  if (err) err.remove();
+  if (ctl) { ctl.removeAttribute('aria-invalid'); ctl.removeAttribute('aria-describedby'); }
+}
+new MutationObserver(() => wireFieldLabels(screens())).observe(document.getElementById('screens'), { childList: true, subtree: true });
+// Printed results keep the building context (the header is hidden in print).
+window.addEventListener('beforeprint', () => {
+  const el = document.getElementById('print-context');
+  if (!el) return;
+  const src = state.mode === 'assessor' ? state.as : state.hw;
+  const name = (src && src.buildingName) || '', addr = (src && src.address) || '';
+  el.innerHTML = `<strong>${escAttr(t('app_title'))}</strong><br>` +
+    [name, addr].filter(Boolean).map(escAttr).join(' — ') +
+    `${name || addr ? '<br>' : ''}${escAttr(t('print_assessed'))}: ${new Date().toLocaleDateString(LANG === 'es' ? 'es' : 'en-US')}`;
+});
 
 // ── INIT ──────────────────────────────────
 // Register the service worker for offline use (core requirement: no cell after a flood).

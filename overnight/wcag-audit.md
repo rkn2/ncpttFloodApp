@@ -2,6 +2,8 @@
 
 *Audited 2026-08-31 against floodapp.html (deployed at rkn2.github.io/ncpttFloodApp). Manual code review — axe-cli could not run due to ChromeDriver version mismatch. Covers WCAG 2.1 AA (the standard for federally funded, citizen-facing web applications under Section 508).*
 
+> **Status 2026-10-17:** items 1–8 fixed 2026-08-31; items 9–16 fixed 2026-10-17 (touch targets, label `for=` wiring and labelled radio/checkbox groups after every render, 📄 citations are buttons that reveal the quote on tap, inline errors replace `alert()` for required fields, print header with building name/address, `autocomplete` on name/org/address/state). The safety-step `confirm()` stays: it is a deliberate stop and native dialogs are accessible. An axe-core 4.10 scan (WCAG 2.0/2.1/2.2 A+AA + best practice) of mode select, homeowner steps and results, rapid and full assessor forms and results, Quick Answers and the sync panel, in an emulated iPhone 13, reports **0 violations**. Automated checks don't cover everything; a screen-reader pass (VoiceOver) is still worth doing.
+
 ---
 
 ## Critical (blocks access for some users)
