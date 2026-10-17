@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Flood Recovery Flyer</title>
+<!-- Printable QR flyer for SHPO offices and field teams. Print on US Letter; one page, EN + ES. -->
+<style>
+  :root { --ink: #1B3A5C; --muted: #4A5A68; --rule: #AABFD4; --bg: #fff; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--ink); font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; padding: 16px; }
+  .page { max-width: 7.5in; margin: 0 auto; text-align: center; }
+  .top { display: flex; align-items: center; justify-content: center; gap: 14px; margin-bottom: 14px; }
+  .top img { width: 64px; height: 64px; }
+  h1 { font-size: 1.9rem; line-height: 1.15; }
+  .es-title { font-size: 1.25rem; color: var(--muted); font-weight: 600; margin-top: 4px; }
+  .qr { width: 3.4in; max-width: 80vw; height: auto; margin: 18px auto 6px; display: block; }
+  .url { font-size: 1.05rem; font-weight: 600; word-break: break-all; }
+  .cols { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; text-align: left; margin-top: 22px;
+          border-top: 2px solid var(--rule); padding-top: 16px; }
+  .cols h2 { font-size: 1.05rem; margin-bottom: 6px; }
+  .cols ol, .cols ul { padding-left: 1.2em; font-size: 0.95rem; line-height: 1.5; }
+  .cols li { margin-bottom: 4px; }
+  .note { margin-top: 18px; font-size: 0.8rem; color: var(--muted); line-height: 1.4; }
+  .print-btn { margin-top: 18px; min-height: 44px; padding: 10px 20px; font-size: 1rem; border-radius: 6px;
+               border: none; background: #2E5A6E; color: #fff; cursor: pointer; }
+  @media (max-width: 560px) { .cols { grid-template-columns: 1fr; } h1 { font-size: 1.5rem; } }
+  @media print {
+    @page { size: letter; margin: 0.5in; }
+    body { padding: 0; }
+    .print-btn { display: none; }
+  }
+</style>
+</head>
+<body>
+<main class="page">
+  <div class="top">
+    <img src="icon.svg" alt="">
+    <div>
+      <h1>Flood damage to an older or historic building?</h1>
+      <div class="es-title" lang="es">¿Daños por inundación en un edificio antiguo o histórico?</div>
+    </div>
+  </div>
+
+  <img class="qr" src="qr.svg" alt="QR code linking to rkn2.github.io/ncpttFloodApp">
+  <div class="url">rkn2.github.io/ncpttFloodApp</div>
+
+  <div class="cols">
+    <section>
+      <h2>Scan with your phone camera</h2>
+      <ul>
+        <li>Step-by-step safety, cleanup and repair guidance for historic buildings</li>
+        <li>Where to find help: FEMA, SBA, insurance and your State Historic Preservation Office</li>
+        <li>Free, no account, in English and Spanish</li>
+      </ul>
+      <h2 style="margin-top:10px;">Keep it for when the internet is down</h2>
+      <ol>
+        <li><strong>iPhone:</strong> open in Safari, tap Share, then <em>Add to Home Screen</em></li>
+        <li><strong>Android:</strong> tap <em>Install</em> when asked, or menu ⋮ → <em>Install app</em></li>
+      </ol>
+    </section>
+    <section lang="es">
+      <h2>Escanee con la cámara de su teléfono</h2>
+      <ul>
+        <li>Guía paso a paso de seguridad, limpieza y reparación para edificios históricos</li>
+        <li>Dónde encontrar ayuda: FEMA, SBA, seguros y su Oficina Estatal de Preservación Histórica</li>
+        <li>Gratis, sin cuenta, en inglés y español</li>
+      </ul>
+      <h2 style="margin-top:10px;">Guárdela para cuando no haya internet</h2>
+      <ol>
+        <li><strong>iPhone:</strong> ábrala en Safari, toque Compartir y luego <em>Agregar a pantalla de inicio</em></li>
+        <li><strong>Android:</strong> toque <em>Instalar</em> cuando se le pida, o menú ⋮ → <em>Instalar aplicación</em></li>
+      </ol>
+    </section>
+  </div>
+
+  <p class="note">Advisory guidance only; it does not replace a professional assessment or a FEMA eligibility decision.<br>
+    <span lang="es">Orientación consultiva; no sustituye una evaluación profesional ni una decisión de elegibilidad de FEMA.</span></p>
+
+  <button class="print-btn" type="button" onclick="window.print()">Print this flyer</button>
+</main>
+</body>
+</html>

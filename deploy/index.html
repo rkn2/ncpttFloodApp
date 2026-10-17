@@ -6,7 +6,7 @@
 <title>Historic Flood Recovery Tool</title>
 <link rel="manifest" href="manifest.webmanifest">
 <meta name="theme-color" content="#2E5A6E">
-<link rel="apple-touch-icon" href="icon.svg">
+<link rel="apple-touch-icon" href="icon-180.png">
 <style>
   :root {
     --hw-primary: #7B5E3A;
@@ -438,6 +438,15 @@
   .pa-cite summary { cursor: pointer; color: #1F4E79; display: inline-block; min-height: 24px; padding: 2px 0; }
   .pa-cite summary:focus-visible { outline: 2px solid var(--hw-accent); outline-offset: 2px; }
   .pa-cite blockquote { margin: 4px 0 6px; padding-left: 8px; border-left: 2px solid #999; font-style: italic; color: #333; }
+  /* ── Install banner (web app, not an app-store app) ── */
+  #install-banner { background: #E3EEF3; border-bottom: 1px solid #AABFD4; color: #1B3A5C;
+    padding: 10px 16px; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; font-size: 0.84rem; line-height: 1.4; }
+  #install-banner[hidden] { display: none; }
+  #install-banner .install-text { flex: 1 1 220px; }
+  #install-banner button { min-height: 44px; min-width: 44px; padding: 8px 14px; border-radius: 6px;
+    font-size: 0.84rem; font-weight: 600; cursor: pointer; }
+  #install-btn { background: #2E5A6E; color: #fff; border: none; }
+  #install-dismiss { background: transparent; color: #1B3A5C; border: 1px solid #AABFD4; }
   #lang-switcher { display: flex; gap: 2px; align-self: center; }
   #lang-switcher button {
     border: 1px solid rgba(255,255,255,0.5);
@@ -785,6 +794,11 @@
     <button id="lang-es" onclick="setLang('es')">ES</button>
   </div>
 </div>
+<div id="install-banner" role="region" aria-label="Install" hidden>
+  <span class="install-text" id="install-text"></span>
+  <button id="install-btn" type="button" hidden onclick="runInstall()"></button>
+  <button id="install-dismiss" type="button" onclick="dismissInstall()"></button>
+</div>
 <div id="progress-bar"><div id="progress-fill" style="width:0%"></div></div>
 <div id="step-indicator"></div>
 
@@ -1055,6 +1069,10 @@ const I18N = {
     // ── Header / chrome ──
     app_title: "Historic Flood Recovery Tool",
     app_subtitle: "National Park Service • Preservation Assistance",
+    install_android: "<strong>Install this app</strong> so it opens from your home screen and works without internet after a flood.",
+    install_ios: "<strong>Install this app</strong> so it works without internet: tap the Share button <span aria-hidden=\"true\">(□↑)</span>, then <strong>Add to Home Screen</strong>.",
+    install_btn: "Install",
+    install_dismiss: "Not now",
     badge_homeowner: "Homeowner",
     badge_assessor: "Assessor",
     btn_back: "← Back",
@@ -1210,6 +1228,10 @@ const I18N = {
     // ── Header / chrome ──
     app_title: "Herramienta de Recuperación ante Inundaciones Históricas",
     app_subtitle: "Servicio de Parques Nacionales • Asistencia de Preservación",
+    install_android: "<strong>Instale esta aplicación</strong> para abrirla desde su pantalla de inicio y usarla sin internet después de una inundación.",
+    install_ios: "<strong>Instale esta aplicación</strong> para usarla sin internet: toque el botón Compartir <span aria-hidden=\"true\">(□↑)</span> y luego <strong>Agregar a pantalla de inicio</strong>.",
+    install_btn: "Instalar",
+    install_dismiss: "Ahora no",
     badge_homeowner: "Propietario",
     badge_assessor: "Evaluador",
     btn_back: "← Atrás",
@@ -1407,7 +1429,54 @@ function syncLangUI() {
   if (savesFloatBtn) savesFloatBtn.innerHTML = '💾 ' + t('saves_title');
   const guideFloatBtn = document.getElementById('guide-btn');
   if (guideFloatBtn) guideFloatBtn.innerHTML = '❓ ' + t('guide_btn_label');
+  updateInstallBanner();
 }
+// ── INSTALL BANNER ──────────────────────────
+// Staying a web app (decided 2026-10-16). Chrome/Edge/Android fire beforeinstallprompt, so we show
+// an Install button; iPhone/iPad Safari has no install API, so we show the Share → Add to Home
+// Screen steps. Hidden once installed or after "Not now".
+let deferredInstall = null;
+function isStandalone() {
+  return (window.matchMedia && window.matchMedia('(display-mode: standalone)').matches) || navigator.standalone === true;
+}
+function isIosSafari() {
+  const ua = navigator.userAgent;
+  const ios = /iPad|iPhone|iPod/.test(ua) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+  return ios && /Safari/.test(ua) && !/CriOS|FxiOS|EdgiOS/.test(ua);
+}
+function installDismissed() {
+  try { return localStorage.getItem('floodapp_install_dismissed') === '1'; } catch (_) { return false; }
+}
+function updateInstallBanner() {
+  const bar = document.getElementById('install-banner');
+  if (!bar) return;
+  const mode = isStandalone() || installDismissed() ? null : deferredInstall ? 'android' : isIosSafari() ? 'ios' : null;
+  bar.hidden = !mode;
+  if (!mode) return;
+  bar.setAttribute('aria-label', t('install_btn'));
+  document.getElementById('install-text').innerHTML = t('install_' + mode);
+  const btn = document.getElementById('install-btn');
+  btn.hidden = mode !== 'android';
+  btn.textContent = t('install_btn');
+  document.getElementById('install-dismiss').textContent = t('install_dismiss');
+}
+async function runInstall() {
+  if (!deferredInstall) return;
+  deferredInstall.prompt();
+  await deferredInstall.userChoice;
+  deferredInstall = null;
+  updateInstallBanner();
+}
+function dismissInstall() {
+  try { localStorage.setItem('floodapp_install_dismissed', '1'); } catch (_) {}
+  updateInstallBanner();
+}
+window.addEventListener('beforeinstallprompt', (e) => {
+  e.preventDefault();
+  deferredInstall = e;
+  updateInstallBanner();
+});
+window.addEventListener('appinstalled', () => { deferredInstall = null; updateInstallBanner(); });
 // Re-render whatever screen is currently shown (used when the language changes).
 function renderCurrent() {
   if (!state.mode) return showModeSelect();
