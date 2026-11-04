@@ -45,6 +45,9 @@
   }
   #app-header h1 { font-size: 1.1rem; font-weight: 600; letter-spacing: 0.01em; }
   #app-header .sub { font-size: 0.78rem; opacity: 0.7; margin-top: 2px; }
+  #app-logo { height: 48px; width: auto; flex-shrink: 0; background: #F5EFE6; border-radius: 6px; padding: 4px; }
+  #app-footer { max-width: 760px; margin: 32px auto 0; padding: 0 16px; font-size: 0.74rem; line-height: 1.45; color: #595959; text-align: center; }
+  #app-footer img { height: 56px; width: auto; display: block; margin: 0 auto 8px; }
   .mode-badge {
     margin-left: auto;
     font-size: 0.72rem;
@@ -797,9 +800,10 @@
 </div>
 
 <div id="app-header" role="banner">
+  <img id="app-logo" src="ncptt-logo.png" alt="NCPTT logo">
   <div>
     <h1 id="app-title">Historic Flood Recovery Tool</h1>
-    <div class="sub" id="app-subtitle">National Park Service &bull; Preservation Assistance</div>
+    <div class="sub" id="app-subtitle">Developed by Penn State with support from the National Park Service's National Center for Preservation Technology and Training</div>
   </div>
   <span id="mode-badge-header" class="mode-badge hidden"></span>
   <div id="lang-switcher" role="group" aria-label="Language">
@@ -817,6 +821,10 @@
 
 <div id="print-context" class="print-only"></div>
 <div id="screens" role="main" aria-live="polite"></div>
+<footer id="app-footer" role="contentinfo">
+  <img src="ncptt-logo.png" alt="National Center for Preservation Technology and Training logo">
+  <p id="app-disclaimer">This application was developed under a grant from the National Park Service, National Center for Preservation Technology and Training. Its contents are solely the responsibility of The Pennsylvania State University and do not necessarily represent official policy of NPS or NCPTT.</p>
+</footer>
 
 <script>
 // ═══════════════════════════════════════════════
@@ -1151,7 +1159,8 @@ const I18N = {
     mode_as_desc: "I am a trained assessor (SHPO staff, NPS, emergency responder, volunteer) conducting building-by-building damage documentation in the field.",
     // ── Header / chrome ──
     app_title: "Historic Flood Recovery Tool",
-    app_subtitle: "National Park Service • Preservation Assistance",
+    app_subtitle: "Developed by Penn State with support from the National Park Service's National Center for Preservation Technology and Training",
+    app_disclaimer: "This application was developed under a grant from the National Park Service, National Center for Preservation Technology and Training. Its contents are solely the responsibility of The Pennsylvania State University and do not necessarily represent official policy of NPS or NCPTT.",
     install_android: "<strong>Install this app</strong> so it opens from your home screen and works without internet after a flood.",
     install_ios: "<strong>Install this app</strong> so it works without internet: tap the Share button <span aria-hidden=\"true\">(□↑)</span>, then <strong>Add to Home Screen</strong>.",
     install_btn: "Install",
@@ -1325,7 +1334,8 @@ const I18N = {
     mode_as_desc: "Soy un evaluador capacitado (personal de SHPO, NPS, personal de emergencia, voluntario) que realiza documentación de daños edificio por edificio en el campo.",
     // ── Header / chrome ──
     app_title: "Herramienta de Recuperación ante Inundaciones Históricas",
-    app_subtitle: "Servicio de Parques Nacionales • Asistencia de Preservación",
+    app_subtitle: "Desarrollada por Penn State con el apoyo del Centro Nacional de Tecnología y Capacitación en Preservación (NCPTT) del Servicio de Parques Nacionales",
+    app_disclaimer: "Esta aplicación fue desarrollada con una subvención del Servicio de Parques Nacionales, Centro Nacional de Tecnología y Capacitación en Preservación. Su contenido es responsabilidad exclusiva de The Pennsylvania State University y no representa necesariamente la política oficial del NPS ni del NCPTT.",
     install_android: "<strong>Instale esta aplicación</strong> para abrirla desde su pantalla de inicio y usarla sin internet después de una inundación.",
     install_ios: "<strong>Instale esta aplicación</strong> para usarla sin internet: toque el botón Compartir <span aria-hidden=\"true\">(□↑)</span> y luego <strong>Agregar a pantalla de inicio</strong>.",
     install_btn: "Instalar",
@@ -1513,6 +1523,8 @@ function syncLangUI() {
   if (titleEl) titleEl.textContent = t('app_title');
   const subEl = document.getElementById('app-subtitle');
   if (subEl) subEl.innerHTML = t('app_subtitle');
+  const discEl = document.getElementById('app-disclaimer');
+  if (discEl) discEl.textContent = t('app_disclaimer');
   const sevModal = document.querySelector('.sev-modal');
   if (sevModal) {
     sevModal.querySelector('h3').textContent = t('sev_title');
